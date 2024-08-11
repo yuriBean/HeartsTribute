@@ -1,0 +1,61 @@
+@import url("https://fonts.googleapis.com/css2?family=Sarabun");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .body-margin{
+    @apply mx-8 md:mx-[10%] py-10 ;
+  }
+  .button-primary {
+    @apply bg-[#346164] rounded  outline-none flex items-center font-bold text-xs md:text-sm xl:text-base text-white py-2 px-4 md:py-3 2xl:py-4;
+  }
+  .edit-profile-round-button {
+    @apply transition-all delay-100 bg-white aspect-square rounded-full text-center font-sans font-medium leading-3 h-16 md:h-20 xl:h-24 w-16 md:w-20 xl:w-24 hover:scale-125 outline-none;
+  }
+  .no-scroll {
+    @apply overflow-hidden;
+  }
+}
+
+.edit-profile-round-button:hover + .edit-profile-round-button,
+.edit-profile-round-button:has(+ .edit-profile-round-button:hover) {
+  scale: 1.025;
+}
+
+.truncate-custom {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Number of lines to show */
+  -webkit-box-orient: vertical;
+}
+
+.scrollbar {
+  /* Replace 'scrollbar-color' property with '-webkit-scrollbar-thumb' and '-webkit-scrollbar-track' properties */
+  scrollbar-width: thin;
+  -webkit-scrollbar-width: thin;
+  -moz-scrollbar-width: thin;
+  -ms-scrollbar-width: thin;
+  -o-scrollbar-width: thin;
+  /* Customize the scrollbar color in webkit-based browsers */
+  /* scrollbar-color: #011627 #f1f1f1; */
+  scrollbar-track-color: #f1f1f1;
+  scrollbar-thumb-color: gray;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -webkit-scrollbar-width: none;
+  -moz-scrollbar-width: none;
+  -ms-scrollbar-width: none;
+  -o-scrollbar-width: none;
+}
+
+.aspect-ratio {
+  width: 100%;
+  height: auto;
+  object-fit: cover; /* Ensures the image covers the area without distortion */
+}
