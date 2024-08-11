@@ -9,7 +9,7 @@ const { firestore } = firebaseAdmin;
 if (!firebaseAdmin.apps.length) {
   firebaseAdmin.initializeApp({
     credential: firebaseAdmin.credential.applicationDefault(),
-    databaseURL: "https://your-database-url.firebaseio.com"
+    databaseURL: "https://heartstribute-da3ff.firebaseio.com"
   });
 }
 const db = firestore();
@@ -18,8 +18,8 @@ const db = firestore();
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
-    user: 'your-email@gmail.com',
-    pass: 'your-email-password'
+    user: 'eddienorhart53@gmail.com',
+    pass: 'a99leb33'
   }
 });
 
@@ -27,16 +27,15 @@ const transporter = nodemailer.createTransport({
 const s3 = new AWS.S3({
   endpoint: 's6k7.ph.idrivee2-37.com',
   signatureVersion: 'v4',
-  accessKeyId: "oObO6WpFNFfXarvAuXKE",
-  secretAccessKey: "j7mtPY9SGz7N6g7Qcj5i8hYOahsSj9k3sbbwCHMT"
+  region: 'us-west-2',
+  accessKeyId: "LmBXwcDiyu87Qs2P2kZt",
+  secretAccessKey: "iYm0qJZYdp1eJ0EKPyQ9r9aW23CUfb1D7msgfvAA"
 });
-
-const publicUrl = `https://b6e5.c19.e2-5.dev/test/`;
 
 // Function to send email reminders
 const sendEmailReminder = async (userEmail, profileId) => {
   const mailOptions = {
-    from: 'your-email@gmail.com',
+    from: 'info@heartstribute.com',
     to: userEmail,
     subject: 'Profile Expiry Reminder',
     text: `Your profile with ID ${profileId} is about to expire. Please activate your tribute tag within 7 days to prevent deletion.`
