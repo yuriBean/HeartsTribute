@@ -31,11 +31,12 @@ export default function CreateQRCode() {
             //     setDisabled(false);
             //     return;
             // }
-            console.log(qrids);
-
+            console.log("Current QR IDs:", qrids);
+            console.log("Entered QR ID:", qrID);
+    
             // if yes then generate new qrID
             // console.log
-            if (!qrids.includes(qrID)) {
+            if (!qrids.some(qr => qr.id === qrID)) {
                 alert("Invalid QR ID or QR ID already exists");
                 setQrID();
                 setDisabled(false);
