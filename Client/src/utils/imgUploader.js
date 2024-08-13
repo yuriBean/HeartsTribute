@@ -10,7 +10,7 @@ const uploadImage = async (file, userId, profileId) => { // Added userId paramet
         const formData = new FormData();
         formData.append('file', file);
 
-        const response = await axios.post(`http://app.heartstribute.com/api/upload/${userId}/${profileId}`, formData, {
+        const response = await axios.post(`http://apps.heartstribute.com/api/upload/${userId}/${profileId}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
