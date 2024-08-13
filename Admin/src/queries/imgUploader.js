@@ -8,7 +8,7 @@ const uploadImage = async (file, userId, qr = false) => { // Added userId parame
         formData.append('qr', qr);
 
         // Make the POST request to the /upload endpoint
-        const response = await axios.post(`https://icloud.heartstribute.com/api/upload/${userId}`, formData, {
+        const response = await axios.post(`https://icloud.heartstribute.com/api/upload/QRCodes/${userId}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
