@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 
-export default function UnusedIDsTable({ ids, loading = false }) {
+export default function UnusedIDsTable({ ids, usedIds, loading = false }) {
     const [currentPage, setCurrentPage] = useState(1);
     const idsPerPage = 20;
 
+    // Filter out used IDs
+    const unusedIds = ids.filter(idObj => !usedIds.includes(idObj.id));
+
     // Calculate total pages
-    const totalPages = Math.ceil(ids.length / idsPerPage);
+    const totalPages = Math.ceil(unusedIds.length / idsPerPage);
 
     // Calculate the starting and ending index of the ids to display
     const startIdx = (currentPage - 1) * idsPerPage;
     const endIdx = startIdx + idsPerPage;
-    const currentIds = ids.slice(startIdx, endIdx);
+    const currentIds = unusedIds.slice(startIdx, endIdx);
 
     // Handle page change
     const handlePageChange = (pageNumber) => {
@@ -59,7 +62,7 @@ export default function UnusedIDsTable({ ids, loading = false }) {
                                     </td>
                                 </tr>
                             ))}
-                        {!loading && ids.length === 0 && (
+                        {!loading && unusedIds.length === 0 && (
                             <tr>
                                 <td colSpan="3" className="text-center">
                                     No data found
