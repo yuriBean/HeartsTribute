@@ -8,7 +8,7 @@ import {
 } from "../queries/qrcode";
 
 import { uploadImage } from "../queries/imgUploader";
-import {  useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import UnusedIDsTable from "../components/UnusedIDsTable";
 
 export default function CreateQRCode() {
@@ -20,7 +20,9 @@ export default function CreateQRCode() {
     const [qrID, setQrID] = useState("");
     const [disabled, setDisabled] = useState(false);
     const [qrids, setQrids] = useState([]);
+    const [usedIds, setUsedIds] = useState([]); // Define usedIds state
     const [loading, setLoading] = useState(false);
+
     const handleQrCodeGenerator = async () => {
         try {
             console.log("button clicked for generator ");
@@ -42,14 +44,17 @@ export default function CreateQRCode() {
                 setDisabled(false);
                 return;
             }
-
-            setQrID(websiteUrl + qrID);
+            
+            if (profile_id){
+                setQrID(websiteUrl + 'profile/' + profile_id);
+            }
+            else {
+                setQrID(websiteUrl + 'login');
+            }
 
             setQrIsVisible(true);
             setTimeout(async () => {
-                const qrCodeImageUrl = await htmlToImage.toBlob(
-                    qrCodeRef.current
-                );
+                const qrCodeImageUrl = await htmlToImage.toBlob(qrCodeRef.current);
                 console.log(qrCodeImageUrl);
                 // Upload the blob to storage and get the URL
                 const imageUrl = await uploadImage(qrCodeImageUrl, true);
@@ -69,6 +74,7 @@ export default function CreateQRCode() {
             }, 100);
         } catch (error) {}
     };
+    
     const downloadQRCode = () => {
         htmlToImage
             .toJpeg(qrCodeRef.current)
@@ -91,8 +97,14 @@ export default function CreateQRCode() {
         setLoading(false);
     };
 
+    const getUsedIds = async () => {
+        const fetchedUsedIds = await getUsedQRCodeIDs(); // Fetch used QR IDs
+        setUsedIds(fetchedUsedIds.usedIds); // Set the used IDs in state
+    };
+
     useEffect(() => {
         getQRIds();
+        getUsedIds(); // Fetch used IDs when the component mounts
     }, []);
 
     useEffect(() => {
@@ -144,7 +156,7 @@ export default function CreateQRCode() {
                 )}
             </div>
             <div className="mt-5">
-                <UnusedIDsTable ids={qrids} loading={loading} />
+                <UnusedIDsTable ids={qrids} usedIds={usedIds} loading={loading} /> {/* Pass usedIds */}
             </div>
         </div>
     ) : (
