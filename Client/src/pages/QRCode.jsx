@@ -36,6 +36,7 @@ export default function QRCode() {
 
     const handleRequestAccess = async () => {
         try {
+            console.log("Profile ID for access request:", qrRecord.profile_id);
             await requestAccess(qrRecord.profile_id); // Function to request access
             alert("Access request sent successfully!");
             navigate("/"); // Redirect to home or another page

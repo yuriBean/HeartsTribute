@@ -586,7 +586,12 @@ const deleteFirestoreDocument = async (collection, docID) => {
   };  
 
 const requestAccess = async (profileId) => {
-    const userEmail = JSON.parse(localStorage.getItem("user")).email; // Assuming user email is stored in localStorage
+    const userEmail = JSON.parse(localStorage.getItem("user")).email; 
+    if (!userEmail) {
+        console.error("User email not found in local storage.");
+        throw new Error("User email not found.");
+    }
+
     const profileRef = doc(db, "profiles", profileId);
 
     try {

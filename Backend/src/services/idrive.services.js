@@ -23,7 +23,7 @@ const s3 = new AWS.S3({
   secretAccessKey: "iYm0qJZYdp1eJ0EKPyQ9r9aW23CUfb1D7msgfvAA"
 });
 
-const publicUrl = `https://b6e5.c19.e2-5.dev/heartstribute.bucket`;
+const publicUrl = `https://b6e5.c19.e2-5.dev/heartstribute.bucket/`;
 
 // CloudWatch client configuration
 const cloudWatch = new AWS.CloudWatch({
@@ -33,7 +33,7 @@ const cloudWatch = new AWS.CloudWatch({
 
 
 // Route to handle file upload
-router.post('/upload/:userId/:profileId', upload.single('file'), (req, res) => {
+router.post('/upload/:userId/:profileId?', upload.single('file'), (req, res) => {
   console.log('Uploading file:', req.file);
   if (!req.file) {
     console.error('No file uploaded.');
@@ -47,9 +47,11 @@ router.post('/upload/:userId/:profileId', upload.single('file'), (req, res) => {
 
   const userId = req.params.userId; // Get user ID from request parameters
   const profileId = req.params.profileId;
+  const folderPath = profileId === 'undefined' ? `ProfileManager/${userId}/${profileId}` : `ProfileManager/${userId}`;
+
   const params = {
     Bucket: 'heartstribute.bucket',
-    Key: `ProfileManager/${userId}/${profileId}/${new Date().toISOString()}-${req.file.originalname}`,
+    Key: `${folderPath}/${new Date().toISOString()}-${req.file.originalname}`,
     Body: fileStream,
     ContentType: fileType,
     ACL: 'public-read',
