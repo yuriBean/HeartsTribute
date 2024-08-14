@@ -121,7 +121,7 @@ export default function PostModal({ setIsOpen, post, profile }) {
           <div>
             <div className="mb-2 flex items-center justify-start space-x-6">
               <img
-                className="h-10 w-10 rounded-full 2xl:h-20 2xl:w-20"
+                className="h-10 w-10 rounded-full 2xl:h-20 2xl:w-20 object-cover"
                 src={
                   profile?.profile_picture || "/images/placeholder-profile.jpg"
                 }
