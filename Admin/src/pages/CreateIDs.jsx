@@ -9,6 +9,7 @@ export default function CreateIDs() {
     const [loading, setLoading] = useState(false);
     const [qrids, setQrids] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [usedIds, setUsedIds] = useState([]); // Define usedIds state
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -40,6 +41,10 @@ export default function CreateIDs() {
     };
     const filteredQRIDs = qrids.filter(qrID => qrID.id && qrID.id.includes(searchTerm));
 
+    const getUsedIds = async () => {
+        const fetchedUsedIds = await getUsedQRCodeIDs(); // Fetch used QR IDs
+        setUsedIds(fetchedUsedIds.usedIds); // Set the used IDs in state
+    };
 
     return (
         <div>
@@ -95,7 +100,7 @@ export default function CreateIDs() {
             </div>
 
             <div className="mt-5">
-            <UnusedIDsTable ids={filteredQRIDs} loading={loading} />
+            <UnusedIDsTable ids={qrids} usedIds={usedIds} loading={loading} />
             </div>
 
         </div>

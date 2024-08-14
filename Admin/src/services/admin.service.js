@@ -302,3 +302,18 @@ export const getProfiles = async () => {
     return []; // Return an empty array on error
   }
 }
+
+export const getUsedQRCodeIDs = async () => {
+  try {
+    const dataquery = query(
+      collection(db, 'qrcodes'),
+      where("active", "==", true)  // Adjust the query based on your requirements
+    );
+    const snapshot = await getDocs(dataquery);
+    const usedIds = snapshot.docs.map(doc => doc.id);
+    return { usedIds };
+  } catch (error) {
+    console.error("Error fetching used QR codes:", error);
+    throw new Error("Failed to fetch used QR codes");
+  }
+};
