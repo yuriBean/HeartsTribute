@@ -9,8 +9,7 @@ export default function DiscoverProfileCard({ profile }) {
   const handleViewProfile = () => {
    
       navigate(`/profile/${profile.id}`); // Navigate to profile if authenticated
-  
-  };
+    }
 
   return (
     <div
