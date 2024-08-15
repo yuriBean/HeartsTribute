@@ -4,6 +4,7 @@ import { createUserRecord } from "./emailAuthServices";
 import { getDocs, query, where, collection } from "firebase/firestore";
 import { db } from "../../firebase";
 import generateRandomSequence from "../utils/generateRandomSequence";
+import { notifyError } from "../utils/toastNotifications";
 
 const usersRef = collection(db, "users");
 
@@ -24,7 +25,7 @@ const extractName = (displayName) => {
   return { firstName, lastName };
 };
 
-export const signinWithGoogle = async () => {
+export const signinWithGoogle = async (qrid) => {
   signInWithPopup(auth, provider)
     .then(async (result) => {
       const user = result.user;
@@ -41,7 +42,7 @@ export const signinWithGoogle = async () => {
 
       console.log(user);
       if (user) {
-        window.location.href = "/";
+        window.location.href = `/?qrid=${qrid}`;
       }
       return user;
     })
@@ -49,10 +50,11 @@ export const signinWithGoogle = async () => {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.error("Error during sign-in:", errorMessage, errorCode);
+      notifyError('An error occurred while signing you in. You may already have another signin method.');
     });
 };
 
-export const signinWithFacebook = async () => {
+export const signinWithFacebook = async (qrid) => {
   signInWithPopup(auth, providerFacebook)
     .then(async (result) => {
       const user = result.user;
@@ -69,7 +71,7 @@ export const signinWithFacebook = async () => {
 
       console.log(user);
       if (user) {
-        window.location.href = "/";
+        window.location.href = `/?qrid=${qrid}`;
       }
       return user;
     })
@@ -77,6 +79,7 @@ export const signinWithFacebook = async () => {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.error("Error during sign-in:", errorMessage, errorCode);
+      notifyError('An error occurred while signing you in. You may already have another signin method.');
     })
 }
 

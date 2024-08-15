@@ -59,7 +59,7 @@ export default function BioTab() {
 
   return !loading ? (
     <div>
-      <CheckProfileOwner>
+      
         <div className="flex justify-end">
         {profile?.memorial_video && (
             <a
@@ -79,6 +79,7 @@ export default function BioTab() {
           <img className="w-2 md:w-4" src="/images/share.svg" alt="" />
           <span>Share</span>
         </button>
+        <CheckProfileOwner>
           <button
             onClick={() => navigate(`/edit-profile/${profile.id}`)}
             className="bg-primary my-2 text-white px-4 py-2 rounded-lg"
@@ -91,9 +92,9 @@ export default function BioTab() {
         >
           Delete Profile
           </button>
-
+          </CheckProfileOwner>
         </div>
-      </CheckProfileOwner>
+      
       {/* <h2 className="my-8 text-sm font-medium tracking-wider ">
         <small className="text-xl md:text-2xl">In Loving Memory of:</small>
         <span className="uppercase text-lg">
@@ -171,14 +172,29 @@ export default function BioTab() {
           )}
         </div> */}
 
-      <div className="flex justify-between items-center">
-        <p className="self-end bg-[#FAFAFA] py-3 text-lg rounded-md">
+<CheckProfileOwner>
+      {profile.expiry_date && (
+      <div className="self-end bg-[#FAFAFA] py-5 my-10 rounded-md text-gray-700">
+      <p className="self-end bg-[#FAFAFA] text-xs sm:text-sm py-1 rounded-md align-end">
+              Days left until deletion: {daysLeft}
+            </p>
+            <p className="self-end bg-[#FAFAFA] text-xs sm:text-sm py-1 rounded-md align-end">
+              Expiry Date: 
+              <span className="text-red-600 font-bold">{new Date(profile.expiry_date).toLocaleDateString()}</span>
+            </p>
+      </div>
+      )}
+    </CheckProfileOwner>
+
+
+      <div className="flex justify-between items-center ">
+        <p className="self-end bg-[#FAFAFA] py-4 text-lg rounded-md">
           Lifetime: {formatDate(profile?.birth_date)} -{" "}
           <strong className="text-red-600">
             {formatDate(profile?.death_date)}
           </strong>
         </p>
-        <div className="flex gap-2">
+
         {/* <button
           onClick={handleShare}
           className="flex cursor-pointer items-center gap-1 md:gap-2 rounded-md bg-[#346164] px-4 py-2 text-sm font-semibold text-white md:px-8 md:py-3"
@@ -196,19 +212,13 @@ export default function BioTab() {
               <span>Memorial Video</span>
             </a>
         )} */}
-              <div className="mx-0 my-8">
-      <p className="text-sm">Days left until deletion: {daysLeft}</p>
-        <p className="text-sm">Expiry Date: <span className="text-red-600 font-bold">{new Date(profile.expiry_date).toLocaleDateString()}</span></p>
-        </div>
 
-</div>
+      
       </div>
 
       <div className="self-end bg-[#FAFAFA] py-3 mt-5 text-md rounded-md text-gray-700">
         {profile?.bio}
       </div>
-      {/* donate button */}
-      
     </div>
   ) : (
     <Spinner />

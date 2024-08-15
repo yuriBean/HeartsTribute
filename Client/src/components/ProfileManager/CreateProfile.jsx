@@ -3,16 +3,16 @@ import InputBoxProfileManager from "./InputBoxProfileManager";
 import ChooseFile from "./ChooseFile";
 import DateInput from "./DateInput";
 import { Label } from "./AddPost";
-import { CreateNewProfile } from "../../services/profileManager.service";
+import { CreateNewProfile, linkProfileToQR, getUserProfiles, createQRCode } from "../../services/profileManager.service";
 import { uploadImage } from "../../utils/imgUploader";
 import { useForm } from "react-hook-form";
 import Input from "../Common/Input";
 import Spinner from "../Common/Spinner";
 import ToggleSwitch from "../Common/ToggleSwitch";
 import { notifySuccess, notifyError } from "../../utils/toastNotifications";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
-export default function CreateProfile({ qrId }) {
+export default function CreateProfile() {
   const {
     register,
     handleSubmit,
@@ -38,8 +38,12 @@ export default function CreateProfile({ qrId }) {
   const [profileVisibility, setProfileVisibility] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [showProfileSelection, setShowProfileSelection] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const qrid = searchParams.get("qrid");
   const { profile_id } = useParams();
+
 
   const handleProfileTypeChange = (e) => {
     setProfileType(e.target.value);
@@ -111,8 +115,8 @@ export default function CreateProfile({ qrId }) {
       const newProfile = await CreateNewProfile(data);
       notifySuccess("Profile Created Successfully");
 
-      if (qrId) {
-        await linkProfileToQR(newProfile.id, qrId);
+      if (qrid) {
+        await createQRCode(newProfile.id, qrid); // Ensure QR code is created
       }
 
       reset();
@@ -137,15 +141,15 @@ export default function CreateProfile({ qrId }) {
   };
 
   useEffect(() => {
-    if (qrId) {
+    if (qrid) {
       fetchUserProfiles();
     }
-  }, [qrId]);
+  }, [qrid]);
 
   const handleProfileLinking = async (profileId) => {
     setLoading(true);
     try {
-      await linkProfileToQR(profileId, qrId);
+      await linkProfileToQR(profileId, qrid);
       notifySuccess("Profile linked successfully");
       navigate(`/profile/${profileId}`);
     } catch (error) {
@@ -223,6 +227,23 @@ export default function CreateProfile({ qrId }) {
           Pet
         </Label>
       </div>
+
+      {showProfileSelection && (
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold">Link Existing Profile</h3>
+          <select
+            className="w-full p-2 border rounded-md"
+            onChange={(e) => handleProfileLinking(e.target.value)}
+          >
+            <option value="">Select a profile to link</option>
+            {existingProfiles.map((profile) => (
+              <option key={profile.id} value={profile.id}>
+                {profile.first_name} {profile.last_name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <h3 className="mb-2 text-sm tracking-wider md:text-base">

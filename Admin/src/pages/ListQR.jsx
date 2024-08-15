@@ -282,9 +282,9 @@ const Dashboard = () => {
                                 <th scope="col" className="px-6 py-3">
                                     PROFILE_ID
                                 </th>
-                                <th scope="col" className="px-6 py-3">
+                                {/* <th scope="col" className="px-6 py-3">
                                     QR_IMAGE
-                                </th>
+                                </th> */}
                                 <th scope="col" className="px-6 py-3">
                                     STATUS
                                 </th>
@@ -331,7 +331,7 @@ const Dashboard = () => {
                                                 {profile.profile_id}
                                             </a>
                                         </th>
-                                        <td className="px-6 py-4 ">
+                                        {/* <td className="px-6 py-4 ">
                                             <img
                                                 src={profile.image}
                                                 className="aspect-square w-20"
@@ -345,7 +345,7 @@ const Dashboard = () => {
                                             >
                                                 Download
                                             </button>
-                                        </td>
+                                        </td> */}
                                         <td className="px-6 py-4">
                                             {profile.active
                                                 ? "Active"

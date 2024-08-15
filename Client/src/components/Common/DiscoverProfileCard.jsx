@@ -7,11 +7,9 @@ export default function DiscoverProfileCard({ profile }) {
   const { user } = useAuth(); // Get user from Auth context
 
   const handleViewProfile = () => {
-    if (!user) {
-      navigate("/login"); // Redirect to login if not authenticated
-    } else {
+   
       navigate(`/profile/${profile.id}`); // Navigate to profile if authenticated
-    }
+  
   };
 
   return (

@@ -49,7 +49,7 @@ export default function CreateQRCode() {
                 setQrID(websiteUrl + 'profile/' + profile_id);
             }
             else {
-                setQrID(websiteUrl + 'login');
+                setQrID(websiteUrl + 'login?qrid=' + qrID);
             }
 
             setQrIsVisible(true);

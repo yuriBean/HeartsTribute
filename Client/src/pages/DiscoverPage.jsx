@@ -4,7 +4,7 @@ import { getDiscoverProfiles } from "../services/profileManager.service";
 import DiscoverProfileCard from "../components/Common/DiscoverProfileCard";
 import Spinner from "../components/Common/Spinner";
 import { checkUserProfiles, getLoggedInUser } from "../services/profileManager.service"; // Import your service functions
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate, useSearchParams } from "react-router-dom"; // Import useNavigate
 import CreateProfileModal from "../components/Profile/CreateProfileModal"; // Import your modal component
 
 export default function DiscoverPage() {
@@ -14,7 +14,9 @@ export default function DiscoverPage() {
   const [hasMore, setHasMore] = useState(true);
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
   const [user, setUser] = useState(null); // State to store user info
-
+  const [searchParams] = useSearchParams();
+  const qrid = searchParams.get("qrid");
+  
   const loadMoreProfiles = async () => {
     if (loadingProfiles || !hasMore) return;
 
@@ -98,7 +100,8 @@ export default function DiscoverPage() {
             </button>
           )}
         </div>
-        <CreateProfileModal 
+        <CreateProfileModal
+            qrid={qrid}
             isOpen={showModal} 
             onClose={() => setShowModal(false)} 
             onCreateProfile={handleCreateProfile} 

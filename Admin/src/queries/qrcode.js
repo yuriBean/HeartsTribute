@@ -1,4 +1,4 @@
-import { db } from "../firebase";
+import { db } from "../firebase"; // Adjust the import path as necessary
 import { collection, addDoc, doc, getDoc, serverTimestamp, getDocs, startAfter, query, orderBy, limit, updateDoc } from "firebase/firestore";
 
 export const createQRCode = async (data) => {
@@ -68,28 +68,40 @@ export const changeCurrentIDIndex = async (index) => {
     console.log(error);
   }
 }
+
 export const createExtraIDs = async (numberOfIds) => {
   try {
-    // append the same document's array of idsAvailable with new random generated id's
-    const docRef = doc(db, "qrids",
-      "1"
-    );
+    const qrCodesRef = collection(db, "qrcodes");
+    const docRef = doc(db, "qrids", "1");
     const docSnap = await getDoc(docRef);
     let data = docSnap.data();
+
     for (let i = 0; i < numberOfIds; i++) {
       const newId = generateRandomId();
       const dateCreated = new Date().toISOString(); // Get the current date in ISO format
       data.idsAvailable.push({ id: newId, dateCreated }); // Store both id and dateCreated
+
+      // Create corresponding QR code with profile_id as null
+      const qrCodeData = {
+        qr_id: newId,
+        profile_id: null,
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp(),
+      };
+      await addDoc(qrCodesRef, qrCodeData);
     }
+
     await updateDoc(docRef, {
-      idsAvailable: data.idsAvailable
-    })
+      idsAvailable: data.idsAvailable,
+    });
+
     return docSnap.data();
   } catch (error) {
     console.error("Error adding document: ", error);
     return null;
   }
-}
+};
+
 export const removeUsedID = async (id) => {
   try {
     const docRef = doc(db, "qrids",

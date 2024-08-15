@@ -1,8 +1,8 @@
 import { collection, addDoc, doc, getDoc, arrayUnion, arrayRemove, updateDoc, query, getDocs, where, serverTimestamp, orderBy, limit, deleteDoc, startAfter } from "firebase/firestore";
 import { db, storage } from "../../firebase";
 import removeUserId from "../utils/removeUserId";
-import { ref, deleteObject } from "firebase/storage"; // Correct import for deleteObject
-import { getAuth } from "firebase/auth"; // Correct import for getAuth
+import { ref, deleteObject } from "firebase/storage";
+import { getAuth } from "firebase/auth";
 
 const CreateNewProfile = async (data) => {
     try {
@@ -623,18 +623,90 @@ const getUserProfiles = async (userId) => {
     }
 };
 
-const linkProfileToQR = async (profileId, qrId) => {
-    const profileRef = doc(db, "profiles", profileId);
+const linkProfileToQR = async (profileId, qrid) => {
     try {
-        await updateDoc(profileRef, {
-            qr_id: qrId // Assuming you want to store the QR ID in the profile document
-        });
-        console.log(`Profile ${profileId} linked to QR code ${qrId}`);
+      console.log(`Attempting to link profile ${profileId} to QR code ${qrid}`);
+  
+      const qrCodesRef = collection(db, "qrcodes");
+      const q = query(qrCodesRef, where("qr_id", "==", qrid));
+      const querySnapshot = await getDocs(q);
+  
+      if (querySnapshot.empty) {
+        throw new Error(`No QR code found with ID ${qrid}`);
+      }
+  
+      const qrCodeDoc = querySnapshot.docs[0];
+      if (!qrCodeDoc) {
+        throw new Error(`No QR code document found for ID ${qrid}`);
+      }
+  
+      const qrCodeData = qrCodeDoc.data();
+      if (!qrCodeData) {
+        throw new Error(`No data found for QR code document with ID ${qrid}`);
+      }
+  
+      // Check if the corresponding profileId of that doc is null
+      if (qrCodeData.profile_id) {
+        throw new Error(`QR code ${qrid} is already linked to profile ID ${qrCodeData.profile_id}`);
+      }
+  
+      // Update the profileId in the QR code document
+      const qrCodeRef = doc(db, "qrcodes", qrCodeDoc.id);
+      await updateDoc(qrCodeRef, {
+        profile_id: profileId,
+        updated_at: serverTimestamp(),
+      });
+
+      const profileRef = doc(db, "profiles", profileId); // Adjust the path according to your collection structure
+      await updateDoc(profileRef, { expiry_date: null });
+  
+      console.log(`Profile ${profileId} linked to QR code ${qrid}`);
     } catch (error) {
-        console.error("Error linking profile to QR code:", error);
-        throw new Error("Failed to link profile to QR code");
+      console.error("Error linking profile to QR code:", error);
+      throw new Error("Failed to link profile to QR code");
     }
-};
+  };  
+const createQRCode = async (profileId, qrid) => {
+    try {
+      const qrCodesRef = collection(db, "qrcodes");
+  
+      // Check if the profileId or qrid already exists in the collection
+      const profileIdQuery = query(qrCodesRef, where("profile_id", "==", profileId));
+      const qridQuery = query(qrCodesRef, where("qr_id", "==", qrid));
+  
+      const [profileIdSnapshot, qridSnapshot] = await Promise.all([
+        getDocs(profileIdQuery),
+        getDocs(qridQuery),
+      ]);
+  
+      if (!profileIdSnapshot.empty) {
+        throw new Error(`Profile ID ${profileId} already exists.`);
+      }
+  
+      if (!qridSnapshot.empty) {
+        throw new Error(`QR ID ${qrid} already exists.`);
+      }
+  
+      const data = {
+        profile_id: profileId,
+        qr_id: qrid,
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp(),
+      };
+  
+      const docRef = await addDoc(qrCodesRef, data);
+
+      const profileRef = doc(db, "profiles", profileId); // Adjust the path according to your collection structure
+      await updateDoc(profileRef, { expiry_date: null });
+
+      console.log("Document written with ID: ", docRef.id);
+      return docRef.id;
+    } catch (error) {
+      console.error("Error adding document: ", error);
+      return null;
+    }
+  };
+    
 
 const checkUserProfiles = async (userId) => {
     try {
@@ -656,5 +728,5 @@ const getLoggedInUser = () => {
 
 
 //export { CreateNewProfile, createPost, getProfileWithId, editProfileWithId, getPostsWithProfileId, addEvent, getEventsByProfileId, AddNewTribute, GetTributesById, getPostsWithUserId, getProfilesWithUserId, getProfileWithIdAndUserId, AddCommentToPost, getCommentsWithPostId, getDiscoverProfiles}
-export { deletePost, getLoggedInUser, checkUserProfiles, getUserProfiles, linkProfileToQR, CreateNewProfile, createPost, getProfileWithId, editProfileWithId, getPostsWithProfileId, addEvent, getEventsByProfileId, AddNewTribute, GetTributesById, getPostsWithUserId, getProfilesWithUserId, getProfileWithIdAndUserId, addFavoriteWithUserId, removeFavoriteWithUserId, getFavoriteProfilesWithUserId, addLikeWithUserId, removeLikeWithUserId, AddCommentToPost, getCommentsWithPostId, getDiscoverProfiles, deleteComment, addRequestedUserToProfile, addAllowedUserToProfile, removeAllowedUserFromProfile, removeRequestedUserFromProfile, deleteProfile, deletePostsByProfileId, deleteProfilePhoto, deleteFirestoreDocument, requestAccess, deleteTribute, deleteEvent, resetProfilePhoto, resetCoverPhoto, deleteFileFromStorage }
+export { createQRCode, deletePost, getLoggedInUser, checkUserProfiles, getUserProfiles, linkProfileToQR, CreateNewProfile, createPost, getProfileWithId, editProfileWithId, getPostsWithProfileId, addEvent, getEventsByProfileId, AddNewTribute, GetTributesById, getPostsWithUserId, getProfilesWithUserId, getProfileWithIdAndUserId, addFavoriteWithUserId, removeFavoriteWithUserId, getFavoriteProfilesWithUserId, addLikeWithUserId, removeLikeWithUserId, AddCommentToPost, getCommentsWithPostId, getDiscoverProfiles, deleteComment, addRequestedUserToProfile, addAllowedUserToProfile, removeAllowedUserFromProfile, removeRequestedUserFromProfile, deleteProfile, deletePostsByProfileId, deleteProfilePhoto, deleteFirestoreDocument, requestAccess, deleteTribute, deleteEvent, resetProfilePhoto, resetCoverPhoto, deleteFileFromStorage }
 

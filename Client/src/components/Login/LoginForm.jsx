@@ -3,21 +3,20 @@ import InputPassword from "./InputPassword";
 import InputText from "./InputText";
 import GoogleLogo from "/Login/google.png";
 import FacebookLogo from "/Login/facebook.png";
-import { signinWithGoogle } from "../../auth/socialAuthServices";
+import { signinWithGoogle, signinWithFacebook } from "../../auth/socialAuthServices";
 import { signin } from "../../auth/emailAuthServices";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
-import { set } from "date-fns";
-import { signinWithFacebook } from "../../auth/socialAuthServices"; // Import the function
+// import { set } from "date-fns";
 
-export default function LoginForm() {
+export default function LoginForm( { qrid }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState([]);
   const [recaptcha, setRecaptcha] = useState("");
+
   const onChange = (e) => {
     if (e.target.name === "Email") {
       setEmail(e.target.value);
@@ -40,7 +39,7 @@ export default function LoginForm() {
       setLoading(true);
       await signin(email, password);
       setLoading(false);
-      navigate("/");
+      navigate(`/no-profile-connected?qrid=${qrid}`); // Redirect to homepage with qrid as query parameter
     } catch (error) {
       setErrors([error.message]);
     } finally {
@@ -50,7 +49,7 @@ export default function LoginForm() {
   const onGoogleSignin = async () => {
     try {
       // setLoading(true);
-      await signinWithGoogle();
+      await signinWithGoogle(qrid);
       // setLoading(false);
     } catch (error) {
       setErrors([]);
@@ -60,7 +59,7 @@ export default function LoginForm() {
 
   const onFacebookSignin = async () => {
     try {
-      await signinWithFacebook();
+      await signinWithFacebook(qrid);
     } catch (error) {
       console.error("Facebook sign-in error:", error);
     }

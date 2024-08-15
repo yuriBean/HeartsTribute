@@ -26,8 +26,14 @@ export default function CreateIDs() {
         setLoading(false);
     };
 
+    const getUsedIds = async () => {
+        const fetchedUsedIds = await getUsedQRCodeIDs(); // Fetch used QR IDs
+        setUsedIds(fetchedUsedIds.usedIds); // Set the used IDs in state
+    };
+
     useEffect(() => {
         getQRIds();
+        getUsedIds();
     }, []);
 
     const handleDownloadCSV = async () => {
@@ -41,10 +47,6 @@ export default function CreateIDs() {
     };
     const filteredQRIDs = qrids.filter(qrID => qrID.id && qrID.id.includes(searchTerm));
 
-    const getUsedIds = async () => {
-        const fetchedUsedIds = await getUsedQRCodeIDs(); // Fetch used QR IDs
-        setUsedIds(fetchedUsedIds.usedIds); // Set the used IDs in state
-    };
 
     return (
         <div>
