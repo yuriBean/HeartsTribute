@@ -10,10 +10,20 @@ import router from "./services/idrive.services.js";
 //config + variables
 const app = express();
 app.use(express.json({ limit: "20mb" }));
-app.use(cors());
 app.use(compression());
 dotenv.config();
 
+const allowedOrigins = ['https://app.heartstribute.com', 'https://www.app.heartstribute.com'];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+}));
 
 // api endpoints
 app.use("/api", router);
