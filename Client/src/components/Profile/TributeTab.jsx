@@ -10,16 +10,13 @@ export default function TributeTab() {
     const { tributes, getTributes } = usePublicProfile();
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        const fetchTributes = async () => {
-            if (tributes.length === 0) {
-                setLoading(true);
-                await getTributes();
-                console.log(tributes);
-                setLoading(false);
-            }
-        };
+    const fetchTributes = async () => {
+        setLoading(true);
+        await getTributes();
+        setLoading(false);
+    };
 
+    useEffect(() => {
         fetchTributes();
     }, []);
 
@@ -46,7 +43,7 @@ export default function TributeTab() {
                             className="w-full"
                             animateIn="bounceInRight"
                         >
-                            <Tribute key={tribute.id} tribute={tribute} />
+                            <Tribute key={tribute.id} tribute={tribute} onDelete={fetchTributes} />
                         </ScrollAnimation>
                     ))}
                 </div>

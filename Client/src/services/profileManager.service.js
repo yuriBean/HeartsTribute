@@ -494,8 +494,24 @@ const deletePostsByProfileId = async (profileId) => {
 const deleteTribute = async (tributeId) => {
     try {
         const tributeRef = doc(db, "tributes", tributeId);
-        await deleteDoc(tributeRef);
-        console.log("Tribute deleted with ID: ", tributeId);
+        const tributeDoc = await getDoc(tributeRef);
+        if (tributeDoc.exists()) {
+            const tributeData = tributeDoc.data();
+            const imagePath = tributeData.imagePath; // Assuming imagePath is the field storing the image path
+
+            // Delete the image from Firebase Storage
+            if (imagePath) {
+                const imageRef = ref(storage, imagePath);
+                await deleteObject(imageRef);
+                console.log(`Image deleted successfully: ${imagePath}`);
+            }
+
+            // Delete the tribute document
+            await deleteDoc(tributeRef);
+            console.log("Tribute deleted with ID: ", tributeId);
+        } else {
+            console.log("No such tribute document!");
+        }
     } catch (error) {
         console.error("Error deleting tribute:", error);
     }
@@ -509,8 +525,10 @@ const deleteEvent = async (eventId) => {
         if (eventDoc.exists()) {
             // Delete associated photos
             const photoPath = eventDoc.data().photoPath; // Assuming you store the photo path
-            const photoRef = ref(storage, photoPath);
-            await deleteObject(photoRef);
+            if (photoPath) {
+                const photoRef = ref(storage, photoPath);
+                await deleteObject(photoRef);
+            }
             await deleteDoc(eventRef);
             console.log("Event deleted with ID: ", eventId);
         }
@@ -625,47 +643,65 @@ const getUserProfiles = async (userId) => {
 
 const linkProfileToQR = async (profileId, qrid) => {
     try {
-      console.log(`Attempting to link profile ${profileId} to QR code ${qrid}`);
-  
-      const qrCodesRef = collection(db, "qrcodes");
-      const q = query(qrCodesRef, where("qr_id", "==", qrid));
-      const querySnapshot = await getDocs(q);
-  
-      if (querySnapshot.empty) {
-        throw new Error(`No QR code found with ID ${qrid}`);
-      }
-  
-      const qrCodeDoc = querySnapshot.docs[0];
-      if (!qrCodeDoc) {
-        throw new Error(`No QR code document found for ID ${qrid}`);
-      }
-  
-      const qrCodeData = qrCodeDoc.data();
-      if (!qrCodeData) {
-        throw new Error(`No data found for QR code document with ID ${qrid}`);
-      }
-  
-      // Check if the corresponding profileId of that doc is null
-      if (qrCodeData.profile_id) {
-        throw new Error(`QR code ${qrid} is already linked to profile ID ${qrCodeData.profile_id}`);
-      }
-  
-      // Update the profileId in the QR code document
-      const qrCodeRef = doc(db, "qrcodes", qrCodeDoc.id);
-      await updateDoc(qrCodeRef, {
-        profile_id: profileId,
-        updated_at: serverTimestamp(),
-      });
+        console.log(`Attempting to link profile ${profileId} to QR code ${qrid}`);
 
-      const profileRef = doc(db, "profiles", profileId); // Adjust the path according to your collection structure
-      await updateDoc(profileRef, { expiry_date: null });
-  
-      console.log(`Profile ${profileId} linked to QR code ${qrid}`);
+        const qrCodesRef = collection(db, "qrcodes");
+        const q = query(qrCodesRef, where("qr_id", "==", qrid));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            throw new Error(`No QR code found with ID ${qrid}`);
+        }
+
+        const qrCodeDoc = querySnapshot.docs[0];
+        if (!qrCodeDoc) {
+            throw new Error(`No QR code document found for ID ${qrid}`);
+        }
+
+        const qrCodeData = qrCodeDoc.data();
+        if (!qrCodeData) {
+            throw new Error(`No data found for QR code document with ID ${qrid}`);
+        }
+
+        // Check if the corresponding profileId of that doc is null
+        if (qrCodeData.profile_id) {
+            throw new Error(`QR code ${qrid} is already linked to profile ID ${qrCodeData.profile_id}`);
+        }
+
+        // Check if the profile is already linked to another QR code
+        const profileQuery = query(qrCodesRef, where("profile_id", "==", profileId));
+        const profileQuerySnapshot = await getDocs(profileQuery);
+        if (!profileQuerySnapshot.empty) {
+            throw new Error(`Profile ID ${profileId} is already linked to another QR code.`);
+        }
+
+        // Get the profile's visibility
+        const profileRef = doc(db, "profiles", profileId);
+        const profileDoc = await getDoc(profileRef);
+        if (!profileDoc.exists()) {
+            throw new Error(`Profile with ID ${profileId} does not exist.`);
+        }
+        const profileData = profileDoc.data();
+        const profileVisibility = profileData.visibility;
+
+        // Update the profileId and profile_visibility in the QR code document
+        const qrCodeRef = doc(db, "qrcodes", qrCodeDoc.id);
+        await updateDoc(qrCodeRef, {
+            profile_id: profileId,
+            profile_visibility: profileVisibility,
+            updated_at: serverTimestamp(),
+            active: true,
+        });
+
+        await updateDoc(profileRef, { expiry_date: null });
+
+        console.log(`Profile ${profileId} linked to QR code ${qrid}`);
     } catch (error) {
-      console.error("Error linking profile to QR code:", error);
-      throw new Error("Failed to link profile to QR code");
+        console.error("Error linking profile to QR code:", error);
+        throw new Error("Failed to link profile to QR code");
     }
-  };  
+};
+
 const createQRCode = async (profileId, qrid) => {
     try {
       const qrCodesRef = collection(db, "qrcodes");

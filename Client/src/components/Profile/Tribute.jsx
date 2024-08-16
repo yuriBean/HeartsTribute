@@ -1,8 +1,22 @@
 import React from "react";
 import { usePublicProfile } from "../Providers/PublicProfileProvider";
+import { deleteTribute } from "../../services/profileManager.service"; // Import deleteTribute
 
-export default function Tribute({ tribute }) {
+export default function Tribute({ tribute, onDelete }) {
   const { profile } = usePublicProfile();
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const handleDeleteTribute = async () => {
+    try {
+      await deleteTribute(tribute.id);
+      onDelete(); // Call the onDelete prop to refresh the tributes list
+    } catch (error) {
+      console.error("Error deleting tribute:", error);
+    }
+  };
+
+  const canDelete = user.email === tribute.email || user.id === profile.user_id;
+
   return (
     <div
       id="tribute"
@@ -22,11 +36,18 @@ export default function Tribute({ tribute }) {
             className="aspect-square w-full h-full rounded-md object-cover"
           />
         )}
-
       </div>
       <p className="text-lime-700 text-xs font-medium tracking-wider italic ">
         ~Tribute By {tribute.display_name}
       </p>
+      {canDelete && (
+        <button
+          onClick={handleDeleteTribute}
+          className="text-sm tracking-wider text-red-500 2xl:text-base mt-2"
+        >
+          Delete Tribute
+        </button>
+      )}
     </div>
   );
 }

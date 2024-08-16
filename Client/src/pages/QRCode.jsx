@@ -18,13 +18,13 @@ export default function QRCode() {
                 navigate("/404");
             } else {
                 if (QRrecord.profile_id) {
-                    // if (QRrecord.profile_visibility === "public") 
+                    if (QRrecord.profile_visibility === "true") 
                     // if (QRrecord) 
-                    //     {
+                        {
                         navigate(`/profile/${QRrecord.profile_id}`); // Redirect to public profile
-                    // } else {
-                    //     setLoading(false);
-                    // }
+                    } else {
+                        setLoading(false);
+                    }
                 } else {
                     navigate(`/no-profile-connected?qrid=${qr_id}`);
                     console.log(qr_id);

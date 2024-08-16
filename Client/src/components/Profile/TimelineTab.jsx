@@ -3,6 +3,7 @@ import Spinner from "../Common/Spinner";
 import { usePublicProfile } from "../Providers/PublicProfileProvider";
 import CheckProfileOwner from "../CheckProfileOwner";
 import { useNavigate } from "react-router-dom";
+import { deleteEvent } from "../../services/profileManager.service"; // Import deleteEvent
 
 export default function TimelineTab() {
   const { profile, events, getEvents, getProfile } = usePublicProfile();
@@ -17,6 +18,18 @@ export default function TimelineTab() {
 
   const toggleReadMore = () => {
     setIsReadMore(!isReadMore);
+  };
+
+  const handleDeleteEvent = async (eventId) => {
+    setLoading(true);
+    try {
+      await deleteEvent(eventId);
+      await getEvents(); // Refresh events after deletion
+    } catch (error) {
+      console.error("Error deleting event:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -92,6 +105,12 @@ export default function TimelineTab() {
           >
             Add Event
           </button>
+          {/* <button
+            onClick={() => navigate(`/edit-profile/${profile.id}/add-event`)}
+            className="bg-red-500 ml-2 my-2 text-white px-4 py-2 rounded-lg"
+          >
+            Delete Event
+          </button> */}
         </div>
       </CheckProfileOwner>
       <h1 className="text-center text-lg mb-6 font-bold tracking-widest xl:text-xl">
@@ -151,6 +170,12 @@ export default function TimelineTab() {
                     {isReadMore ? "Read Less" : "Read More"}
                   </button>
                 )}
+                <button
+                  onClick={() => handleDeleteEvent(event.id)}
+                  className="text-sm tracking-wider text-red-500 2xl:text-base mt-2"
+                >
+                  Delete Event
+                </button>
               </div>
             </li>
           ))}

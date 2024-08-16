@@ -42,7 +42,11 @@ export const signinWithGoogle = async (qrid) => {
 
       console.log(user);
       if (user) {
-        window.location.href = `/no-profile-connected?qrid=${qrid}`;
+        if(qrid === null){
+          window.location.href = `/`;
+        }
+        else
+          window.location.href = `/no-profile-connected?qrid=${qrid}`;
       }
       return user;
     })
@@ -71,7 +75,11 @@ export const signinWithFacebook = async (qrid) => {
 
       console.log(user);
       if (user) {
-        window.location.href = `/no-profile-connected?qrid=${qrid}`;
+        if(qrid === null){
+          window.location.href = `/`;
+        }
+        else
+          window.location.href = `/no-profile-connected?qrid=${qrid}`;
       }
       return user;
     })
