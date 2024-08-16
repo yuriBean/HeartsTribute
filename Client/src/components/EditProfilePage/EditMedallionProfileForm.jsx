@@ -84,13 +84,13 @@ export default function EditProfileForm() {
   const handleChange = (name, value) => {
     if (profile[name] === value) {
       const updatedData = { ...modifiedData };
-      delete updatedData[name];
+      delete updatedData[name]; 
       setModifiedData(updatedData);
     } else {
       setModifiedData((prev) => ({ ...prev, [name]: value }));
     }
   };
-  const getProfiles = async (first) => {
+  const getProfiles = async (first = false) => {
     let url =
       "https://api.globalgiving.org/api/public/projectservice/all/projects/active/summary.json?api_key=effb307b-a845-4e62-8146-2300502217ac";
     try {
@@ -109,13 +109,23 @@ export default function EditProfileForm() {
         const data = await response.json();
         setHasNext(data.projects.hasNext);
         setNextID(data.projects.nextProjectId);
-        setDonationProfiles((prev) => [...prev, ...data.projects.project]);
+        setDonationProfiles((prev) => [
+          ...prev,
+          ...data.projects.project,
+        ]);
         setDonationProfilesLoading(false);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (donationEnabled) {
+      getProfiles();
+    }
+  }, [donationEnabled]);
+
   const onLoadMore = (e) => {
     if (e.target.value === "load_more") {
       e.preventDefault();
@@ -125,11 +135,7 @@ export default function EditProfileForm() {
       setDonationProfileID(e.target.value);
     }
   };
-  useEffect(() => {
-    if (donationEnabled) {
-      getProfiles(true);
-    }
-  }, [donationEnabled]);
+  
   useEffect(() => {
     if (profile) {
       setProfilePicture({ name: profile?.profile_picture });
@@ -139,9 +145,14 @@ export default function EditProfileForm() {
       setDonationProfileID(profile?.donation_profile_id);
     }
   }, [profile]);
+
   useEffect(() => {
     console.log(modifiedData);
   }, [modifiedData]);
+
+  const filteredProfiles = donationProfiles.filter((profile) =>
+    profile.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return !loading ? (
     <div className="">
@@ -425,31 +436,52 @@ export default function EditProfileForm() {
           </Label>
         </div>
         <div>
-          {donationEnabled && (
-            <select
-              className="rounded-md border p-2 w-full"
-              placeholder="Select Donation Profile"
-              name="donation_profile_id"
-              onChange={(e) => onLoadMore(e)}
-            >
-              <option value="">Select Donation Profile</option>
-              {/* option to load more profiles */}
-              {donationProfilesLoading && (
-                <option value="loading">Loading...</option>
+        {donationEnabled && (
+            <>
+              <Label>Search Donation Profiles</Label>
+              <input
+                type="text"
+                className="border p-2 mb-2 rounded-md w-full"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onFocus={() => setIsDropdownOpen(true)}
+              />
+              {isDropdownOpen && (
+                <div className="absolute z-10 bg-white border rounded-md w-full">
+                  <select
+                    className="rounded-md border p-2 w-full"
+                    placeholder="Select Donation Profile"
+                    name="donation_profile_id"
+                    onChange={(e) => {
+                      setDonationProfileID(e.target.value);
+                      setIsDropdownOpen(false);
+                      getProfiles();
+                    }}
+                    onClick={() => getProfiles()}
+                  >
+                    <option value="">Select Donation Profile</option>
+                    {donationProfilesLoading && (
+                      <option value="loading">Loading...</option>
+                    )}
+                    {!donationProfilesLoading &&
+                      filteredProfiles.map((profile) => (
+                        <option value={profile.id} key={profile.id}>
+                          {profile.title}
+                        </option>
+                      ))}
+                  </select>
+                  {/* {hasNext && (
+                    <button
+                      onClick={() => getProfiles()}
+                      className="mt-2 text-blue-500"
+                    >
+                      Load More
+                    </button>
+                  )} */}
+                </div>
               )}
-
-              {!donationProfilesLoading &&
-                donationProfiles.map((profile) => (
-                  <option value={profile?.id} key={profile?.id}>
-                    {profile?.title}
-                  </option>
-                ))}
-              {hasNext && (
-                <option value="load_more" className="cursor-pointer">
-                  Load More...
-                </option>
-              )}
-            </select>
+            </>
           )}
         </div>
         <br />

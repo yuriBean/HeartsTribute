@@ -79,7 +79,7 @@ export default function CreateProfile() {
         return null;
       }
     }
-    return null;
+    return null; 
   };
   const onSubmit = async (data) => {
     if (profileType === "human") data.profile_type = "human";
@@ -160,7 +160,7 @@ export default function CreateProfile() {
     }
   };
 
-  const getProfiles = async (first) => {
+  const getProfiles = async (first = false) => {
     let url =
       "https://api.globalgiving.org/api/public/projectservice/all/projects/active/summary.json?api_key=effb307b-a845-4e62-8146-2300502217ac";
     try {
@@ -179,13 +179,17 @@ export default function CreateProfile() {
         const data = await response.json();
         setHasNext(data.projects.hasNext);
         setNextID(data.projects.nextProjectId);
-        setDonationProfiles((prev) => [...prev, ...data.projects.project]);
+        setDonationProfiles((prev) => [
+          ...prev,
+          ...data.projects.project,
+        ]);
         setDonationProfilesLoading(false);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
 
   useEffect(() => {
     if (donationEnabled) {
@@ -538,30 +542,40 @@ export default function CreateProfile() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onFocus={() => setIsDropdownOpen(true)}
                 />
-                {isDropdownOpen && (
-                  <div className="absolute z-10 bg-white border rounded-md w-full">
-                    <select
-                      className="rounded-md border p-2 w-full"
-                      placeholder="Select Donation Profile"
-                      name="donation_profile_id"
-                      onChange={(e) => {
-                        setDonationProfileID(e.target.value);
-                        setIsDropdownOpen(false);
-                      }}
+              {isDropdownOpen && (
+                <div className="absolute z-10 bg-white border rounded-md w-full">
+                  <select
+                    className="rounded-md border p-2 w-full"
+                    placeholder="Select Donation Profile"
+                    name="donation_profile_id"
+                    onChange={(e) => {
+                      setDonationProfileID(e.target.value);
+                      setIsDropdownOpen(false);
+                      getProfiles();
+                    }}
+                    onClick={() => getProfiles()}
+                  >
+                    <option value="">Select Donation Profile</option>
+                    {donationProfilesLoading && (
+                      <option value="loading">Loading...</option>
+                    )}
+                    {!donationProfilesLoading &&
+                      filteredProfiles.map((profile) => (
+                        <option value={profile.id} key={profile.id}>
+                          {profile.title}
+                        </option>
+                      ))}
+                  </select>
+                  {/* {hasNext && (
+                    <button
+                      onClick={() => getProfiles()}
+                      className="mt-2 text-blue-500"
                     >
-                      <option value="">Select Donation Profile</option>
-                      {donationProfilesLoading && (
-                        <option value="loading">Loading...</option>
-                      )}
-                      {!donationProfilesLoading &&
-                        filteredProfiles.map((profile) => (
-                          <option value={profile.id} key={profile.id}>
-                            {profile.title}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-                )}
+                      Load More
+                    </button>
+                  )} */}
+                </div>
+              )}
               </div>
             </>
           )}

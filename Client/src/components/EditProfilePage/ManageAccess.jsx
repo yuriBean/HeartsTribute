@@ -16,7 +16,16 @@ export default function ManageAccess() {
   const { profile, loading, getProfile } = useProfile();
   const [emailInput, setEmailInput] = useState("");
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const grantAccess = async (email) => {
+    if (!validateEmail(email)) {
+      notifyError("Please enter a valid email address");
+      return;
+    }
     try {
       await addAllowedUserToProfile(profile.id, email);
       notifySuccess("Access Granted");

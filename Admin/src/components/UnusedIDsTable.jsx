@@ -5,7 +5,9 @@ export default function UnusedIDsTable({ ids, usedIds, loading = false }) {
     const idsPerPage = 20;
 
     // Filter out used IDs
-    const unusedIds = ids.filter(idObj => !usedIds.includes(idObj.id));
+    const unusedIds = ids
+        .filter(idObj => !usedIds.includes(idObj.id))
+        .sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
 
     // Calculate total pages
     const totalPages = Math.ceil(unusedIds.length / idsPerPage);
