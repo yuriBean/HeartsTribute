@@ -1,14 +1,14 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getUserProfiles, linkProfileToQR, getLoggedInUser } from "../services/profileManager.service";
+import { getUserProfiles, linkProfileToQR, getLoggedInUser, getQRIdsForProfiles } from "../services/profileManager.service";
 import Layout from "../components/Layout/Layout";
 import Spinner from "../components/Common/Spinner";
+import { notifyError, notifySuccess } from "../utils/toastNotifications";
 
 export default function NoProfileConnected() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [profiles, setProfiles] = useState([]);
-  const [error, setError] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [linking, setLinking] = useState(false);
   const [searchParams] = useSearchParams();
@@ -19,8 +19,10 @@ export default function NoProfileConnected() {
       const user = getLoggedInUser();
       if (user) {
         const profiles = await getUserProfiles(user.uid);
-        setProfiles(profiles);
-        if (profiles.length === 0) {
+        const qrIds = await getQRIdsForProfiles(profiles.map(profile => profile.id));
+        const unlinkedProfiles = profiles.filter(profile => !qrIds.includes(profile.id));
+        setProfiles(unlinkedProfiles);
+        if (unlinkedProfiles.length === 0) {
           navigate(`/profile-manager/tribute-tags?qrid=${qrid}`);
         }
       } else {
@@ -34,14 +36,13 @@ export default function NoProfileConnected() {
   };
 
   const handleCreateProfile = () => {
-    try{
+    try {
       const user = getLoggedInUser();
-      if(!user)
+      if (!user)
         navigate(`/login?qrid=${qrid}`);
       else
         navigate(`/profile-manager/tribute-tags?qrid=${qrid}`);
-    }
-    catch (error) {
+    } catch (error) {
       setError("Failed to fetch profiles. Please try again.");
       setLoading(false);
     }
@@ -58,19 +59,17 @@ export default function NoProfileConnected() {
 
       // Check if the QRID already exists and is not linked to another profile
       await linkProfileToQR(profileId, qrid); // Link existing profile to QR code
-      alert("Profile linked successfully!");
+      notifySuccess("Profile linked successfully!");
       navigate(`/profile/${profileId}`); // Redirect to the linked profile
     } catch (error) {
       console.error("Failed to link profile", error);
-      alert(`Failed to link profile: ${error.message}`);
+      notifyError(`Failed to link profile. The QR ID or profile may already be linked.`);
     } finally {
       setLinking(false);
     }
   };
 
   useEffect(() => {
-    // if( qrid===null )
-    //   navigate(`/?qrid=${qrid}`);
     checkUserProfiles();
   }, []);
 
@@ -82,7 +81,7 @@ export default function NoProfileConnected() {
     <Layout>
       <div className="flex flex-col items-center justify-center h-[40rem]">
         <h1 className="text-2xl md:text-4xl font-bold text-center mx-1 md:mx-9">
-          Looks like no profile is connected with this QR code. Start by creating a new profile or linking an existing one.
+          Looks like no profile is connected with this QR code. Start by creating a new profile or linking an existing unused one.
         </h1>
         {profiles.length > 0 ? (
           <>
@@ -105,10 +104,10 @@ export default function NoProfileConnected() {
                             handleLinkProfile(profile.id);
                             setModalOpen(false);
                           }}
-                          className="bg-primary text-white px-4 py-2 rounded"
+                          className="bg-primary text-white px-4 py-2 rounded w-full text-left"
                           disabled={linking}
                         >
-                          {profile.id} {/* Replace with the profile property you want to display */}
+                          {profile.first_name} {/* Replace with the profile property you want to display */}
                         </button>
                       </li>
                     ))}
