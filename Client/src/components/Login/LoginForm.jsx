@@ -39,7 +39,7 @@ export default function LoginForm( { qrid }) {
       setLoading(true);
       await signin(email, password);
       setLoading(false);
-      navigate(`/no-profile-connected?qrid=${qrid}`); // Redirect to homepage with qrid as query parameter
+      navigate(`/no-profile-connected?qrid=${qrid}`); 
     } catch (error) {
       setErrors([error.message]);
     } finally {

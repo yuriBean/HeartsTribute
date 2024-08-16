@@ -34,7 +34,7 @@ export default function NoProfileConnected() {
   };
 
   const handleCreateProfile = () => {
-    navigate(`/profile-manager/tribute-tags?qrid=${qrid}`);
+    navigate(`/login?redirect=/profile-manager/tribute-tags&qrid=${qrid}`);
   };
 
   const handleLinkProfile = async (profileId) => {

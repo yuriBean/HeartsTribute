@@ -14,18 +14,20 @@ export default function QRCode() {
         try {
             const QRrecord = await getQRCode(qr_id);
             setQrRecord(QRrecord);
-            if (!QRrecord || QRrecord.active === false) {
+            if (!QRrecord) {
                 navigate("/404");
             } else {
                 if (QRrecord.profile_id) {
-                    if (QRrecord.profile_visibility === "public") {
+                    // if (QRrecord.profile_visibility === "public") 
+                    // if (QRrecord) 
+                    //     {
                         navigate(`/profile/${QRrecord.profile_id}`); // Redirect to public profile
-                    } else {
-                        // Profile is private, show request access option
-                        setLoading(false);
-                    }
+                    // } else {
+                    //     setLoading(false);
+                    // }
                 } else {
-                    navigate("/no-profile-connected");
+                    navigate(`/no-profile-connected?qrid=${qr_id}`);
+                    console.log(qr_id);
                 }
             }
         } catch (error) {

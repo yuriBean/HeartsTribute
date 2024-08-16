@@ -27,31 +27,24 @@ export default function CreateQRCode() {
         try {
             console.log("button clicked for generator ");
             setDisabled(true);
-            // const check = await profileExists(profile_id);
-            // if (!check) {
-            //     alert("Profile does not exist");
-            //     setDisabled(false);
-            //     return;
-            // }
             console.log("Current QR IDs:", qrids);
             console.log("Entered QR ID:", qrID);
     
-            // if yes then generate new qrID
-            // console.log
             if (!qrids.some(qr => qr.id === qrID)) {
                 alert("Invalid QR ID or QR ID already exists");
-                setQrID();
+                setQrID("");
                 setDisabled(false);
                 return;
             }
             
-            if (profile_id){
-                setQrID(websiteUrl + 'profile/' + profile_id);
-            }
-            else {
-                setQrID(websiteUrl + 'login?qrid=' + qrID);
+            let qrCodeValue;
+            if (profile_id) {
+                qrCodeValue = websiteUrl + 'profile/' + profile_id;
+            } else {
+                qrCodeValue = websiteUrl + 'login?qrid=' + qrID;
             }
 
+            setQrID(qrCodeValue);
             setQrIsVisible(true);
             setTimeout(async () => {
                 const qrCodeImageUrl = await htmlToImage.toBlob(qrCodeRef.current);
@@ -59,11 +52,10 @@ export default function CreateQRCode() {
                 // Upload the blob to storage and get the URL
                 const imageUrl = await uploadImage(qrCodeImageUrl, true);
                 console.log(imageUrl);
-                // alert(imageUrl);
                 let data = {
                     qr_id: qrID,
                     image: imageUrl,
-                    profile_id: profile_id,
+                    profile_id: profile_id || null,
                     active: true,
                 };
                 await createQRCode(data);
@@ -72,9 +64,11 @@ export default function CreateQRCode() {
                 downloadQRCode();
                 setDisabled(false);
             }, 100);
-        } catch (error) {}
-    };
-    
+        } catch (error) {
+            console.error("Error generating QR code:", error);
+            setDisabled(false);
+        }
+    };    
     const downloadQRCode = () => {
         htmlToImage
             .toJpeg(qrCodeRef.current)

@@ -116,7 +116,7 @@ export default function CreateProfile() {
       notifySuccess("Profile Created Successfully");
 
       if (qrid) {
-        await createQRCode(newProfile.id, qrid); // Ensure QR code is created
+        await linkProfileToQR(newProfile.id, qrid); // Ensure QR code is created
       }
 
       reset();
