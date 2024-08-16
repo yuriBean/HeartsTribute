@@ -43,7 +43,7 @@ export const signinWithGoogle = async (qrid) => {
       console.log(user);
       if (user) {
         if(qrid === null){
-          window.location.href = `/`;
+          window.location.href = `/no-profile-connected?qrid=${qrid}`;
         }
         else
           window.location.href = `/no-profile-connected?qrid=${qrid}`;

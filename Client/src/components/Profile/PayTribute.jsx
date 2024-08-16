@@ -51,6 +51,7 @@ export default function PayTribute({ setShow }) {
         ? `${user.first_name} ${user.last_name}`
         : user.email;
     data.profile_id = profile.id;
+    data.created_by = user.id;
     try {
       await AddNewTribute(data);
       reset();

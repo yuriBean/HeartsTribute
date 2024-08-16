@@ -25,6 +25,9 @@ export default function EditProfileForm() {
   const [donationProfilesLoading, setDonationProfilesLoading] = useState(false);
   const [donationProfileID, setDonationProfileID] = useState(null);
   const user = (localStorage.getItem("user")) ? JSON.parse(localStorage.getItem("user")) : null;
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [showProfileSelection, setShowProfileSelection] = useState(false);
 
   const onSelectProfilePicture = (e) => {
     setProfilePicture(e);
@@ -485,7 +488,7 @@ export default function EditProfileForm() {
           )}
         </div>
         <br />
-        <h3 className="mb-2 text-sm tracking-wider md:text-base">
+        <h3 className="mt-20 mb-2 text-sm tracking-wider md:text-base">
           Profile Visibility
         </h3>
         <hr />

@@ -28,7 +28,7 @@ const CreateProfileModal = ({ qrid, isOpen, onClose, onCreateProfile }) => {
       // Link existing profile
       if (selectedProfileId) {
         await linkProfileToQR(selectedProfileId, qrid);
-        await createQRCode(selectedProfileId, qrid); // Ensure QR code is created
+        // await createQRCode(selectedProfileId, qrid); // Ensure QR code is created
         onCreateProfile();
       } else {
         alert("Please select a profile to link.");

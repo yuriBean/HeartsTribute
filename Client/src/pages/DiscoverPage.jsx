@@ -81,7 +81,7 @@ export default function DiscoverPage() {
 
   const handleCreateProfile = () => {
     setShowModal(false); // Close the modal
-    navigate("/profile-manager/tribute-tags"); // Navigate to the Tribute Tags page
+    navigate(`/profile-manager/tribute-tags?qrid=${qrid}`); // Navigate to the Tribute Tags page
   };
   return (
     <>

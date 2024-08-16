@@ -15,7 +15,7 @@ export default function Tribute({ tribute, onDelete }) {
     }
   };
 
-  const canDelete = user.email === tribute.email || user.id === profile.user_id;
+  const canDelete = user.id === tribute.created_by || user.id === profile.user_id;
 
   return (
     <div

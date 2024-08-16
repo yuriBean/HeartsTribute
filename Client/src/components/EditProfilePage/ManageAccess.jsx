@@ -52,6 +52,7 @@ export default function ManageAccess() {
     try {
       await removeAllowedUserFromProfile(profile.id, email);
       notifySuccess("Access Revoked");
+      profile.allowedUsers = profile.allowedUsers.filter(userEmail => userEmail !== email);
       getProfile();
     } catch (error) {
       console.error(error);

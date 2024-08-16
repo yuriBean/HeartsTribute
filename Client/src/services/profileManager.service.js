@@ -143,6 +143,7 @@ const AddNewTribute = async (data) => {
     try {
         data.created_at = serverTimestamp();
         data.updated_at = serverTimestamp();
+        data.created_by = data.created_by;
         const dbref = await addDoc(collection(db, "tributes"),
             data
         );
@@ -385,7 +386,7 @@ const removeAllowedUserFromProfile = async (profile_id, email) => {
         const profileRef = doc(db, "profiles", profile_id);
         const profileDoc = await getDoc(profileRef);
         if (profileDoc.exists()) {
-            if (profileDoc.data().requestedUsers) {
+            if (profileDoc.data().allowedUsers) {
                 await updateDoc(profileRef, {
                     allowedUsers: arrayRemove(email)
                 });

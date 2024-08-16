@@ -34,7 +34,17 @@ export default function NoProfileConnected() {
   };
 
   const handleCreateProfile = () => {
-    navigate(`/login?redirect=/profile-manager/tribute-tags&qrid=${qrid}`);
+    try{
+      const user = getLoggedInUser();
+      if(!user)
+        navigate(`/login?qrid=${qrid}`);
+      else
+        navigate(`/profile-manager/tribute-tags?qrid=${qrid}`);
+    }
+    catch (error) {
+      setError("Failed to fetch profiles. Please try again.");
+      setLoading(false);
+    }
   };
 
   const handleLinkProfile = async (profileId) => {
@@ -59,6 +69,8 @@ export default function NoProfileConnected() {
   };
 
   useEffect(() => {
+    // if( qrid===null )
+    //   navigate(`/?qrid=${qrid}`);
     checkUserProfiles();
   }, []);
 
