@@ -7,6 +7,8 @@ import {
     changeQRStatus,
     updateQrCode,
 } from "../services/admin.service";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons'; // Import the icons you need
 
 const Dashboard = () => {
     const [profileID, setProfileID] = useState("");
@@ -22,6 +24,7 @@ const Dashboard = () => {
         id: "",
         profile_id: "",
     });
+    const [showDefinedProfiles, setShowDefinedProfiles] = useState(true);
 
     const fetchProfiles = async () => {
         try {
@@ -44,7 +47,7 @@ const Dashboard = () => {
         try {
             setLoading(true);
             const { data, last, first } = await getPaginatedQRCodes(
-                10,
+                20,
                 "next",
                 lastDoc,
                 null
@@ -68,7 +71,7 @@ const Dashboard = () => {
             setHasMore(true);
             setLoading(true);
             const { data, last, first } = await getPaginatedQRCodes(
-                10,
+                20,
                 "previous",
                 null,
                 firstDoc
@@ -156,7 +159,7 @@ const Dashboard = () => {
 
             if (profileID == "") return;
             const { data } = await getPaginatedQRCodes(
-                10,
+                20,
                 "next",
                 null,
                 null,
@@ -181,7 +184,7 @@ const Dashboard = () => {
 
             if (qrID == "") return;
             const { data } = await getPaginatedQRCodes(
-                10,
+                20,
                 "next",
                 null,
                 null,
@@ -212,6 +215,13 @@ const Dashboard = () => {
         fetchProfiles();
     }, []);
 
+    const toggleProfiles = () => {
+        setShowDefinedProfiles(!showDefinedProfiles);
+    };
+
+    const filteredProfiles = profiles.filter(profile =>
+        showDefinedProfiles ? profile.profile_id : !profile.profile_id
+    );
 
     return (
         <div>
@@ -279,8 +289,17 @@ const Dashboard = () => {
                                 <th scope="col" className="px-6 py-3">
                                     QR_ID
                                 </th>
-                                <th scope="col" className="px-6 py-3">
-                                    PROFILE_ID
+                                <th scope="col" className="px-6 py-3 flex items-center">
+                                PROFILE_ID   
+                                    <button 
+                                        onClick={toggleProfiles} 
+                                        className="mx-3"
+                                    >
+                                        <FontAwesomeIcon 
+                                            icon={showDefinedProfiles ? faToggleOn : faToggleOff} 
+                                            size="2x" 
+                                        />
+                                    </button>
                                 </th>
                                 {/* <th scope="col" className="px-6 py-3">
                                     QR_IMAGE
@@ -304,8 +323,8 @@ const Dashboard = () => {
                                     </td>
                                 </tr>
                             )}
-                            {!loading &&
-                                profiles.map((profile) => (
+                            {!loading && 
+                                filteredProfiles.map((profile) => (
                                     <tr
                                         key={profile.id}
                                         className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"

@@ -5,6 +5,7 @@ export const createQRCode = async (data) => {
   try {
     data.updated_at = serverTimestamp();
     data.created_at = serverTimestamp();
+    data.active = true;
     const docRef = await addDoc(collection(db, "qrcodes"), data);
     console.log("Document written with ID: ", docRef.id);
     return docRef.id;
@@ -85,6 +86,7 @@ export const createExtraIDs = async (numberOfIds) => {
       const qrCodeData = {
         qr_id: newId,
         profile_id: null,
+        active: true,
         created_at: serverTimestamp(),
         updated_at: serverTimestamp(),
       };

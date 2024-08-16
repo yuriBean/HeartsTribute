@@ -71,7 +71,7 @@ export const getPaginatedMedallionProfiles = async (size = 10, direction = "next
     return { data: [], last: null, first: null, qrCodes: [] }; // Return empty QR codes on error
   }
 }
-export const getPaginatedQRCodes = async (size = 10, direction = "next", lastDoc = null, firstDoc = null, profile_id = null) => {
+export const getPaginatedQRCodes = async (size = 20, direction = "next", lastDoc = null, firstDoc = null, profile_id = null) => {
   try {
     let dataquery = query(
       collection(db, 'qrcodes'),
