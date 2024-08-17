@@ -159,15 +159,15 @@ export default function LoginForm( { qrid }) {
             </button>
           </div>
         </div>
-        {/* <footer className="mt-2 text-center font-medium text-secondaryDarkGray xl:text-xl 3xl:text-3xl">
+        <footer className="mt-2 text-center font-medium text-secondaryDarkGray xl:text-xl 3xl:text-3xl">
           Don't have an account?{" "}
           <Link
             className="cursor-pointer font-semibold text-primary underline"
-            to={"/signup"}
+            to={`/signup?qrid=${qrid}`}
           >
             Sign Up
           </Link>
-        </footer> */}
+        </footer>
       </main>
       <div className="hidden tall:block"></div>
     </div>

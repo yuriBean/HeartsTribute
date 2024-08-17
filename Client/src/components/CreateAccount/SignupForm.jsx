@@ -3,9 +3,9 @@ import InputPassword from "../Login/InputPassword";
 import InputText from "../Login/InputText";
 import { signup, checkUserProfiles, linkTributeTag, createProfile } from "../../auth/emailAuthServices";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-export default function SignupForm() {
+export default function SignupForm({ qrid }) {
   const [loading, setLoading] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -81,7 +81,7 @@ export default function SignupForm() {
     }
     try {
       setLoading(true);
-      const user = await signup(email, password, firstName, lastName);
+      const user = await signup(email, password, firstName, lastName, qrid);
       setLoading(false);
       if (profiles.length > 0) {
         // Show pop-up to link tribute tag to an existing profile
@@ -89,9 +89,9 @@ export default function SignupForm() {
       } else {
         // Show pop-up to create a new profile
         await createProfile(user.uid, firstName, lastName, tributeTagID);
-        alert("/profile-created-successfully");
+        alert(`/profile-created-successfully?qrid=${qrid}`);
       }
-      navigate("/complete-registration", { state: { email: email } });
+      navigate(`/complete-registration?qrid=${qrid}`, { state: { email: email } });
     } catch (error) {
       setErrors([]);
       setErrors([error.message]);
@@ -104,7 +104,7 @@ export default function SignupForm() {
     const selectedProfileID = prompt("Select a profile ID to link with tribute tag: " + tagID, profiles[0]?.id || ""); // Simplified example
     if (selectedProfileID) {
       linkTributeTag(selectedProfileID, tagID);
-      navigate("/profile-linked-successfully");
+      navigate(`/profile-linked-successfully?qrid=${qrid}`);
     }
   };
 
@@ -203,7 +203,7 @@ export default function SignupForm() {
           Already have an account?{" "}
           <Link
             className="cursor-pointer font-semibold text-primary underline"
-            to={"/login"}
+            to={`/login?qrid=${qrid}`}
           >
             Log In
           </Link>

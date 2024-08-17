@@ -6,8 +6,9 @@ import {
 } from "../../services/profileManager.service";
 import Comment from "./Comment";
 import Picker from "emoji-picker-react";
+import { notifyError, notifySuccess } from "../../utils/toastNotifications";
 
-export default function PostModal({ setIsOpen, post, profile }) {
+export default function PostModal({ setIsOpen, post, profile, onPostDeleted  }) {
   const [isReadMore, setIsReadMore] = useState(false);
   const [comments, setComments] = useState([]);
   const [text, setText] = useState("");
@@ -66,7 +67,9 @@ export default function PostModal({ setIsOpen, post, profile }) {
         try {
             await deletePost(post.id); // Call the deletePost function
             notifySuccess("Post deleted successfully");
+            onPostDeleted();
             setIsOpen(false); // Close the modal after deletion
+            setLoading(true);
         } catch (error) {
             notifyError("Failed to delete post: " + error.message);
           } finally {

@@ -26,11 +26,11 @@ export default function NoProfileConnected() {
           navigate(`/profile-manager/tribute-tags?qrid=${qrid}`);
         }
       } else {
-        setError("User is not logged in.");
+        notifyError("User is not logged in.");
       }
       setLoading(false);
     } catch (error) {
-      setError("Failed to fetch profiles. Please try again.");
+      notifyError("Failed to fetch profiles. Please try again.");
       setLoading(false);
     }
   };
@@ -43,7 +43,7 @@ export default function NoProfileConnected() {
       else
         navigate(`/profile-manager/tribute-tags?qrid=${qrid}`);
     } catch (error) {
-      setError("Failed to fetch profiles. Please try again.");
+      notifyError("Failed to fetch profiles. Please try again.");
       setLoading(false);
     }
   };
@@ -63,13 +63,15 @@ export default function NoProfileConnected() {
       navigate(`/profile/${profileId}`); // Redirect to the linked profile
     } catch (error) {
       console.error("Failed to link profile", error);
-      notifyError(`Failed to link profile. The QR ID or profile may already be linked.`);
+      notifyError("Failed to link profile. The QR ID or profile may already be linked.");
     } finally {
       setLinking(false);
     }
   };
 
   useEffect(() => {
+    // if(qrid===null)
+    //   navigate('/');
     checkUserProfiles();
   }, []);
 

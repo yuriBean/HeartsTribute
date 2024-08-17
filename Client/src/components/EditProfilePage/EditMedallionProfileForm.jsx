@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Label } from "./AddPostOnProfile";
 import ToggleSwitch from "../Common/ToggleSwitch";
 import ChooseFile from "../ProfileManager/ChooseFile";
@@ -11,6 +11,7 @@ import { uploadImage } from "../../utils/imgUploader";
 import Spinner from "../Common/Spinner";
 import { useProfile } from "../Providers/EditProfileProvider";
 import { notifySuccess } from "../../utils/toastNotifications";
+import debounce from "lodash.debounce";
 
 export default function EditProfileForm() {
   const { profile, loading, setLoading, getProfile } = useProfile();
@@ -20,7 +21,7 @@ export default function EditProfileForm() {
   const [checker, setChecker] = useState(true);
   const [donationEnabled, setDonationEnabled] = useState(false);
   const [donationProfiles, setDonationProfiles] = useState([]);
-  const [nextID, setNextID] = useState(0);
+  const [nextProjectId, setNextProjectId] = useState(null);
   const [hasNext, setHasNext] = useState(false);
   const [donationProfilesLoading, setDonationProfilesLoading] = useState(false);
   const [donationProfileID, setDonationProfileID] = useState(null);
@@ -93,41 +94,68 @@ export default function EditProfileForm() {
       setModifiedData((prev) => ({ ...prev, [name]: value }));
     }
   };
-  const getProfiles = async (first = false) => {
-    let url =
-      "https://api.globalgiving.org/api/public/projectservice/all/projects/active/summary.json?api_key=effb307b-a845-4e62-8146-2300502217ac";
-    try {
-      if (donationEnabled) {
-        if (!first && nextID) url += `&nextProjectId=${nextID}`;
-        setDonationProfilesLoading(true);
+  const getProfiles = useCallback(
+    debounce(async (searchTerm, loadMore = false) => {
+      let url =
+        "https://api.globalgiving.org/api/public/projectservice/all/projects/active/summary.json?api_key=effb307b-a845-4e62-8146-2300502217ac";
+      if (searchTerm) {
+        url += `&q=${searchTerm}`;
+      }
+      if (nextProjectId && loadMore) {
+        url += `&nextProjectId=${nextProjectId}`;
+      }
 
-        const response = await fetch(url, {
-          headers: {
-            Accept: "application/json",
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+      try {
+        if (donationEnabled) {
+          setDonationProfilesLoading(true);
+          const response = await fetch(url, {
+            headers: {
+              Accept: "application/json",
+            },
+          });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          
+          setDonationProfiles((prevProfiles) => [
+            ...prevProfiles,
+            ...data.projects.project,
+          ]);
+          setNextProjectId(data.projects.nextProjectId);
+          setHasNext(data.projects.hasNext);
+          setDonationProfilesLoading(false);
         }
-        const data = await response.json();
-        setHasNext(data.projects.hasNext);
-        setNextID(data.projects.nextProjectId);
-        setDonationProfiles((prev) => [
-          ...prev,
-          ...data.projects.project,
-        ]);
+      } catch (error) {
+        console.log(error);
         setDonationProfilesLoading(false);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    }, 300),
+    [donationEnabled, nextProjectId]
+  );
 
+  // Infinite scroll handler
   useEffect(() => {
-    if (donationEnabled) {
-      getProfiles();
-    }
-  }, [donationEnabled]);
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop !==
+          document.documentElement.offsetHeight ||
+        donationProfilesLoading ||
+        !hasNext
+      ) {
+        return;
+      }
+      getProfiles(null, true);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [getProfiles, donationProfilesLoading, hasNext]);
+
+  // Initial fetch
+  useEffect(() => {
+    getProfiles();
+  }, [getProfiles]);
 
   const onLoadMore = (e) => {
     if (e.target.value === "load_more") {
@@ -439,8 +467,14 @@ export default function EditProfileForm() {
           </Label>
         </div>
         <div>
-        {donationEnabled && (
+          {donationEnabled && (
             <>
+            <p className="text-sm md:text-lg my-2">
+                Honor the memory of your loved one by supporting a cause close
+                to their heart. Choose a charity from the dropdown list below
+                and encourage others to make a donation in their name.
+              </p>
+            <div className="md:col-span-2 relative">
               <Label>Search Donation Profiles</Label>
               <input
                 type="text"
@@ -459,9 +493,7 @@ export default function EditProfileForm() {
                     onChange={(e) => {
                       setDonationProfileID(e.target.value);
                       setIsDropdownOpen(false);
-                      getProfiles();
                     }}
-                    onClick={() => getProfiles()}
                   >
                     <option value="">Select Donation Profile</option>
                     {donationProfilesLoading && (
@@ -474,16 +506,9 @@ export default function EditProfileForm() {
                         </option>
                       ))}
                   </select>
-                  {/* {hasNext && (
-                    <button
-                      onClick={() => getProfiles()}
-                      className="mt-2 text-blue-500"
-                    >
-                      Load More
-                    </button>
-                  )} */}
                 </div>
               )}
+              </div>
             </>
           )}
         </div>

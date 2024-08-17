@@ -5,7 +5,7 @@ import { notifySuccess, notifyError } from "../../utils/toastNotifications";
 import { formatDate } from "../../utils/dateToNow";
 import CheckProfileOwner from "../CheckProfileOwner";
 import { useNavigate } from "react-router-dom";
-import { deleteProfile, deletePostsByProfileId, deleteFirestoreDocument, deleteFileFromStorage } from "../../services/profileManager.service";
+import { deleteProfileQR, deletePostsByProfileId, deleteFirestoreDocument, deleteFileFromStorage } from "../../services/profileManager.service";
 
 export default function BioTab() {
   const { profile, loading } = usePublicProfile();
@@ -44,7 +44,8 @@ export default function BioTab() {
 
         // Delete the profile document from Firestore
         await deleteFirestoreDocument("profiles", profile.id);
-
+        console.log(profile.id);
+        await deleteProfileQR(profile.id);
         notifySuccess("Profile deleted successfully");
         // Optionally, redirect or update the UI after deletion
         navigate("/"); // Redirect to home or another page

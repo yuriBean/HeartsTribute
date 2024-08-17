@@ -21,6 +21,7 @@ export default function Post({ post, profile }) {
   const [likes, setLikes] = useState(0);
   const [liked_posts, setLikedPosts] = useState([]);
   const { updateLocalStorage } = useAuth();
+  const [loading, setLoading] = useState(false);
 
   const removeLike = async () => {
     try {
@@ -103,6 +104,10 @@ export default function Post({ post, profile }) {
     const videoId = url.split("v=")[1]?.split("&")[0];
     return `https://www.youtube.com/embed/${videoId}`;
   };
+
+  const handlePostDelete = () => {
+    window.location.reload(); // Refresh the page to reflect the changes
+  }
   
   return (
     <div
@@ -184,7 +189,7 @@ export default function Post({ post, profile }) {
           className="relative w-full rounded-md bg-white p-4 lg:w-2/3"
           onClick={(e) => e.stopPropagation()}
         >
-          <PostModal profile={profile} setIsOpen={setIsOpen} post={post} />
+          <PostModal profile={profile} setIsOpen={setIsOpen} post={post} onPostDeleted={handlePostDelete} />
         </div>
       </Modal>
     </div>

@@ -18,7 +18,7 @@ export default function QRCode() {
                 navigate("/404");
             } else {
                 if (QRrecord.profile_id) {
-                    if (QRrecord.profile_visibility === "true") 
+                    if (QRrecord.profile_visibility) 
                     // if (QRrecord) 
                         {
                         navigate(`/profile/${QRrecord.profile_id}`); // Redirect to public profile

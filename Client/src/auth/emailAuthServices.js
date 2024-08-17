@@ -7,11 +7,11 @@ import { errorMessagesFirebaseAuth } from "../utils/errorMessagesFirebaseAuth";
 const usersRef = collection(db, "users");
 
 
-export const signup = async (email, password, first_name, last_name) => {
+export const signup = async (email, password, first_name, last_name, qrid) => {
 
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    await createUserRecord(userCredential.user.uid, email, first_name, last_name);
+    await createUserRecord(userCredential.user.uid, email, first_name, last_name, qrid);
     await verifyEmail();
     return userCredential.user;
   } catch (error) {
@@ -33,10 +33,11 @@ export const signin = async (email, password) => {
   }
 }
 
-export const verifyEmail = async () => {
+export const verifyEmail = async (qrid) => {
   try {
     await sendEmailVerification(auth.currentUser, {
-      url: "https://admin.heartstribute.com/redirect",
+      url: `https://admin.heartstribute.com/redirect?qrid=${qrid}`,
+      handleCodeInApp: true,
     });
   } catch (error) {
     throw new Error(error.message);
@@ -45,7 +46,7 @@ export const verifyEmail = async () => {
 
 export const signout = (email, password) => {
   signOut(auth).then(() => {
-    window.location.href = "/login";
+    window.location.href = `/login?qrid=${qrid}`;
     localStorage.removeItem("user");
   }).catch((error) => {
   });
@@ -54,14 +55,14 @@ export const signout = (email, password) => {
 export const forgotPassword = async (email) => {
   try {
     await sendPasswordResetEmail(auth, email, {
-      url: "https://admin.heartstribute.com/redirect",
+      url: `https://admin.heartstribute.com/redirect?qrid=${qrid}`,
     });
   } catch (error) {
     throw new Error(error.message);
   }
 }
 
-export const createUserRecord = async (uuid, email, first_name, last_name) => {
+export const createUserRecord = async (uuid, email, first_name, last_name, qrid) => {
   try {
     await setDoc(doc(db, "users", uuid), {
       uid: uuid,
@@ -70,6 +71,7 @@ export const createUserRecord = async (uuid, email, first_name, last_name) => {
       last_name: last_name,
       created_at: serverTimestamp(),
       updated_at: serverTimestamp(),
+      qrid: qrid,
     });
 
   } catch (error) {

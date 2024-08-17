@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import InputBoxProfileManager from "./InputBoxProfileManager";
 import ChooseFile from "./ChooseFile";
 import DateInput from "./DateInput";
@@ -11,6 +11,7 @@ import Spinner from "../Common/Spinner";
 import ToggleSwitch from "../Common/ToggleSwitch";
 import { notifySuccess, notifyError } from "../../utils/toastNotifications";
 import { Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import debounce from "lodash.debounce";
 
 export default function CreateProfile() {
   const {
@@ -160,42 +161,54 @@ export default function CreateProfile() {
     }
   };
 
-  const getProfiles = async (first = false) => {
-    let url =
-      "https://api.globalgiving.org/api/public/projectservice/all/projects/active/summary.json?api_key=effb307b-a845-4e62-8146-2300502217ac";
-    try {
-      if (donationEnabled) {
-        if (!first && nextID) url += `&nextProjectId=${nextID}`;
-        setDonationProfilesLoading(true);
-
-        const response = await fetch(url, {
-          headers: {
-            Accept: "application/json",
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setHasNext(data.projects.hasNext);
-        setNextID(data.projects.nextProjectId);
-        setDonationProfiles((prev) => [
-          ...prev,
-          ...data.projects.project,
-        ]);
-        setDonationProfilesLoading(false);
+  const getProfiles = useCallback(
+    debounce(async (searchTerm) => {
+      let url =
+        "https://api.globalgiving.org/api/public/projectservice/all/projects/active/summary.json?api_key=effb307b-a845-4e62-8146-2300502217ac";
+      if (searchTerm) {
+        url += `&q=${searchTerm}`;
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-
-  useEffect(() => {
+  
+      let allProfiles = [];
+      let nextProjectId = null;
+  
+      try {
+        if (donationEnabled) {
+          setDonationProfilesLoading(true);
+  
+          do {
+            const paginatedUrl = nextProjectId ? `${url}&nextProjectId=${nextProjectId}` : url;
+  
+            const response = await fetch(paginatedUrl, {
+              headers: {
+                Accept: "application/json",
+              },
+            });
+  
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+  
+            const data = await response.json();
+  
+            allProfiles = allProfiles.concat(data.projects.project);
+            nextProjectId = data.projects.nextProjectId; // Update the nextProjectId for the next iteration
+          } while (nextProjectId); // Continue until there is no nextProjectId
+  
+          setDonationProfiles(allProfiles);
+          setDonationProfilesLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }, 300),
+    [donationEnabled]
+  );
+    useEffect(() => {
     if (donationEnabled) {
-      getProfiles(true);
+      getProfiles(searchTerm);
     }
-  }, [donationEnabled]);
+  }, [donationEnabled, searchTerm, getProfiles]);
 
   const filteredProfiles = donationProfiles.filter(profile =>
     profile.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -535,13 +548,13 @@ export default function CreateProfile() {
               <div className="md:col-span-2 relative">
                 <Label>Search Donation Profiles</Label>
                 <input
-                  type="text"
-                  className="border p-2 mb-2 rounded-md w-full"
-                  placeholder="Search..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  onFocus={() => setIsDropdownOpen(true)}
-                />
+                type="text"
+                className="border p-2 mb-2 rounded-md w-full"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onFocus={() => setIsDropdownOpen(true)}
+              />
               {isDropdownOpen && (
                 <div className="absolute z-10 bg-white border rounded-md w-full">
                   <select
@@ -551,7 +564,6 @@ export default function CreateProfile() {
                     onChange={(e) => {
                       setDonationProfileID(e.target.value);
                       setIsDropdownOpen(false);
-                      getProfiles();
                     }}
                     onClick={() => getProfiles()}
                   >

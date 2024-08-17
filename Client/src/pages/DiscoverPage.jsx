@@ -3,7 +3,6 @@ import Layout from "../components/Layout/Layout";
 import { getDiscoverProfiles } from "../services/profileManager.service";
 import DiscoverProfileCard from "../components/Common/DiscoverProfileCard";
 import Spinner from "../components/Common/Spinner";
-import { checkUserProfiles, getLoggedInUser } from "../services/profileManager.service"; // Import your service functions
 import { useNavigate, useSearchParams } from "react-router-dom"; // Import useNavigate
 import CreateProfileModal from "../components/Profile/CreateProfileModal"; // Import your modal component
 
@@ -16,7 +15,9 @@ export default function DiscoverPage() {
   const [user, setUser] = useState(null); // State to store user info
   const [searchParams] = useSearchParams();
   const qrid = searchParams.get("qrid");
-  
+  const [savedQR, setSavedQR] = useState(null);
+  const suser = JSON.parse(localStorage.getItem("user"));
+
   const loadMoreProfiles = async () => {
     if (loadingProfiles || !hasMore) return;
 
@@ -65,24 +66,37 @@ export default function DiscoverPage() {
   useEffect(() => {
     const checkProfile = async () => {
       // Assuming you have a way to get the logged-in user
-      const loggedInUser = await getLoggedInUser(); // Replace with your method to get the logged-in user
-      setUser(loggedInUser);
+      // const loggedInUser = await getLoggedInUser(); // Replace with your method to get the logged-in user
+      // setUser(loggedInUser);
 
-      if (loggedInUser) {
-        const profiles = await checkUserProfiles(loggedInUser.uid);
-        if (profiles.length === 0) {
-          setShowModal(true); // Show modal if no profile exists
-        }
+      // if (loggedInUser) {
+      //   const profiles = await checkUserProfiles(loggedInUser.uid);
+      //   console.log("kore da koreeeeeeeeee " + loggedInUser.uid);
+
+      //   // if (profiles.length === 0) {
+      //   //   setShowModal(true); // Show modal if no profile exists
+      //   // }
+      // }
+console.log(suser.qrid)
+      if (suser.qrid === null && qrid === null) {
+        setShowModal(false);
+      } else {
+        setShowModal(true); // Show modal if either is not null
+        setSavedQR(suser.qrid); // Store the qrid from suser
       }
     };
 
     checkProfile();
   }, []);
 
-  const handleCreateProfile = () => {
-    setShowModal(false); // Close the modal
-    navigate(`/profile-manager/tribute-tags?qrid=${qrid}`); // Navigate to the Tribute Tags page
+  const handleCreateProfile = async () => {
+    if (savedQR && !qrid) {
+      navigate(`/no-profile-connected?qrid=${savedQR}`);
+    } else {
+      navigate(`/no-profile-connected?qrid=${qrid}`);
+    }
   };
+
   return (
     <>
       <Layout>
@@ -100,12 +114,12 @@ export default function DiscoverPage() {
             </button>
           )}
         </div>
-        <CreateProfileModal
-            qrid={qrid}
-            isOpen={showModal} 
-            onClose={() => setShowModal(false)} 
-            onCreateProfile={handleCreateProfile} 
-          />
+        {showModal && (
+                  <CreateProfileModal
+                  qrid={qrid || savedQR}
+                  onCreateProfile={handleCreateProfile} 
+                />      
+        )}
 
       </Layout>
     </>

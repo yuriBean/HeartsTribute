@@ -21,6 +21,10 @@ export default function TimelineTab() {
   };
 
   const handleDeleteEvent = async (eventId) => {
+
+    if(eventId === 'birth' || eventId === 'death')
+      {alert('cant'); return;}
+    if(window.confirm("Are you sure you want to delete this post? This action cannot be undone.")){
     setLoading(true);
     try {
       await deleteEvent(eventId);
@@ -30,6 +34,7 @@ export default function TimelineTab() {
     } finally {
       setLoading(false);
     }
+  }
   };
 
   useEffect(() => {
@@ -170,12 +175,15 @@ export default function TimelineTab() {
                     {isReadMore ? "Read Less" : "Read More"}
                   </button>
                 )}
+            <CheckProfileOwner>
+                {event.id !== 'birth' && event.id !== 'death' && (
                 <button
                   onClick={() => handleDeleteEvent(event.id)}
                   className="text-sm tracking-wider text-red-500 2xl:text-base mt-2"
                 >
                   Delete Event
-                </button>
+                </button>)}
+                </CheckProfileOwner>
               </div>
             </li>
           ))}

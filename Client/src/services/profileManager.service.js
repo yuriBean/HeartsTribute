@@ -3,6 +3,7 @@ import { db, storage } from "../../firebase";
 import removeUserId from "../utils/removeUserId";
 import { ref, deleteObject } from "firebase/storage";
 import { getAuth } from "firebase/auth";
+import { deleteField } from "firebase/firestore";
 
 const CreateNewProfile = async (data) => {
     try {
@@ -590,7 +591,7 @@ const deleteFirestoreDocument = async (collection, docID) => {
     const userDocRef = doc(db, "users", userID);
     try {
       const userDoc = await getDoc(userDocRef);
-      if (userDoc.exists) {
+      if (userDoc.exists()) {
         const userData = userDoc.data();
         const filePath = type === "profile" ? userData.profilePhotoPath : userData.coverPhotoPath;
         await deleteFileFromStorage(filePath);
@@ -603,6 +604,28 @@ const deleteFirestoreDocument = async (collection, docID) => {
       throw new Error(`Failed to delete ${type} photo: ${error.message}`);
     }
   };  
+
+  const deleteProfileQR = async (profileId) => {
+    try {
+        const qrcodesCollectionRef = collection(db, "qrcodes");
+        const q = query(qrcodesCollectionRef, where("profile_id", "==", profileId));
+
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            querySnapshot.forEach(async (doc) => {
+                await updateDoc(doc.ref, {
+                    profile_id: null,
+                });
+                console.log(`Profile ID ${profileId} has been unlinked from QR code.`);
+            });
+        } else {
+            console.log("QR code document not found.");
+        }
+    } catch (error) {
+        throw new Error(`Failed to delete id from qrcodes: ${error.message}`);
+    }
+};
 
 const requestAccess = async (profileId) => {
     const userEmail = JSON.parse(localStorage.getItem("user")).email; 
@@ -776,8 +799,28 @@ const getQRIdsForProfiles = async (profileIds) => {
     }
 };
 
-
+const deleteSignUpQR = async (userId) => {
+    try {
+        const qrCodesRef = collection(db, "users");
+        console.log("Deleting QR for user:", userId);
+        const q = query(qrCodesRef, where("uid", "==", userId));
+        const querySnapshot = await getDocs(q);
+    
+        if (!querySnapshot.empty) {
+          for (const doc of querySnapshot.docs) {
+            await updateDoc(doc.ref, {
+              qrid: deleteField(), // Correctly delete the `qrid` field
+            });
+            console.log(`QR ID has been removed from document ID ${doc.id}`);
+          }
+        } else {
+          console.log("No documents found for the given userId.");
+        }
+      } catch (error) {
+        console.error("Error deleting QR IDs for profiles:", error);
+      }
+    }
 
 //export { CreateNewProfile, createPost, getProfileWithId, editProfileWithId, getPostsWithProfileId, addEvent, getEventsByProfileId, AddNewTribute, GetTributesById, getPostsWithUserId, getProfilesWithUserId, getProfileWithIdAndUserId, AddCommentToPost, getCommentsWithPostId, getDiscoverProfiles}
-export {getQRIdsForProfiles,  createQRCode, deletePost, getLoggedInUser, checkUserProfiles, getUserProfiles, linkProfileToQR, CreateNewProfile, createPost, getProfileWithId, editProfileWithId, getPostsWithProfileId, addEvent, getEventsByProfileId, AddNewTribute, GetTributesById, getPostsWithUserId, getProfilesWithUserId, getProfileWithIdAndUserId, addFavoriteWithUserId, removeFavoriteWithUserId, getFavoriteProfilesWithUserId, addLikeWithUserId, removeLikeWithUserId, AddCommentToPost, getCommentsWithPostId, getDiscoverProfiles, deleteComment, addRequestedUserToProfile, addAllowedUserToProfile, removeAllowedUserFromProfile, removeRequestedUserFromProfile, deleteProfile, deletePostsByProfileId, deleteProfilePhoto, deleteFirestoreDocument, requestAccess, deleteTribute, deleteEvent, resetProfilePhoto, resetCoverPhoto, deleteFileFromStorage }
+export { deleteSignUpQR, deleteProfileQR, getQRIdsForProfiles,  createQRCode, deletePost, getLoggedInUser, checkUserProfiles, getUserProfiles, linkProfileToQR, CreateNewProfile, createPost, getProfileWithId, editProfileWithId, getPostsWithProfileId, addEvent, getEventsByProfileId, AddNewTribute, GetTributesById, getPostsWithUserId, getProfilesWithUserId, getProfileWithIdAndUserId, addFavoriteWithUserId, removeFavoriteWithUserId, getFavoriteProfilesWithUserId, addLikeWithUserId, removeLikeWithUserId, AddCommentToPost, getCommentsWithPostId, getDiscoverProfiles, deleteComment, addRequestedUserToProfile, addAllowedUserToProfile, removeAllowedUserFromProfile, removeRequestedUserFromProfile, deleteProfile, deletePostsByProfileId, deleteProfilePhoto, deleteFirestoreDocument, requestAccess, deleteTribute, deleteEvent, resetProfilePhoto, resetCoverPhoto, deleteFileFromStorage }
 
