@@ -47,7 +47,7 @@ router.post('/upload/:userId/:profileId?', upload.single('file'), (req, res) => 
 
   const userId = req.params.userId; // Get user ID from request parameters
   const profileId = req.params.profileId;
-  const folderPath = profileId === 'undefined' ? `ProfileManager/${userId}/${profileId}` : `ProfileManager/${userId}`;
+  const folderPath = profileId === undefined ? `ProfileManager/${userId}` : `ProfileManager/${userId}/${profileId}`;
 
   const params = {
     Bucket: 'heartstribute.bucket',
