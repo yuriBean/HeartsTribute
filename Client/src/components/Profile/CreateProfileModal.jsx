@@ -1,15 +1,10 @@
-import { useNavigate } from "react-router-dom";
-import { deleteSignUpQR } from "../../services/profileManager.service"; // Import your service functions
 
-const CreateProfileModal = ({ qrid }) => {
-  const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
+const CreateProfileModal = ({ onCreateProfile }) => {
 
   const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevent default form submission behavior
-    await deleteSignUpQR(user.uid); 
-    navigate(`/no-profile-connected?qrid=${qrid}`);
-  };
+    event.preventDefault();
+    onCreateProfile();
+    };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">

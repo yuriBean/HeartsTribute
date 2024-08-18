@@ -3,7 +3,6 @@ import { Label } from "./AddPostOnProfile";
 import ToggleSwitch from "../Common/ToggleSwitch";
 import ChooseFile from "../ProfileManager/ChooseFile";
 import {
-  getProfileWithId,
   editProfileWithId,
 } from "../../services/profileManager.service";
 import InputForEdit from "../Common/InputForEdit";
@@ -11,7 +10,7 @@ import { uploadImage } from "../../utils/imgUploader";
 import Spinner from "../Common/Spinner";
 import { useProfile } from "../Providers/EditProfileProvider";
 import { notifySuccess } from "../../utils/toastNotifications";
-import debounce from "lodash.debounce";
+import debounce from "lodash.debounce"; 
 
 export default function EditProfileForm() {
   const { profile, loading, setLoading, getProfile } = useProfile();
@@ -28,7 +27,6 @@ export default function EditProfileForm() {
   const user = (localStorage.getItem("user")) ? JSON.parse(localStorage.getItem("user")) : null;
   const [searchTerm, setSearchTerm] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [showProfileSelection, setShowProfileSelection] = useState(false);
 
   const onSelectProfilePicture = (e) => {
     setProfilePicture(e);
@@ -94,8 +92,9 @@ export default function EditProfileForm() {
       setModifiedData((prev) => ({ ...prev, [name]: value }));
     }
   };
+
   const getProfiles = useCallback(
-    debounce(async (searchTerm, loadMore = false) => {
+    debounce(async (searchTerm, loadMore = true) => {
       let url =
         "https://api.globalgiving.org/api/public/projectservice/all/projects/active/summary.json?api_key=effb307b-a845-4e62-8146-2300502217ac";
       if (searchTerm) {
@@ -118,10 +117,12 @@ export default function EditProfileForm() {
           }
           const data = await response.json();
           
-          setDonationProfiles((prevProfiles) => [
-            ...prevProfiles,
-            ...data.projects.project,
-          ]);
+          setDonationProfiles((prevProfiles) => {
+            const newProfiles = data.projects.project.filter(
+              (newProfile) => !prevProfiles.some((prev) => prev.id === newProfile.id)
+            );
+            return [...prevProfiles, ...newProfiles];
+          });
           setNextProjectId(data.projects.nextProjectId);
           setHasNext(data.projects.hasNext);
           setDonationProfilesLoading(false);
@@ -130,7 +131,7 @@ export default function EditProfileForm() {
         console.log(error);
         setDonationProfilesLoading(false);
       }
-    }, 300),
+    }, 5000),
     [donationEnabled, nextProjectId]
   );
 
@@ -157,15 +158,9 @@ export default function EditProfileForm() {
     getProfiles();
   }, [getProfiles]);
 
-  const onLoadMore = (e) => {
-    if (e.target.value === "load_more") {
-      e.preventDefault();
-      getProfiles(false);
-      e.target.value = "nextID"; // Reset the select value
-    } else {
-      setDonationProfileID(e.target.value);
-    }
-  };
+  const filteredProfiles = donationProfiles.filter((profile) =>
+    profile.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   
   useEffect(() => {
     if (profile) {
@@ -180,10 +175,6 @@ export default function EditProfileForm() {
   useEffect(() => {
     console.log(modifiedData);
   }, [modifiedData]);
-
-  const filteredProfiles = donationProfiles.filter((profile) =>
-    profile.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return !loading ? (
     <div className="">
@@ -221,26 +212,6 @@ export default function EditProfileForm() {
                 id="last_name"
                 className="px-4 py-3 tracking-wider"
               />
-              {/* <InputForEdit
-                value={profile?.title}
-                handleChange={handleChange}
-                modifiedData={modifiedData}
-                type="text"
-                name="title"
-                label="Title"
-                id="title"
-                className="px-4 py-3 tracking-wider"
-              /> */}
-              {/* <InputForEdit
-                value={profile?.relation}
-                handleChange={handleChange}
-                modifiedData={modifiedData}
-                type="text"
-                name="relation"
-                label="Relation"
-                id="relation"
-                className="px-4 py-3 tracking-wider"
-              /> */}
               <InputForEdit
                 value={profile?.nickname}
                 handleChange={handleChange}

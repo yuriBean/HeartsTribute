@@ -23,7 +23,11 @@ export default function NoProfileConnected() {
         const unlinkedProfiles = profiles.filter(profile => !qrIds.includes(profile.id));
         setProfiles(unlinkedProfiles);
         if (unlinkedProfiles.length === 0) {
+          if (!qrid){
+            notifyError('QR Code not detected. Please scan your QR Code and try again.');
+          } else {
           navigate(`/profile-manager/tribute-tags?qrid=${qrid}`);
+          }
         }
       } else {
         notifyError("User is not logged in.");
@@ -40,8 +44,12 @@ export default function NoProfileConnected() {
       const user = getLoggedInUser();
       if (!user)
         navigate(`/login?qrid=${qrid}`);
-      else
-        navigate(`/profile-manager/tribute-tags?qrid=${qrid}`);
+      else{
+        if (!qrid || qrid==='null' || qrid === 'undefined')
+          notifyError('QR Code not detected. Please scan your QR Code and try again.');
+        else
+          navigate(`/profile-manager/tribute-tags?qrid=${qrid}`);
+      }
     } catch (error) {
       notifyError("Failed to fetch profiles. Please try again.");
       setLoading(false);
@@ -51,7 +59,7 @@ export default function NoProfileConnected() {
   const handleLinkProfile = async (profileId) => {
     setLinking(true);
     try {
-      if (!profileId || !qrid) {
+      if (!profileId || !qrid || qrid==='null') {
         throw new Error("Invalid profile ID or QR ID.");
       }
 
@@ -63,7 +71,7 @@ export default function NoProfileConnected() {
       navigate(`/profile/${profileId}`); // Redirect to the linked profile
     } catch (error) {
       console.error("Failed to link profile", error);
-      notifyError("Failed to link profile. The QR ID or profile may already be linked.");
+      notifyError("Failed to link profile. The QR ID or profile may be invalid.");
     } finally {
       setLinking(false);
     }

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout/Layout";
-import { getDiscoverProfiles } from "../services/profileManager.service";
+import { deleteSignUpQR, getDiscoverProfiles } from "../services/profileManager.service";
 import DiscoverProfileCard from "../components/Common/DiscoverProfileCard";
 import Spinner from "../components/Common/Spinner";
 import { useNavigate, useSearchParams } from "react-router-dom"; // Import useNavigate
 import CreateProfileModal from "../components/Profile/CreateProfileModal"; // Import your modal component
+import { notifyError } from "../utils/toastNotifications";
 
 export default function DiscoverPage() {
   const [profiles, setProfiles] = useState([]);
@@ -12,11 +13,10 @@ export default function DiscoverPage() {
   const [loadingProfiles, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
-  const [user, setUser] = useState(null); // State to store user info
   const [searchParams] = useSearchParams();
   const qrid = searchParams.get("qrid");
   const [savedQR, setSavedQR] = useState(null);
-  const suser = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const loadMoreProfiles = async () => {
     if (loadingProfiles || !hasMore) return;
@@ -77,12 +77,12 @@ export default function DiscoverPage() {
       //   //   setShowModal(true); // Show modal if no profile exists
       //   // }
       // }
-console.log(suser.qrid)
-      if (suser.qrid === null && qrid === null) {
+console.log(user.qrid)
+      if (user.qrid === null && qrid === null) {
         setShowModal(false);
       } else {
         setShowModal(true); // Show modal if either is not null
-        setSavedQR(suser.qrid); // Store the qrid from suser
+        setSavedQR(user.qrid); // Store the qrid from user
       }
     };
 
@@ -90,10 +90,16 @@ console.log(suser.qrid)
   }, []);
 
   const handleCreateProfile = async () => {
+    
+    console.log("user    ", user.uid);
     if (savedQR && !qrid) {
+      await deleteSignUpQR(user.uid);
       navigate(`/no-profile-connected?qrid=${savedQR}`);
-    } else {
+      setSavedQR('');
+    } else if (!savedQR && qrid) {
       navigate(`/no-profile-connected?qrid=${qrid}`);
+    } else if(qrid === 'null' || !qrid || qrid === 'undefined'){
+      notifyError('QR Code not detected. Please scan your QR Code and try again.');
     }
   };
 

@@ -1,7 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import InputBoxProfileManager from "./InputBoxProfileManager";
 import ChooseFile from "./ChooseFile";
-import DateInput from "./DateInput";
 import { Label } from "./AddPost";
 import { CreateNewProfile, linkProfileToQR, getUserProfiles, createQRCode } from "../../services/profileManager.service";
 import { uploadImage } from "../../utils/imgUploader";
@@ -10,7 +8,7 @@ import Input from "../Common/Input";
 import Spinner from "../Common/Spinner";
 import ToggleSwitch from "../Common/ToggleSwitch";
 import { notifySuccess, notifyError } from "../../utils/toastNotifications";
-import { Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import debounce from "lodash.debounce";
 
 export default function CreateProfile() {
@@ -32,8 +30,6 @@ export default function CreateProfile() {
   const [profileType, setProfileType] = useState("human");
   const [donationEnabled, setDonationEnabled] = useState(false);
   const [donationProfiles, setDonationProfiles] = useState([]);
-  const [nextID, setNextID] = useState(0);
-  const [hasNext, setHasNext] = useState(false);
   const [donationProfilesLoading, setDonationProfilesLoading] = useState(false);
   const [donationProfileID, setDonationProfileID] = useState(null);
   const [profileVisibility, setProfileVisibility] = useState(true);
@@ -44,7 +40,8 @@ export default function CreateProfile() {
   const [searchParams] = useSearchParams();
   const qrid = searchParams.get("qrid");
   const { profile_id } = useParams();
-
+  const [nextProjectId, setNextProjectId] = useState(null);
+  const [hasNext, setHasNext] = useState(false);
 
   const handleProfileTypeChange = (e) => {
     setProfileType(e.target.value);
@@ -125,7 +122,7 @@ export default function CreateProfile() {
       setProfilePicture(null);
       navigate(`/profile/${newProfile.id}`);
     } catch (err) {
-      notifyError("Failed to create Profile");
+      notifyError("Failed to link profile. QR ID may be invalid.");
     } finally {
       setLoading(false);
     }
@@ -162,55 +159,71 @@ export default function CreateProfile() {
   };
 
   const getProfiles = useCallback(
-    debounce(async (searchTerm) => {
+    debounce(async (searchTerm, loadMore = true) => {
       let url =
         "https://api.globalgiving.org/api/public/projectservice/all/projects/active/summary.json?api_key=effb307b-a845-4e62-8146-2300502217ac";
       if (searchTerm) {
         url += `&q=${searchTerm}`;
       }
-  
-      let allProfiles = [];
-      let nextProjectId = null;
-  
+      if (nextProjectId && loadMore) {
+        url += `&nextProjectId=${nextProjectId}`;
+      }
+
       try {
         if (donationEnabled) {
           setDonationProfilesLoading(true);
-  
-          do {
-            const paginatedUrl = nextProjectId ? `${url}&nextProjectId=${nextProjectId}` : url;
-  
-            const response = await fetch(paginatedUrl, {
-              headers: {
-                Accept: "application/json",
-              },
-            });
-  
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-  
-            const data = await response.json();
-  
-            allProfiles = allProfiles.concat(data.projects.project);
-            nextProjectId = data.projects.nextProjectId; // Update the nextProjectId for the next iteration
-          } while (nextProjectId); // Continue until there is no nextProjectId
-  
-          setDonationProfiles(allProfiles);
+          const response = await fetch(url, {
+            headers: {
+              Accept: "application/json",
+            },
+          });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          
+          setDonationProfiles((prevProfiles) => {
+            const newProfiles = data.projects.project.filter(
+              (newProfile) => !prevProfiles.some((prev) => prev.id === newProfile.id)
+            );
+            return [...prevProfiles, ...newProfiles];
+          });
+          setNextProjectId(data.projects.nextProjectId);
+          setHasNext(data.projects.hasNext);
           setDonationProfilesLoading(false);
         }
       } catch (error) {
         console.log(error);
+        setDonationProfilesLoading(false);
       }
-    }, 300),
-    [donationEnabled]
+    }, 5000),
+    [donationEnabled, nextProjectId]
   );
-    useEffect(() => {
-    if (donationEnabled) {
-      getProfiles(searchTerm);
-    }
-  }, [donationEnabled, searchTerm, getProfiles]);
 
-  const filteredProfiles = donationProfiles.filter(profile =>
+  // Infinite scroll handler
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop !==
+          document.documentElement.offsetHeight ||
+        donationProfilesLoading ||
+        !hasNext
+      ) {
+        return;
+      }
+      getProfiles(null, true);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [getProfiles, donationProfilesLoading, hasNext]);
+
+  // Initial fetch
+  useEffect(() => {
+    getProfiles();
+  }, [getProfiles]);
+
+  const filteredProfiles = donationProfiles.filter((profile) =>
     profile.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -293,24 +306,6 @@ export default function CreateProfile() {
                 placeholder={"Hawke"}
                 className="px-4 py-3 tracking-wider"
               />
-              {/* <Input
-                register={register}
-                name={"title"}
-                type="text"
-                label="Title"
-                id="title"
-                placeholder={"DAD | HUSBAND | SON"}
-                className="px-4 py-3 tracking-wider"
-              />
-              <Input
-                register={register}
-                name={"relation"}
-                type="text"
-                label="Relation"
-                id="relation"
-                placeholder={"Dad"}
-                className="px-4 py-3 tracking-wider"
-              /> */}
               <Input
                 register={register}
                 name={"nickname"}
@@ -540,14 +535,14 @@ export default function CreateProfile() {
         <div>
           {donationEnabled && (
             <>
-              <p className="text-sm md:text-lg my-2">
+            <p className="text-sm md:text-lg my-2">
                 Honor the memory of your loved one by supporting a cause close
                 to their heart. Choose a charity from the dropdown list below
                 and encourage others to make a donation in their name.
               </p>
-              <div className="md:col-span-2 relative">
-                <Label>Search Donation Profiles</Label>
-                <input
+            <div className="md:col-span-2 relative">
+              <Label>Search Donation Profiles</Label>
+              <input
                 type="text"
                 className="border p-2 mb-2 rounded-md w-full"
                 placeholder="Search..."
@@ -565,7 +560,6 @@ export default function CreateProfile() {
                       setDonationProfileID(e.target.value);
                       setIsDropdownOpen(false);
                     }}
-                    onClick={() => getProfiles()}
                   >
                     <option value="">Select Donation Profile</option>
                     {donationProfilesLoading && (
@@ -578,14 +572,6 @@ export default function CreateProfile() {
                         </option>
                       ))}
                   </select>
-                  {/* {hasNext && (
-                    <button
-                      onClick={() => getProfiles()}
-                      className="mt-2 text-blue-500"
-                    >
-                      Load More
-                    </button>
-                  )} */}
                 </div>
               )}
               </div>
