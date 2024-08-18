@@ -147,7 +147,7 @@ const Dashboard = () => {
             setLastDoc(null);
             setFirstDoc(null);
             setLoading(false);
-            setPage(2);
+            setPage(1);
             setHasMore(false);
         } catch (error) {
             console.log(error);
