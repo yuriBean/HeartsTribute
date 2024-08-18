@@ -122,8 +122,8 @@ console.log(user.qrid)
         </div>
         {showModal && (
                   <CreateProfileModal
-                  qrid={qrid || savedQR}
                   onCreateProfile={handleCreateProfile} 
+                  onClose={!showModal}
                 />      
         )}
 

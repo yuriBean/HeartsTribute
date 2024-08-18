@@ -1,5 +1,5 @@
 
-const CreateProfileModal = ({ onCreateProfile }) => {
+const CreateProfileModal = ({ onCreateProfile, onClose }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,9 +20,9 @@ const CreateProfileModal = ({ onCreateProfile }) => {
             Get Started
           </button>
         </form>
-        {/* <button onClick={onClose} className="my-2 text-gray-600 hover:underline">
+        <button onClick={onClose} className="my-2 text-gray-600 hover:underline">
           Close
-        </button> */}
+        </button>
       </div>
     </div>
   );
