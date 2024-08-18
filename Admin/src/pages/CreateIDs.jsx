@@ -8,7 +8,6 @@ export default function CreateIDs() {
     const [noOfQRsToGenerate, setNoOfQRsToGenerate] = useState(1);
     const [loading, setLoading] = useState(false);
     const [qrids, setQrids] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
     const [usedIds, setUsedIds] = useState([]); // Define usedIds state
 
     const handleSubmit = async (e) => {
@@ -45,8 +44,6 @@ export default function CreateIDs() {
             alert("Failed to download CSV");
         }
     };
-    const filteredQRIDs = qrids.filter(qrID => qrID.id && qrID.id.includes(searchTerm));
-
 
     return (
         <div>
@@ -90,15 +87,6 @@ export default function CreateIDs() {
                         </button>
                     </div>
                 </form>
-            </div>
-            <div className="mt-5">
-                <input
-                    type="text"
-                    placeholder="Search for Unique IDs"
-                    className="rounded-lg border border-gray-200 p-1 text-sm focus:outline-none focus:ring-2 focus:ring-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
             </div>
 
             <div className="mt-5">

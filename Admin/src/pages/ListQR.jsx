@@ -111,6 +111,7 @@ const Dashboard = () => {
             console.log(error);
         }
     };
+    
     const handleEdit = async (id, profile_id) => {
         setIsOpen(!isOpen);
         setUpdate({
@@ -119,6 +120,7 @@ const Dashboard = () => {
         });
         console.log("edit modal: " + id + " " + profile_id);
     };
+
     const updateProfileId = async () => {
         try {
             console.log(
@@ -134,37 +136,37 @@ const Dashboard = () => {
             console.log(error);
         }
     };
-    const handleStatusChange = async (id, status) => {
+
+    const filterByType = async (type, value) => {
         try {
-            if (
-                !window.confirm(
-                    "Are you sure you want to change status of this profile?"
-                )
-            )
+            console.log("Filter Type:", type);
+            console.log("Filter Value:", value);
+            setLoading(true);
+    
+            if (!value) return;
+    
+            const filters = {
+                profileID: { profile_id: value },
+                qrID: { qr_id: value }
+            };
+    
+            const filter = filters[type];
+    
+            if (!filter) {
+                console.error("Invalid filter type");
+                setLoading(false);
                 return;
-
-            const res = await changeQRStatus(id, status);
-            if (res) {
-                fetchProfiles();
             }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const filterByProfileId = async () => {
-        try {
-            console.log(profileID);
-            setLoading(true);
-
-            if (profileID == "") return;
+    
             const { data } = await getPaginatedQRCodes(
                 20,
                 "next",
                 null,
                 null,
-                profileID
+                filter.profile_id || null,
+                filter.qr_id || null
             );
+    
             setProfiles(data);
             setLastDoc(null);
             setFirstDoc(null);
@@ -176,41 +178,7 @@ const Dashboard = () => {
             setLoading(false);
         }
     };
-
-    const filterByQrId = async () => {
-        try {
-            console.log(qrID);
-            setLoading(true);
-
-            if (qrID == "") return;
-            const { data } = await getPaginatedQRCodes(
-                20,
-                "next",
-                null,
-                null,
-                null,
-                qrID
-            );
-            setProfiles(data);
-            setLastDoc(null);
-            setFirstDoc(null);
-            setLoading(false);
-            setPage(2);
-            setHasMore(false);
-        } catch (error) {
-            console.log(error);
-            setLoading(false);
-        }
-    };
-
-    const downloadImage = async (url) => {
-        const a = document.createElement("a");
-        a.href = url;
-        a.target = "_blank";
-        a.download = "qr_code.png";
-        a.click();
-    };
-
+        
     useEffect(() => {
         fetchProfiles();
     }, []);
@@ -219,10 +187,22 @@ const Dashboard = () => {
         setShowDefinedProfiles(!showDefinedProfiles);
     };
 
-    const filteredProfiles = profiles.filter(profile =>
-        showDefinedProfiles ? profile.profile_id : !profile.profile_id
-    );
+const filteredProfiles = profiles.filter(profile => {
+    // Check for valid profile_id and qr_id
+    const profileId = profile.profile_id || "";  // Default to an empty string if profile_id is null or undefined
+    const qrId = profile.qr_id || "";            // Default to an empty string if qr_id is null or undefined
 
+    if (profileID && qrID) {
+        return profileId.includes(profileID) && qrId.includes(qrID);
+    } else if (profileID) {
+        return profileId.includes(profileID);
+    } else if (qrID) {
+        return qrId.includes(qrID);
+    } else {
+        return true; // Show all if no filter is applied
+    }
+});
+    
     return (
         <div>
             {/* filter data by userID input */}
@@ -244,7 +224,7 @@ const Dashboard = () => {
                                 onChange={(e) => setProfileID(e.target.value)}
                             />
                             <button
-                                onClick={() => filterByProfileId("profileID")}
+                                onClick={() => filterByType("profileID", profileID)}
                                 className="ml-2 rounded-lg bg-primary px-2 py-1 text-xs text-white"
                             >
                                 Search
@@ -260,7 +240,7 @@ const Dashboard = () => {
                                 onChange={(e) => setQRID(e.target.value)}
                             />
                             <button
-                                onClick={() => filterByQrId("qrID")}
+                                onClick={() => filterByType("qrID", qrID)}
                                 className="ml-2 rounded-lg bg-primary px-2 py-1 text-xs text-white"
                             >
                                 Search
@@ -300,12 +280,6 @@ const Dashboard = () => {
                                             size="2x" 
                                         />
                                     </button>
-                                </th>
-                                {/* <th scope="col" className="px-6 py-3">
-                                    QR_IMAGE
-                                </th> */}
-                                <th scope="col" className="px-6 py-3">
-                                    STATUS
                                 </th>
                                 <th scope="col" className="px-6 py-3">
                                     Last Updated
@@ -350,26 +324,6 @@ const Dashboard = () => {
                                                 {profile.profile_id}
                                             </a>
                                         </th>
-                                        {/* <td className="px-6 py-4 ">
-                                            <img
-                                                src={profile.image}
-                                                className="aspect-square w-20"
-                                            />
-                                            <br />
-                                            <button
-                                                onClick={() =>
-                                                    downloadImage(profile.image)
-                                                }
-                                                className="text-xs underline"
-                                            >
-                                                Download
-                                            </button>
-                                        </td> */}
-                                        <td className="px-6 py-4">
-                                            {profile.active
-                                                ? "Active"
-                                                : "Not Active"}
-                                        </td>
                                         <td className="px-6 py-4">
                                             {dateToNow(
                                                 profile?.updated_at.seconds
@@ -377,23 +331,6 @@ const Dashboard = () => {
                                         </td>
                                         <td className="px-6 py-4 ">
                                             <div className="grid grid-cols-3">
-                                                <button
-                                                    className={`font-medium  hover:underline ${
-                                                        profile.active
-                                                            ? "text-red-500"
-                                                            : "text-green-500"
-                                                    }`}
-                                                    onClick={() =>
-                                                        handleStatusChange(
-                                                            profile.id,
-                                                            !profile.active
-                                                        )
-                                                    }
-                                                >
-                                                    {profile.active
-                                                        ? "Deactivate"
-                                                        : "Activate"}
-                                                </button>
                                                 <button
                                                     className="font-medium text-blue-600 hover:underline dark:text-blue-500"
                                                     onClick={() =>
