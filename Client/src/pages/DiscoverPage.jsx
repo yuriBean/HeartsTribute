@@ -3,8 +3,8 @@ import Layout from "../components/Layout/Layout";
 import { deleteSignUpQR, getDiscoverProfiles } from "../services/profileManager.service";
 import DiscoverProfileCard from "../components/Common/DiscoverProfileCard";
 import Spinner from "../components/Common/Spinner";
-import { useNavigate, useSearchParams } from "react-router-dom"; // Import useNavigate
-import CreateProfileModal from "../components/Profile/CreateProfileModal"; // Import your modal component
+import { useNavigate, useSearchParams } from "react-router-dom";
+import CreateProfileModal from "../components/Profile/CreateProfileModal"; 
 import { notifyError } from "../utils/toastNotifications";
 
 export default function DiscoverPage() {
@@ -12,7 +12,7 @@ export default function DiscoverPage() {
   const [lastDoc, setLastDoc] = useState(null);
   const [loadingProfiles, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [showModal, setShowModal] = useState(false); // State to control modal visibility
+  const [showModal, setShowModal] = useState(false);
   const [searchParams] = useSearchParams();
   const qrid = searchParams.get("qrid");
   const [savedQR, setSavedQR] = useState(null);
@@ -65,20 +65,9 @@ export default function DiscoverPage() {
 
   useEffect(() => {
     const checkProfile = async () => {
-      // Assuming you have a way to get the logged-in user
-      // const loggedInUser = await getLoggedInUser(); // Replace with your method to get the logged-in user
-      // setUser(loggedInUser);
+    console.log(user.qrid)
 
-      // if (loggedInUser) {
-      //   const profiles = await checkUserProfiles(loggedInUser.uid);
-      //   console.log("kore da koreeeeeeeeee " + loggedInUser.uid);
-
-      //   // if (profiles.length === 0) {
-      //   //   setShowModal(true); // Show modal if no profile exists
-      //   // }
-      // }
-console.log(user.qrid)
-      if (user.qrid === null && qrid === null) {
+      if (qrid === 'null' || !qrid || qrid === 'undefined' && !user.qrid) {
         setShowModal(false);
       } else {
         setShowModal(true); // Show modal if either is not null
@@ -103,6 +92,10 @@ console.log(user.qrid)
     }
   };
 
+  const handleClose = () => {
+    setShowModal(false);
+  }
+
   return (
     <>
       <Layout>
@@ -123,7 +116,7 @@ console.log(user.qrid)
         {showModal && (
                   <CreateProfileModal
                   onCreateProfile={handleCreateProfile} 
-                  onClose={!showModal}
+                  onClose={handleClose}
                 />      
         )}
 

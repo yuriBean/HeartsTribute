@@ -23,7 +23,7 @@ const s3 = new AWS.S3({
   secretAccessKey: "iYm0qJZYdp1eJ0EKPyQ9r9aW23CUfb1D7msgfvAA"
 });
 
-const publicUrl = "https://b6e5.c19.e2-5.dev/heartstribute.bucket/";
+const publicUrl = `https://b6e5.c19.e2-5.dev/heartstribute.bucket/`;
 
 const cloudWatch = new AWS.CloudWatch({
   endpoint: endpoint,
@@ -43,17 +43,16 @@ router.post('/upload/:userId/:profileId?', upload.single('file'), (req, res) => 
   console.log(fileType);
 
   const fileStream = fs.createReadStream(req.file.path);
-
   const userId = req.params.userId; 
   const profileId = req.params.profileId;
 
-  const folderPath = profileId ? `ProfileManager/${userId}/${profileId}` : `ProfileManager/${userId}`;
+  const folderPath = profileId ? `${userId}/${profileId}/` : `${userId}/`;
 
   const key = `${folderPath}/${new Date().toISOString()}-${req.file.originalname}`;
 
   const params = {
     Bucket: 'heartstribute.bucket',
-    Key: key,
+    Key: `ProfileManager/${key}`,
     Body: fileStream,
     ContentType: fileType,
     ACL: 'public-read',

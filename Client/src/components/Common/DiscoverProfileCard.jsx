@@ -17,7 +17,7 @@ export default function DiscoverProfileCard({ profile }) {
       className="mx-auto w-3/4 p-4 text-lg shadow-lg xl:w-1/2 rounded-lg"
     >
       <img
-        className="aspect-ratio rounded-xl"
+        className="w-full rounded-xl"
         loading="lazy"
         src={profile.profile_picture}
         alt=""
