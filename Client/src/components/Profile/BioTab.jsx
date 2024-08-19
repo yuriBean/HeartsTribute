@@ -6,6 +6,8 @@ import { formatDate } from "../../utils/dateToNow";
 import CheckProfileOwner from "../CheckProfileOwner";
 import { useNavigate } from "react-router-dom";
 import { deleteProfileQR, deletePostsByProfileId, deleteFirestoreDocument, deleteFileFromStorage } from "../../services/profileManager.service";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default function BioTab() {
   const { profile, loading } = usePublicProfile();
@@ -61,24 +63,23 @@ export default function BioTab() {
   return !loading ? (
     <div>
       
-        <div className="flex justify-end">
-        {profile?.memorial_video && (
+      <div className="flex flex-col items-center justify-center md:flex-row md:justify-end">
+      {profile?.memorial_video && (
             <a
               href={profile?.memorial_video}
               target="_blank"
               rel="noreferrer"
-              className="bg-primary my-2 text-white px-4 py-2 rounded-lg flex gap-2 mx-"
+              className="bg-primary my-2 text-white px-4 py-2 rounded-lg mx-2"
             >
-              <span>Memorial Video</span>
+              Memorial Video
             </a>
         )}
         <button
           onClick={handleShare}
-          className="bg-primary my-2 text-white px-4 py-2 rounded-lg flex gap-2 mx-2"
-          style={{ justifyContent: 'center', alignItems: 'center'}}
+          className="bg-primary my-2 text-white px-4 py-2 rounded-lg mx-2"
         >
-          <img className="w-2 md:w-4" src="/images/share.svg" alt="" />
-          <span>Share</span>
+          <FontAwesomeIcon icon={faShareAlt} className="mr-2" />
+          Share
         </button>
         <CheckProfileOwner>
           <button
@@ -153,18 +154,18 @@ export default function BioTab() {
                 </p>
               </div>)}
               {profile?.city && (
-              <div className="flex items-center gap-4">
-                <span className="text-md font-bold md:text-md">
+              <div className="flex items-center">
+                <span className="text-md mr-2 font-bold md:text-md">
                   Location: 
                   </span>
-                <p className="text-lg">
+                <p className="text-md">
                   {profile?.city}, {profile?.state}
                 </p>
               </div>)}
               {profile?.funeral_date && (
               <div className="flex items-center gap-4">
                 <p className="text-md">
-                <span className="text-md font-bold md:text-md">
+                <span className="mr-2 text-md font-bold md:text-md">
                     Funeral Date: 
                   </span>
                   {formatDate(profile?.funeral_date) || "N/A"}
@@ -173,7 +174,7 @@ export default function BioTab() {
               {profile?.cemetery_location && (
               <div className="flex items-center gap-4">
                 <p className="text-md">
-                <span className="text-md font-bold md:text-md">
+                <span className="text-md mr-2 font-bold md:text-md">
                     Cemetery Location:{" "}
                   </span>
                   {profile?.cemetery_location || "N/A"}
@@ -186,7 +187,7 @@ export default function BioTab() {
             {profile?.favorite_treats && (
               <div className="flex items-center gap-4 mt-5">
                 <p className="text-md">
-                  <span className="text-md font-bold md:text-md">
+                  <span className="text-md mr-2 font-bold md:text-md mr-2">
                     Favorite Tricks & treats:{" "}
                   </span>
                   {profile?.favorite_treats || "N/A"}
@@ -195,7 +196,7 @@ export default function BioTab() {
               {profile?.favorite_places && (
               <div className="flex items-center gap-4">
                 <p className="text-md">
-                <span className="text-md font-bold md:text-md">
+                <span className="text-md mr-2 font-bold md:text-md">
                 Favorite Places:{" "}
                   </span>
                   {profile?.favorite_places || "N/A"}
@@ -207,7 +208,8 @@ export default function BioTab() {
 
 
       <div className="self-end bg-[#FAFAFA] py-3 mt-5 text-md rounded-md text-gray-700">
-        {profile?.bio}
+      <div style={{ whiteSpace: 'pre-wrap' }}>
+      {profile?.bio}</div>
       </div>
     </div>
   ) : (

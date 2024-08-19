@@ -104,7 +104,6 @@ export default function CreateProfile() {
       data.donation_profile_title = currentProfile.title;
     }
 
-    // Expiry
     const creationDate = new Date(data.created_at);
     const expiryDate = new Date(creationDate.getTime() + 45 * 24 * 60 * 60 * 1000); 
     data.expiry_date = expiryDate.toISOString(); 
@@ -114,7 +113,7 @@ export default function CreateProfile() {
       notifySuccess("Profile Created Successfully");
 
       if (qrid) {
-        await linkProfileToQR(newProfile.id, qrid); // Ensure QR code is created
+        await linkProfileToQR(newProfile.id, qrid); 
       }
 
       reset();
