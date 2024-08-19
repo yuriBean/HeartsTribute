@@ -192,6 +192,15 @@ const filteredProfiles = profiles.filter(profile => {
     const profileId = profile.profile_id || "";  // Default to an empty string if profile_id is null or undefined
     const qrId = profile.qr_id || "";            // Default to an empty string if qr_id is null or undefined
 
+    const hasProfileId = Boolean(profile.profile_id);
+
+    if (showDefinedProfiles) {
+        // Show profiles with a profile_id when toggle is on
+        return hasProfileId;
+    } else {
+        // Show profiles without a profile_id when toggle is off
+        return !hasProfileId;
+    }
     if (profileID && qrID) {
         return profileId.includes(profileID) && qrId.includes(qrID);
     } else if (profileID) {
