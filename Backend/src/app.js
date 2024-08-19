@@ -2,17 +2,17 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import compression from "compression";
-import helmet from "helmet";
+// import helmet from "helmet";
 import router from "./services/idrive.services.js";
 
 dotenv.config();
 const app = express();
-app.use(helmet());
+// app.use(helmet());
 app.use(express.json({ limit: "20mb" }));
 app.use(compression());
 
 // Allowed origins for CORS
-const allowlist = ['https://app.heartstribute.com', 'https://www.app.heartstribute.com'];
+const allowlist = ['https://app.heartstribute.com', 'https://www.app.heartstribute.com', 'https://api.heartstribute.com', 'http://localhost:5173'];
 
 const corsOptionsDelegate = (req, callback) => {
   const origin = req.header('Origin');

@@ -17,8 +17,13 @@ const uploadImage = async (file, userId, profileId) => { // Added userId paramet
         });
 
         if (response.status === 200) {
-            console.log('Uploaded a file!   ', response.data.url);
-            return response.data.url;
+            let fileUrl = response.data.url;
+            console.log('Uploaded a file!   ', fileUrl);
+            if (fileUrl.includes('heartstribute.bucketProfileManager')) {
+                fileUrl = fileUrl.replace('heartstribute.bucketProfileManager', 'heartstribute.bucket/ProfileManager');
+            }
+            console.log('Uploaded a file!   ', fileUrl);
+            return fileUrl;
         } else {
             console.error('Error uploading image: ', response.data);
             return null;

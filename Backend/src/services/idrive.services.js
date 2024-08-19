@@ -11,7 +11,7 @@ const upload = multer({ dest: 'uploads/' });
 
 // Get the directory name of the current module
 const __filename = fileURLToPath(import.meta.url);
-
+console.log(__filename);
 // Create an S3 client for IDrive Cloud
 const endpoint = new AWS.Endpoint('s6k7.ph.idrivee2-37.com');
 const s3 = new AWS.S3({
@@ -48,11 +48,11 @@ router.post('/upload/:userId/:profileId?', upload.single('file'), (req, res) => 
 
   const folderPath = profileId ? `${userId}/${profileId}/` : `${userId}/`;
 
-  const key = `${folderPath}/${new Date().toISOString()}-${req.file.originalname}`;
+  const key = `ProfileManager/${folderPath}${new Date().toISOString()}-${req.file.originalname}`;
 
   const params = {
     Bucket: 'heartstribute.bucket',
-    Key: `ProfileManager/${key}`,
+    Key: key,
     Body: fileStream,
     ContentType: fileType,
     ACL: 'public-read',
@@ -66,7 +66,7 @@ router.post('/upload/:userId/:profileId?', upload.single('file'), (req, res) => 
       console.error('Error uploading file: ', err);
       return res.status(500).send('Error uploading file: ' + err.message);
     }
-    const fileUrl = publicUrl + params.Key;
+    const fileUrl = `${publicUrl}${params.Key}`;
     res.status(200).send({ message: 'File uploaded successfully', url: fileUrl });
   });
 });
