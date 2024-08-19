@@ -17,7 +17,7 @@ const uploadImage = async (file, userId, profileId) => { // Added userId paramet
         });
 
         if (response.status === 200) {
-            console.log('Uploaded a file!');
+            console.log('Uploaded a file!   ', response.data.url);
             return response.data.url;
         } else {
             console.error('Error uploading image: ', response.data);

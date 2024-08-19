@@ -23,12 +23,11 @@ const s3 = new AWS.S3({
   secretAccessKey: "iYm0qJZYdp1eJ0EKPyQ9r9aW23CUfb1D7msgfvAA"
 });
 
-const publicUrl = `https://b6e5.c19.e2-5.dev/heartstribute.bucket/`;
+const publicUrl = "https://b6e5.c19.e2-5.dev/heartstribute.bucket/";
 
-// CloudWatch client configuration
 const cloudWatch = new AWS.CloudWatch({
   endpoint: endpoint,
-  region: 'us-west-2', // Change to your bucket's region
+  region: 'us-west-2', 
 });
 
 
@@ -39,19 +38,22 @@ router.post('/upload/:userId/:profileId?', upload.single('file'), (req, res) => 
     console.error('No file uploaded.');
     return res.status(400).send('No file uploaded.');
   }
-  // get mime type of the file
+
   const fileType = req.file.mimetype;
   console.log(fileType);
 
   const fileStream = fs.createReadStream(req.file.path);
 
-  const userId = req.params.userId; // Get user ID from request parameters
+  const userId = req.params.userId; 
   const profileId = req.params.profileId;
-  const folderPath = profileId === undefined ? `ProfileManager/${userId}/user` : `ProfileManager/${userId}/${profileId}`;
+
+  const folderPath = profileId ? `ProfileManager/${userId}/${profileId}` : `ProfileManager/${userId}`;
+
+  const key = `${folderPath}/${new Date().toISOString()}-${req.file.originalname}`;
 
   const params = {
     Bucket: 'heartstribute.bucket',
-    Key: `${folderPath}/${new Date().toISOString()}-${req.file.originalname}`,
+    Key: key,
     Body: fileStream,
     ContentType: fileType,
     ACL: 'public-read',
@@ -59,7 +61,7 @@ router.post('/upload/:userId/:profileId?', upload.single('file'), (req, res) => 
   };
 
   s3.putObject(params, (err, data) => {
-    // Remove the file from local storage
+
     fs.unlinkSync(req.file.path);
     if (err) {
       console.error('Error uploading file: ', err);
@@ -71,7 +73,7 @@ router.post('/upload/:userId/:profileId?', upload.single('file'), (req, res) => 
 });
 
 router.delete('/delete/:key', async (req, res) => {
-  const { key } = req.params; // Get the file key from the request parameters
+  const { key } = req.params; 
 
   const params = {
     Bucket: 'heartstribute.bucket',
@@ -90,11 +92,11 @@ router.delete('/delete/:key', async (req, res) => {
 router.get('/metrics', async (req, res) => {
   const params = {
     Namespace: 'AWS/S3',
-    MetricName: 'BucketSizeBytes', // Example metric name
+    MetricName: 'BucketSizeBytes',
     Dimensions: [
       {
         Name: 'BucketName',
-        Value: 'heartstribute.bucket' // Change to your bucket name
+        Value: 'heartstribute.bucket' 
       },
       {
         Name: 'StorageType',

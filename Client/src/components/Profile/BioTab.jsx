@@ -195,25 +195,6 @@ export default function BioTab() {
             {formatDate(profile?.death_date)}
           </strong>
         </p>
-
-        {/* <button
-          onClick={handleShare}
-          className="flex cursor-pointer items-center gap-1 md:gap-2 rounded-md bg-[#346164] px-4 py-2 text-sm font-semibold text-white md:px-8 md:py-3"
-        >
-          <img className="w-2 md:w-4" src="/images/share.svg" alt="" />
-          <span>Share</span>
-        </button> */}
-        {/* {profile?.memorial_video && (
-            <a
-              href={profile?.memorial_video}
-              target="_blank"
-              rel="noreferrer"
-              className="flex cursor-pointer font-bold rounded-md items-center gap-4 bg-[#346164] px-3 py-1 text-sm md:text-sm text-white md:px-8 md:py-3"
-            >
-              <span>Memorial Video</span>
-            </a>
-        )} */}
-
       
       </div>
 
