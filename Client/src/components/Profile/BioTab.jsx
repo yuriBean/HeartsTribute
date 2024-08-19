@@ -105,75 +105,7 @@ export default function BioTab() {
       </h2> */}
 
       {/* section to show city, state, funeral_date, cemetery_location add check that if values undefined show None */}
-
-        {/* link to memorial_video if it exists */}
-        {/* <div className="flex flex-col gap-2">
-          {profile.profile_type == "human" && (
-            <>
-              {profile?.hobbies &&
-              (<div className="flex items-center gap-4 mt-5">
-                <p className="text-lg ">
-                  <small className="text-xl font-bold md:text-xl ">Hobbies: </small>
-                  {profile?.hobbies || "N/A"}
-                </p>
-              </div>)}
-              {profile?.nickname && (
-              <div className="flex items-center gap-4">
-                <p className="text-lg ">
-                  <small className="text-xl font-bold md:text-xl">Nicknames: </small>
-                  {profile?.nickname || "N/A"}
-                </p>
-              </div>)}
-              {profile?.city && (
-              <div className="flex items-center gap-4">
-                <small className="text-xl font-bold md:text-xl">Location: </small>
-                <p className="text-lg">
-                  {profile?.city}, {profile?.state}
-                </p>
-              </div>)}
-              {profile?.funeral_date && (
-              <div className="flex items-center gap-4">
-                <p className="text-lg ">
-                  <small className="text-xl font-bold md:text-xl">Funeral Date: </small>
-                  {formatDate(profile?.funeral_date) || "N/A"}
-                </p>
-              </div>)}
-              {profile?.cemetery_location && (
-              <div className="flex items-center gap-4">
-                <p className="text-lg">
-                  <small className="text-xl font-bold md:text-xl">
-                    Cemetery Location:{" "}
-                  </small>
-                  {profile?.cemetery_location || "N/A"}
-                </p>
-              </div>)}
-            </>
-          )} 
-           {profile.profile_type == "pet" && (
-            <>
-            {profile?.favorite_treats && (
-              <div className="flex items-center gap-4 mt-5">
-                <p className="text-lg">
-                  <small className="text-xl font-bold md:text-xl">
-                    Favorite Tricks & treats:{" "}
-                  </small>
-                  {profile?.favorite_treats || "N/A"}
-                </p>
-              </div>)}
-              {profile?.favorite_places && (
-              <div className="flex items-center gap-4">
-                <p className="text-lg">
-                  <small className="text-xl font-bold md:text-xl">
-                    Favorite Places:{" "}
-                  </small>
-                  {profile?.favorite_places || "N/A"}
-                </p>
-              </div>)}
-            </>
-          )}
-        </div> */}
-
-<CheckProfileOwner>
+      <CheckProfileOwner>
       {profile.expiry_date && (
       <div className="self-end bg-[#FAFAFA] py-5 my-10 rounded-md text-gray-700">
       <p className="self-end bg-[#FAFAFA] text-xs sm:text-sm py-1 rounded-md align-end">
@@ -197,6 +129,74 @@ export default function BioTab() {
         </p>
       
       </div>
+
+        {/* link to memorial_video if it exists */}
+        <div className="flex flex-col gap-2">
+          {profile.profile_type == "human" && (
+            <>
+              {profile?.hobbies &&
+              (<div className="flex items-center gap-4 mt-5">
+                <p className="text-lg ">
+                  <small className="text-lg font-bold md:text-xl ">Hobbies: </small>
+                  {profile?.hobbies || "N/A"}
+                </p>
+              </div>)}
+              {profile?.nickname && (
+              <div className="flex items-center gap-4">
+                <p className="text-lg ">
+                  <small className="text-lg font-bold md:text-xl">Nicknames: </small>
+                  {profile?.nickname || "N/A"}
+                </p>
+              </div>)}
+              {profile?.city && (
+              <div className="flex items-center gap-4">
+                <small className="text-lg font-bold md:text-xl">Location: </small>
+                <p className="text-lg">
+                  {profile?.city}, {profile?.state}
+                </p>
+              </div>)}
+              {profile?.funeral_date && (
+              <div className="flex items-center gap-4">
+                <p className="text-lg ">
+                  <small className="text-md font-bold md:text-xl">Funeral Date: </small>
+                  {formatDate(profile?.funeral_date) || "N/A"}
+                </p>
+              </div>)}
+              {profile?.cemetery_location && (
+              <div className="flex items-center gap-4">
+                <p className="text-md">
+                  <small className="text-md font-bold md:text-xl">
+                    Cemetery Location:{" "}
+                  </small>
+                  {profile?.cemetery_location || "N/A"}
+                </p>
+              </div>)}
+            </>
+          )} 
+           {profile.profile_type == "pet" && (
+            <>
+            {profile?.favorite_treats && (
+              <div className="flex items-center gap-4 mt-5">
+                <p className="text-md">
+                  <span className="text-md font-bold md:text-md">
+                    Favorite Tricks & treats:{" "}
+                  </span>
+                  {profile?.favorite_treats || "N/A"}
+                </p>
+              </div>)}
+              {profile?.favorite_places && (
+              <div className="flex items-center gap-4">
+                <p className="text-md">
+                <span className="text-md font-bold md:text-md">
+                Favorite Places:{" "}
+                  </span>
+                  {profile?.favorite_places || "N/A"}
+                </p>
+              </div>)}
+            </>
+          )}
+        </div>
+
 
       <div className="self-end bg-[#FAFAFA] py-3 mt-5 text-md rounded-md text-gray-700">
         {profile?.bio}

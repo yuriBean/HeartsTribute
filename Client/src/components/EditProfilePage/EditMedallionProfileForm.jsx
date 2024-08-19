@@ -405,7 +405,7 @@ export default function EditProfileForm() {
         )}
         <br />
         <h3 className="mb-2 text-sm tracking-wider md:text-base">
-          Donation Profile
+          Donate in Their Memory
         </h3>
         <hr />
         <div className="mb-4">
@@ -441,12 +441,10 @@ export default function EditProfileForm() {
           {donationEnabled && (
             <>
             <p className="text-sm md:text-lg my-2">
-                Honor the memory of your loved one by supporting a cause close
-                to their heart. Choose a charity from the dropdown list below
-                and encourage others to make a donation in their name.
-              </p>
+            Honor the memory of your loved one by supporting a cause close to their heart. Type the charity name in the search box, select a preferred charity from the dropdown list, and encourage others to donate in their name.
+            </p>
             <div className="md:col-span-2 relative">
-              <Label>Search Donation Profiles</Label>
+              <Label>Search Charity List</Label>
               <input
                 type="text"
                 className="border p-2 mb-2 rounded-md w-full"
@@ -466,7 +464,7 @@ export default function EditProfileForm() {
                       setIsDropdownOpen(false);
                     }}
                   >
-                    <option value="">Select Donation Profile</option>
+                    <option value="">Select Charity</option>
                     {donationProfilesLoading && (
                       <option value="loading">Loading...</option>
                     )}

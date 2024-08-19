@@ -121,8 +121,12 @@ export default function TimelineTab() {
         </div>
       </CheckProfileOwner>
       <h1 className="text-center text-lg mb-6 font-bold tracking-widest xl:text-xl">
-        {profile.first_name + " " + profile.last_name}'s Life Events
-      </h1>
+      {profile.last_name ? (
+  `${profile.first_name} ${profile.last_name}'s Life Events`
+) : (
+  `${profile.first_name}'s Life Events`
+)}
+          </h1>
       <small className="text-lg">
         Tap or hover over the events to uncover more
         details and heartfelt memories. Scroll left or right to explore all the significant events on the

@@ -13,6 +13,7 @@ export default function NoProfileConnected() {
   const [linking, setLinking] = useState(false);
   const [searchParams] = useSearchParams();
   const qrid = searchParams.get("qrid");
+  const user = getLoggedInUser ();
 
   const checkUserProfiles = async () => {
     try {
@@ -46,7 +47,7 @@ export default function NoProfileConnected() {
         navigate(`/login?qrid=${qrid}`);
       else{
         if (!qrid || qrid==='null' || qrid === 'undefined')
-          notifyError('QR Code not detected. Please scan your QR Code and try again.');
+          notifyError("Failed to activate your Tribute Tag. Please try scanning it again. If the issue persists, contact support.");
         else
           navigate(`/profile-manager/tribute-tags?qrid=${qrid}`);
       }
@@ -62,16 +63,13 @@ export default function NoProfileConnected() {
       if (!profileId || !qrid || qrid==='null') {
         throw new Error("Invalid profile ID or QR ID.");
       }
-
-      console.log(`Linking profile ${profileId} to QR code ${qrid}`);
-
       // Check if the QRID already exists and is not linked to another profile
       await linkProfileToQR(profileId, qrid); // Link existing profile to QR code
       notifySuccess("Profile linked successfully!");
       navigate(`/profile/${profileId}`); // Redirect to the linked profile
     } catch (error) {
       console.error("Failed to link profile", error);
-      notifyError("Failed to link profile. The QR ID or profile may be invalid.");
+      notifyError("Failed to activate your Tribute Tag. Please try scanning it again. If the issue persists, contact support.");
     } finally {
       setLinking(false);
     }
@@ -90,9 +88,16 @@ export default function NoProfileConnected() {
   return (
     <Layout>
       <div className="flex flex-col items-center justify-center h-[40rem]">
-        <h1 className="text-2xl md:text-4xl font-bold text-center mx-1 md:mx-9">
-          Looks like no profile is connected with this QR code. Start by creating a new profile or linking an existing unused one.
+        {user ? (
+        <h1 className="text-2xl md:text-xl  text-center mx-2 md:mx-0 w-100 md:w-70  ">
+          Your Tribute Tag is ready for activation. Start by linking it to a profile now. 
+
+        </h1>):(
+        <h1 className="text-2xl md:text-xl  text-center mx-2 md:mx-0 w-100 md:w-70  ">
+                Welcome to Hearts Tribute!<br></br> It looks like this Tribute Tag isn’t linked to a profile yet. We’ll guide you through the setup in no time. Start by creating an account.
         </h1>
+        )
+         }
         {profiles.length > 0 ? (
           <>
             <button onClick={() => setModalOpen(true)} className="bg-primary text-white px-4 py-2 rounded mt-4">
@@ -133,8 +138,8 @@ export default function NoProfileConnected() {
             )}
           </>
         ) : (
-          <button onClick={handleCreateProfile} className="bg-blue-500 text-white px-4 py-2 rounded mt-4">
-            Create New Profile
+          <button onClick={handleCreateProfile} className="bg-primary text-white px-4 py-2 rounded mt-4">
+            Continue
           </button>
         )}
       </div>

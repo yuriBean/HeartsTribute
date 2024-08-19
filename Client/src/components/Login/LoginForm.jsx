@@ -39,7 +39,11 @@ export default function LoginForm( { qrid }) {
       setLoading(true);
       await signin(email, password);
       setLoading(false);
+      if(qrid){
       navigate(`/no-profile-connected?qrid=${qrid}`); 
+      } else {
+        navigate (`/`);
+      }
 
     } catch (error) {
       setErrors([error.message]);

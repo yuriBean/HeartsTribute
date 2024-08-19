@@ -49,7 +49,7 @@ export default function EventsOfProfile() {
             <img className='w-32' src="/images/stopwatch.svg" alt="No Events" />
             <h3 className='text-2xl text-gray-800 tracking-wider'>No timeline events found</h3>
             <p className='text-xl text-gray-800 tracking-wide'>
-              No events have been added yet in Robert T. Hawke's timeline.
+              No events have been added yet in this timeline.
             </p>
           </div>
         )}

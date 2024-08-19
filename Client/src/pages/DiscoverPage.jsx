@@ -67,7 +67,7 @@ export default function DiscoverPage() {
     const checkProfile = async () => {
     console.log(user.qrid)
 
-      if (qrid === 'null' || !qrid || qrid === 'undefined' && !user.qrid) {
+      if (qrid === 'null' || qrid === undefined || ( !qrid && !user.qrid)) {
         setShowModal(false);
       } else {
         setShowModal(true); // Show modal if either is not null

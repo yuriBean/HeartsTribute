@@ -24,7 +24,7 @@ export default function RequestAccess() {
     <Layout>
       <div className="flex flex-col items-center justify-center h-[40rem]">
         {user ? (<>
-          <h1 className="text-xl md:text-2xl font-bold text-center">
+          <h1 className="text-xl md:text-2xl font-bold text-center text-primary">
             The owner of this profile wishes to keep it private. If
             you would like to request access, please send a request to the
             profile owner
@@ -34,7 +34,7 @@ export default function RequestAccess() {
           </button>
         </>) : (
           <>
-            <h1 className="text-xl md:text-2xl font-bold text-center">
+            <h1 className="text-xl md:text-2xl font-bold text-center text-primary">
               The owner of this profile wishes to keep it private. If
               you would like to request access, please log in or create an account and send a request to the
               profile owner

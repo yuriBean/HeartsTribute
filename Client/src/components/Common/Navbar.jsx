@@ -55,7 +55,7 @@ export default function Navbar() {
             <>
               <Link to="/signout">
                 <button className="rounded-md bg-black px-6 py-2 font-bold text-white">
-                  Sign out
+                  Sign Out
                 </button>
               </Link>
             </>
