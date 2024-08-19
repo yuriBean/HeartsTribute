@@ -1,5 +1,7 @@
 import React from 'react';
 import { deleteEvent } from "../../services/profileManager.service";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export default function EventRow({ id, date, img, name, location, time, onDelete }) {
 
@@ -28,10 +30,10 @@ export default function EventRow({ id, date, img, name, location, time, onDelete
         </span>
         <button
           onClick={handleDeleteEvent}
-          className="text-sm tracking-wider text-red-500 2xl:text-base mt-2"
+          className="text-md tracking-wider text-red-500 2xl:text-base mt-2 text-right"
         >
-          Delete Event
-        </button>
+           <FontAwesomeIcon icon={faTrash} />
+           </button>
       </div>
     </div>
   );

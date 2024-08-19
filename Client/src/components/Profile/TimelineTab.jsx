@@ -4,6 +4,8 @@ import { usePublicProfile } from "../Providers/PublicProfileProvider";
 import CheckProfileOwner from "../CheckProfileOwner";
 import { useNavigate } from "react-router-dom";
 import { deleteEvent } from "../../services/profileManager.service"; // Import deleteEvent
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export default function TimelineTab() {
   const { profile, events, getEvents, getProfile } = usePublicProfile();
@@ -156,7 +158,18 @@ export default function TimelineTab() {
                 {event.event_date}
               </span>
               <div className="z-100 absolute top-0 rounded flex h-[450px] w-full -translate-y-1/2 scale-0 transform flex-col border bg-white p-4 transition delay-300 hover:scale-100 peer-hover:scale-100">
-                <h1 className="mb-2">{event.event_name}</h1>
+                <div className="flex items-center justify-between">
+                  <h1 className="mb-2">{event.event_name}</h1>
+                <CheckProfileOwner>
+                {event.id !== 'birth' && event.id !== 'death' && (
+                <button
+                  onClick={() => handleDeleteEvent(event.id)}
+                  className="text-md tracking-wider text-red-500 2xl:text-base my-2"
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                  </button>)}
+                </CheckProfileOwner>
+                </div>
                 <img
                   src={event.image}
                   className="aspect-ratio rounded-lg"
@@ -175,15 +188,7 @@ export default function TimelineTab() {
                     {isReadMore ? "Read Less" : "Read More"}
                   </button>
                 )}
-            <CheckProfileOwner>
-                {event.id !== 'birth' && event.id !== 'death' && (
-                <button
-                  onClick={() => handleDeleteEvent(event.id)}
-                  className="text-sm tracking-wider text-red-500 2xl:text-base mt-2"
-                >
-                  Delete Event
-                </button>)}
-                </CheckProfileOwner>
+
               </div>
             </li>
           ))}

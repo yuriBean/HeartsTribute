@@ -1,6 +1,8 @@
 import React from "react";
 import { usePublicProfile } from "../Providers/PublicProfileProvider";
 import { deleteTribute } from "../../services/profileManager.service"; // Import deleteTribute
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export default function Tribute({ tribute, onDelete }) {
   const { profile } = usePublicProfile();
@@ -39,17 +41,18 @@ export default function Tribute({ tribute, onDelete }) {
           />
         )}
       </div>
+      <div className="flex items-center justify-between ">
       <p className="text-lime-700 text-xs font-medium tracking-wider italic ">
         ~Tribute By {tribute.display_name}
       </p>
       {canDelete && (
         <button
           onClick={handleDeleteTribute}
-          className="text-sm tracking-wider text-red-500 2xl:text-base mt-2"
+          className="text-md tracking-wider text-red-500 2xl:text-base mt-2"
         >
-          Delete Tribute
+           <FontAwesomeIcon icon={faTrash} />
         </button>
-      )}
+      )}</div>
     </div>
   );
 }
