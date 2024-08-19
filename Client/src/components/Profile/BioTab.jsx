@@ -136,38 +136,46 @@ export default function BioTab() {
             <>
               {profile?.hobbies &&
               (<div className="flex items-center gap-4 mt-5">
-                <p className="text-lg ">
-                  <small className="text-lg font-bold md:text-xl ">Hobbies: </small>
+                <p className="text-md">
+                <span className="text-md font-bold md:text-md">
+                    Hobbies: 
+                    </span>
                   {profile?.hobbies || "N/A"}
                 </p>
               </div>)}
               {profile?.nickname && (
               <div className="flex items-center gap-4">
-                <p className="text-lg ">
-                  <small className="text-lg font-bold md:text-xl">Nicknames: </small>
+                <p className="text-md">
+                <span className="text-md font-bold md:text-md">
+                  Nicknames: 
+                  </span>
                   {profile?.nickname || "N/A"}
                 </p>
               </div>)}
               {profile?.city && (
               <div className="flex items-center gap-4">
-                <small className="text-lg font-bold md:text-xl">Location: </small>
+                <span className="text-md font-bold md:text-md">
+                  Location: 
+                  </span>
                 <p className="text-lg">
                   {profile?.city}, {profile?.state}
                 </p>
               </div>)}
               {profile?.funeral_date && (
               <div className="flex items-center gap-4">
-                <p className="text-lg ">
-                  <small className="text-md font-bold md:text-xl">Funeral Date: </small>
+                <p className="text-md">
+                <span className="text-md font-bold md:text-md">
+                    Funeral Date: 
+                  </span>
                   {formatDate(profile?.funeral_date) || "N/A"}
                 </p>
               </div>)}
               {profile?.cemetery_location && (
               <div className="flex items-center gap-4">
                 <p className="text-md">
-                  <small className="text-md font-bold md:text-xl">
+                <span className="text-md font-bold md:text-md">
                     Cemetery Location:{" "}
-                  </small>
+                  </span>
                   {profile?.cemetery_location || "N/A"}
                 </p>
               </div>)}

@@ -9,10 +9,10 @@ export default function Tribute({ tribute, onDelete }) {
   const user = JSON.parse(localStorage.getItem("user"));
 
   const handleDeleteTribute = async () => {
-    if(window.confirm("Are you sure you want to delete this post? This action cannot be undone.")){
+    if(window.confirm("Are you sure you want to delete this tribute? This action cannot be undone.")){
       try {
         await deleteTribute(tribute.id);
-        onDelete(); // Call the onDelete prop to refresh the tributes list
+        onDelete(); 
       } catch (error) {
         console.error("Error deleting tribute:", error);
       }

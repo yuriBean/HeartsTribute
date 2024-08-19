@@ -7,6 +7,8 @@ import {
 import Comment from "./Comment";
 import Picker from "emoji-picker-react";
 import { notifyError, notifySuccess } from "../../utils/toastNotifications";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export default function PostModal({ setIsOpen, post, profile, onPostDeleted  }) {
   const [isReadMore, setIsReadMore] = useState(false);
@@ -65,15 +67,15 @@ export default function PostModal({ setIsOpen, post, profile, onPostDeleted  }) 
   const handleDeletePost = async () => {
     if (window.confirm("Are you sure you want to delete this post? This action cannot be undone.")) {
         try {
-            await deletePost(post.id); // Call the deletePost function
+            await deletePost(post.id); 
             notifySuccess("Post deleted successfully");
             onPostDeleted();
-            setIsOpen(false); // Close the modal after deletion
+            setIsOpen(false); 
             setLoading(true);
         } catch (error) {
             notifyError("Failed to delete post: " + error.message);
           } finally {
-            setIsOpen(false); // Close the modal after deletion or error
+            setIsOpen(false); 
         }
     }
 };
@@ -130,20 +132,17 @@ export default function PostModal({ setIsOpen, post, profile, onPostDeleted  }) 
                 }
                 alt=""
               />
-              <div className="font-poppins font-bold">
+              <div className="font-poppins font-bold flex justify-between items-center w-full px-5">
                 <h2 className="my-1 text-xl font-medium tracking-widest 2xl:text-3xl">
                   {profile?.first_name + ". " + profile?.last_name}
                 </h2>
-                {/* <p className="text-left text-sm tracking-wider 2xl:text-base">
-                  {profile?.title}
-                </p> */}
-                          {user && user.id === post.user_id && (
+          {user && user.id === post.user_id && (
             <button
               onClick={handleDeletePost}
               className="mt-4 rounded bg-red-500 px-4 py-2 text-white"
             >
-              Delete Post
-            </button>
+           <FontAwesomeIcon icon={faTrash} />
+           </button>
           )}
 
               </div>

@@ -64,9 +64,11 @@ export default function QRCode() {
         <div className="flex flex-col items-center justify-center h-screen">
             <h1 className="text-2xl font-bold">Profile Access</h1>
             <p className="mt-4">
-                This profile is private. Would you like to request access?
+            The owner of this profile wishes to keep it private. If
+            you would like to request access, please send a request to the
+            profile owner.
             </p>
-            <button onClick={handleRequestAccess} className="bg-blue-500 text-white px-4 py-2 rounded mt-4">
+            <button onClick={handleRequestAccess} className="bg-primary text-white px-4 py-2 rounded mt-4">
                 Request Access
             </button>
         </div>

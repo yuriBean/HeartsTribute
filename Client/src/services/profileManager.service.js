@@ -601,6 +601,7 @@ const deleteFirestoreDocument = async (collection, docID) => {
         throw new Error("User not found");
       }
     } catch (error) {
+        console.log(`Failed to delete ${type} photo: ${error.message}`);
       throw new Error(`Failed to delete ${type} photo: ${error.message}`);
     }
   };  
@@ -687,19 +688,16 @@ const linkProfileToQR = async (profileId, qrid) => {
             throw new Error(`No data found for QR code document with ID ${qrid}`);
         }
 
-        // Check if the corresponding profileId of that doc is null
         if (qrCodeData.profile_id) {
             throw new Error(`QR code ${qrid} is already linked to profile ID ${qrCodeData.profile_id}`);
         }
 
-        // Check if the profile is already linked to another QR code
         const profileQuery = query(qrCodesRef, where("profile_id", "==", profileId));
         const profileQuerySnapshot = await getDocs(profileQuery);
         if (!profileQuerySnapshot.empty) {
             throw new Error(`Profile ID ${profileId} is already linked to another QR code.`);
         }
 
-        // Get the profile's visibility
         const profileRef = doc(db, "profiles", profileId);
         const profileDoc = await getDoc(profileRef);
         if (!profileDoc.exists()) {
@@ -708,7 +706,6 @@ const linkProfileToQR = async (profileId, qrid) => {
         const profileData = profileDoc.data();
         const profileVisibility = profileData.visibility;
 
-        // Update the profileId and profile_visibility in the QR code document
         const qrCodeRef = doc(db, "qrcodes", qrCodeDoc.id);
         await updateDoc(qrCodeRef, {
             profile_id: profileId,

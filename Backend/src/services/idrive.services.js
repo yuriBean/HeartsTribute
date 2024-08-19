@@ -72,7 +72,11 @@ router.post('/upload/:userId/:profileId?', upload.single('file'), (req, res) => 
 });
 
 router.delete('/delete/:key', async (req, res) => {
-  const { key } = req.params; 
+  const { key } = req.params;
+
+  if (!key) {
+    return res.status(400).send('File key is required for deletion.');
+  }
 
   const params = {
     Bucket: 'heartstribute.bucket',
@@ -80,13 +84,15 @@ router.delete('/delete/:key', async (req, res) => {
   };
 
   try {
-    await s3.deleteObject(params).promise();
+    const data = await s3.deleteObject(params).promise();
+    console.log(`File deleted successfully: ${key}`, data);
     res.status(200).send({ message: 'File deleted successfully' });
   } catch (err) {
-    console.error('Error deleting file: ', err);
+    console.error(`Error deleting file with key ${key}: `, err);
     res.status(500).send('Error deleting file: ' + err.message);
   }
 });
+
 // Route to get metrics
 router.get('/metrics', async (req, res) => {
   const params = {

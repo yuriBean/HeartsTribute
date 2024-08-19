@@ -41,7 +41,7 @@ export default function LoginForm( { qrid }) {
       setLoading(false);
       if(qrid){
       navigate(`/no-profile-connected?qrid=${qrid}`); 
-      } else {
+      } else if (qrid === 'null' || qrid === undefined || !qrid) {
         navigate (`/`);
       }
 
