@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import EventRow from "../Profile/EventRow";
 import Spinner from "../Common/Spinner";
+import { useProfile } from "../Providers/EditProfileProvider"
 
 export default function EventsOfProfile() {
   const [loading, setLoading] = useState(true);
@@ -17,7 +18,7 @@ export default function EventsOfProfile() {
   const handleDelete = async (id) => {
     // Filter out the deleted event locally
     setLoading(true);
-    await getEvents();  // Fetch the updated events after deletion
+    await getEvents();  
     setLoading(false);
   };
 
