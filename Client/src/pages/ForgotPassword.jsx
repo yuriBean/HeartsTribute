@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { forgotPassword } from "../auth/emailAuthServices";
 import InputText from "../components/Login/InputText";
+import { useSearchParams } from "react-router-dom";
 
 export default function ForgotPassword() {
+  const [searchParams] = useSearchParams();
+  const qrid = searchParams.get("qrid");
+
   const [email, setEmail] = useState("");
   const onChange = (e) => {
     if (e.target.name === "Email") {
@@ -13,7 +17,7 @@ export default function ForgotPassword() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await forgotPassword(email);
+      await forgotPassword(email, qrid);
       alert("Check your email for reset link");
     } catch (error) {
       console.log(error);

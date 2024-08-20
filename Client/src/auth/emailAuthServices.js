@@ -52,7 +52,7 @@ export const signout = (email, password) => {
   });
 }
 
-export const forgotPassword = async (email) => {
+export const forgotPassword = async (email, qrid) => {
   try {
     await sendPasswordResetEmail(auth, email, {
       url: `https://admin.heartstribute.com/redirect?qrid=${qrid}`,
