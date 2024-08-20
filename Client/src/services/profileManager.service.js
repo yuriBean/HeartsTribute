@@ -597,7 +597,7 @@ const deleteFirestoreDocument = async (collection, docID) => {
         const idriveKey = `ProfileManager/${userID}/${type === "profile" ? "profile" : "cover"}`;
         await deleteFileFromStorage(filePath);
 
-        const response = await fetch(`/api/deleteProfile/${userID}/${type}`, {
+        const response = await fetch(`https://api.heartstribute.com/api/deleteProfile/${userID}/${type}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json'
@@ -645,7 +645,7 @@ const deleteFirestoreDocument = async (collection, docID) => {
 
 const deleteProfileFromIDrive = async (userId, profileId) => {
     try {
-      const response = await fetch(`/api/deleteProfile/${userId}/${profileId}`, {
+      const response = await fetch(`https://api.heartstribute.com/api/deleteProfile/${userId}/${profileId}`, {
         method: 'DELETE',
       });
       if (!response.ok) {
