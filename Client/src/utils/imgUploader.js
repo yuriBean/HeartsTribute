@@ -34,4 +34,14 @@ const uploadImage = async (file, userId, profileId) => { // Added userId paramet
     }
 };
 
-export { uploadImage };
+const deleteFolder = async (userId, profileId) => {
+    try {
+      const response = await axios.delete(`https://api.heartstribute.com/api/delete/${userId}/${profileId}/`);
+      console.log('Profile deleted successfully:', response.data);
+    } catch (error) {
+      console.error('Error deleting profile:', error.response ? error.response.data : error.message);
+    }
+  };
+  
+
+export { uploadImage, deleteFolder };

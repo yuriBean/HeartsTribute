@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { deleteProfileQR, deletePostsByProfileId, deleteFirestoreDocument, deleteFileFromStorage, deleteProfileFromIDrive } from "../../services/profileManager.service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
+import { deleteFolder } from "../../utils/imgUploader";
 
 export default function BioTab() {
   const { profile, loading } = usePublicProfile();
@@ -43,10 +44,10 @@ export default function BioTab() {
         }
         if (profile?.cover_picture) {
           console.log("Deleting cover picture:", profile.cover_picture); 
-          await deleteFileFromStorage(profile.cover_picture);
+          // await deleteFileFromStorage(profile.cover_picture);
         }
 
-        await deleteProfileFromIDrive(user.id, profile.id)
+        await deleteFolder(user.id, profile.id)
         await deleteFirestoreDocument("profiles", profile.id);
         console.log(profile.id);
         await deleteProfileQR(profile.id);
@@ -139,7 +140,7 @@ export default function BioTab() {
               {profile?.hobbies &&
               (<div className="flex items-center gap-4 mt-5">
                 <p className="text-md">
-                <span className="text-md font-bold md:text-md">
+                <span className="text-md mr-2 font-bold md:text-md">
                     Hobbies: 
                     </span>
                   {profile?.hobbies || "N/A"}
@@ -148,8 +149,8 @@ export default function BioTab() {
               {profile?.nickname && (
               <div className="flex items-center gap-4">
                 <p className="text-md">
-                <span className="text-md font-bold md:text-md">
-                  Nicknames: 
+                <span className="text-md mr-2 font-bold md:text-md">
+                  Nickname: 
                   </span>
                   {profile?.nickname || "N/A"}
                 </p>

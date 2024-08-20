@@ -71,41 +71,43 @@ router.post('/upload/:userId/:profileId?', upload.single('file'), (req, res) => 
   });
 });
 
-router.delete('/deleteProfile/:userId/:profileId', async (req, res) => {
-  const { userId, profileId } = req.params;
-
-  if (!userId || !profileId) {
-    return res.status(400).send('UserId and ProfileId are required.');
-  }
-
+router.delete('/delete/:userId/:profileId', (req, res) => {
+  const userId = req.params.userId;
+  const profileId = req.params.profileId;
+  
+  // Construct the folder path
   const folderPath = `${userId}/${profileId}/`;
 
-  const listParams = {
-    Bucket: 'heartstribute.bucket',
-    Prefix: `ProfileManager/${folderPath}`
-  };
-
-  try {
-    const listedObjects = await s3.listObjectsV2(listParams).promise();
-
-    if (listedObjects.Contents.length === 0) {
-      return res.status(404).send('No files found in the specified folder.');
+  // List all objects in the folder
+  s3.listObjectsV2({ Bucket: 'heartstribute.bucket', Prefix: `ProfileManager/${folderPath}` }, (err, data) => {
+    if (err) {
+      console.error('Error listing objects: ', err);
+      return res.status(500).send('Error listing objects: ' + err.message);
     }
 
+    if (data.Contents.length === 0) {
+      return res.status(404).send('No objects found to delete.');
+    }
+
+    // Prepare delete parameters
     const deleteParams = {
       Bucket: 'heartstribute.bucket',
       Delete: {
-        Objects: listedObjects.Contents.map(obj => ({ Key: obj.Key }))
+        Objects: data.Contents.map(object => ({ Key: object.Key })),
+        Quiet: false
       }
     };
 
-    await s3.deleteObjects(deleteParams).promise();
-    
-    res.status(200).send({ message: 'Profile folder and its contents deleted successfully' });
-  } catch (err) {
-    console.error(`Error deleting profile folder: ${err.message}`);
-    res.status(500).send('Error deleting profile folder: ' + err.message);
-  }
+    // Delete all objects
+    s3.deleteObjects(deleteParams, (err, data) => {
+      if (err) {
+        console.error('Error deleting objects: ', err);
+        return res.status(500).send('Error deleting objects: ' + err.message);
+      }
+
+      res.status(200).send({ message: 'Folder deleted successfully' });
+    });
+  });
 });
 
 // Route to get metrics
