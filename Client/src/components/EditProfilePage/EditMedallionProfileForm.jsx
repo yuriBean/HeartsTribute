@@ -440,9 +440,10 @@ export default function EditProfileForm() {
           </p>
           <div className="md:col-span-2 relative">
             <label className="block text-sm font-medium text-gray-700">Search Charity List</label>
+            <div className="flex"></div>
             <input
                 type="text"
-                className="border p-2 mb-2 rounded-md w-full"
+                className="border p-2 mb-2 rounded-md w-full md:w-80"
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
