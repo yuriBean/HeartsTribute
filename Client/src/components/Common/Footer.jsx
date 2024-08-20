@@ -15,7 +15,7 @@ export default function Footer() {
         </div>
         <div className="inline space-x-4">
           <a
-            href="/"
+            href="https://www.heartstribute.com/product/tribute-tag/"
             target="_blank"
             className="rounded bg-[#346164] px-4 py-2 text-base hover:bg-[#B0CF33] lg:px-8"
           >
