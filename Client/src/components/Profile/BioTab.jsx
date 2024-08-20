@@ -5,12 +5,16 @@ import { notifySuccess, notifyError } from "../../utils/toastNotifications";
 import { formatDate } from "../../utils/dateToNow";
 import CheckProfileOwner from "../CheckProfileOwner";
 import { useNavigate } from "react-router-dom";
-import { deleteProfileQR, deletePostsByProfileId, deleteFirestoreDocument, deleteFileFromStorage } from "../../services/profileManager.service";
+import { deleteProfileQR, deletePostsByProfileId, deleteFirestoreDocument, deleteFileFromStorage, deleteProfileFromIDrive } from "../../services/profileManager.service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default function BioTab() {
   const { profile, loading } = usePublicProfile();
+  const user  = localStorage.getItem("user")
+  ? JSON.parse(localStorage.getItem("user"))
+  : null;
+  
   const navigate = useNavigate();
   const handleShare = () => {
     if (navigator.share) {
@@ -31,26 +35,23 @@ export default function BioTab() {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this profile? This action cannot be undone.")) {
       try {
-        // Delete associated posts
         await deletePostsByProfileId(profile.id);
 
-        // Delete profile picture and cover picture from storage
         if (profile?.profile_picture) {
-          console.log("Deleting profile picture:", profile.profile_picture); // Log the path
-          await deleteFileFromStorage(profile.profile_picture);
+          console.log("Deleting profile picture:", profile.profile_picture);
+          // await deleteFileFromStorage(profile.profile_picture);
         }
         if (profile?.cover_picture) {
-          console.log("Deleting cover picture:", profile.cover_picture); // Log the path
+          console.log("Deleting cover picture:", profile.cover_picture); 
           await deleteFileFromStorage(profile.cover_picture);
         }
 
-        // Delete the profile document from Firestore
+        await deleteProfileFromIDrive(user.id, profile.id)
         await deleteFirestoreDocument("profiles", profile.id);
         console.log(profile.id);
         await deleteProfileQR(profile.id);
         notifySuccess("Profile deleted successfully");
-        // Optionally, redirect or update the UI after deletion
-        navigate("/"); // Redirect to home or another page
+        navigate("/");
       } catch (error) {
         notifyError(`Failed to delete profile: ${error.message}`);
       }

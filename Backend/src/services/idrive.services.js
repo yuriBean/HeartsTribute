@@ -71,25 +71,40 @@ router.post('/upload/:userId/:profileId?', upload.single('file'), (req, res) => 
   });
 });
 
-router.delete('/delete/:key', async (req, res) => {
-  const { key } = req.params;
+router.delete('/deleteProfile/:userId/:profileId', async (req, res) => {
+  const { userId, profileId } = req.params;
 
-  if (!key) {
-    return res.status(400).send('File key is required for deletion.');
+  if (!userId || !profileId) {
+    return res.status(400).send('UserId and ProfileId are required.');
   }
 
-  const params = {
+  const folderPath = `${userId}/${profileId}/`;
+
+  const listParams = {
     Bucket: 'heartstribute.bucket',
-    Key: key,
+    Prefix: `ProfileManager/${folderPath}`
   };
 
   try {
-    const data = await s3.deleteObject(params).promise();
-    console.log(`File deleted successfully: ${key}`, data);
-    res.status(200).send({ message: 'File deleted successfully' });
+    const listedObjects = await s3.listObjectsV2(listParams).promise();
+
+    if (listedObjects.Contents.length === 0) {
+      return res.status(404).send('No files found in the specified folder.');
+    }
+
+    const deleteParams = {
+      Bucket: 'heartstribute.bucket',
+      Delete: {
+        Objects: listedObjects.Contents.map(obj => ({ Key: obj.Key }))
+      }
+    };
+
+    await s3.deleteObjects(deleteParams).promise();
+    
+    res.status(200).send({ message: 'Profile folder and its contents deleted successfully' });
   } catch (err) {
-    console.error(`Error deleting file with key ${key}: `, err);
-    res.status(500).send('Error deleting file: ' + err.message);
+    console.error(`Error deleting profile folder: ${err.message}`);
+    res.status(500).send('Error deleting profile folder: ' + err.message);
   }
 });
 

@@ -26,7 +26,7 @@ export default function EditProfileForm() {
   const [donationProfileID, setDonationProfileID] = useState(null);
   const user = (localStorage.getItem("user")) ? JSON.parse(localStorage.getItem("user")) : null;
   const [searchTerm, setSearchTerm] = useState("");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [allProfiles, setAllProfiles] = useState([]);
 
   const onSelectProfilePicture = (e) => {
     setProfilePicture(e);
@@ -93,74 +93,69 @@ export default function EditProfileForm() {
     }
   };
 
-  const getProfiles = useCallback(
-    debounce(async (searchTerm, loadMore = true) => {
-      let url =
-        "https://api.globalgiving.org/api/public/projectservice/all/projects/active/summary.json?api_key=effb307b-a845-4e62-8146-2300502217ac";
-      if (searchTerm) {
-        url += `&q=${searchTerm}`;
-      }
-      if (nextProjectId && loadMore) {
-        url += `&nextProjectId=${nextProjectId}`;
+  const fetchProfilesInBatches = async (initialCall = true) => {
+    let combinedProfiles = [];
+    let nextId = initialCall ? null : nextProjectId;
+    const maxCalls = 20;
+    let calls = 0;
+
+    setLoading(true);
+
+    while (calls < maxCalls) {
+      let url = `https://api.globalgiving.org/api/public/projectservice/all/projects/active/summary.json?api_key=effb307b-a845-4e62-8146-2300502217ac`;
+
+      if (nextId) {
+        url += `&nextProjectId=${nextId}`;
       }
 
       try {
-        if (donationEnabled) {
-          setDonationProfilesLoading(true);
-          const response = await fetch(url, {
-            headers: {
-              Accept: "application/json",
-            },
-          });
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          
-          setDonationProfiles((prevProfiles) => {
-            const newProfiles = data.projects.project.filter(
-              (newProfile) => !prevProfiles.some((prev) => prev.id === newProfile.id)
-            );
-            return [...prevProfiles, ...newProfiles];
-          });
-          setNextProjectId(data.projects.nextProjectId);
-          setHasNext(data.projects.hasNext);
-          setDonationProfilesLoading(false);
+        const response = await fetch(url, {
+          headers: {
+            Accept: "application/json",
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        combinedProfiles = [...combinedProfiles, ...data.projects.project];
+        nextId = data.projects.nextProjectId;
+
+        // Stop if there are no more profiles to fetch
+        if (!data.projects.hasNext) {
+          break;
         }
       } catch (error) {
         console.log(error);
-        setDonationProfilesLoading(false);
+        break;
       }
-    }, 5000),
-    [donationEnabled, nextProjectId]
-  );
 
-  // Infinite scroll handler
+      calls++;
+    }
+
+    setAllProfiles((prevProfiles) => [...prevProfiles, ...combinedProfiles]);
+    setNextProjectId(nextId);
+    setLoading(false);
+  };
+
+  // Trigger filtering when the button is clicked
   useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop !==
-          document.documentElement.offsetHeight ||
-        donationProfilesLoading ||
-        !hasNext
-      ) {
-        return;
-      }
-      getProfiles(null, true);
-    };
+    const filtered = allProfiles.filter((profile) =>
+      profile.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setDonationProfiles(filtered);
+  }, [searchTerm, allProfiles]);
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [getProfiles, donationProfilesLoading, hasNext]);
+  // Clear profiles and fetch anew
+  const fetchNewProfiles = () => {
+    setAllProfiles([]);
+    setNextProjectId(null);
+    fetchProfilesInBatches(true); // Initial call
+  };
 
-  // Initial fetch
   useEffect(() => {
-    getProfiles();
-  }, [getProfiles]);
-
-  const filteredProfiles = donationProfiles.filter((profile) =>
-    profile.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    fetchProfilesInBatches();
+  }, []);
   
   useEffect(() => {
     if (profile) {
@@ -438,49 +433,52 @@ export default function EditProfileForm() {
           </Label>
         </div>
         <div>
-          {donationEnabled && (
-            <>
-            <p className="text-sm md:text-lg my-2">
-            Honor the memory of your loved one by supporting a cause close to their heart. Type the charity name in the search box, select a preferred charity from the dropdown list, and encourage others to donate in their name.
-            </p>
-            <div className="md:col-span-2 relative">
-              <Label>Search Charity List</Label>
-              <input
+      {donationEnabled && (
+        <>
+          <p className="text-sm md:text-lg my-2">
+            Honor the memory of your loved one by supporting a cause close to their heart. Type the charity name in the search box and select a charity from the list.
+          </p>
+          <div className="md:col-span-2 relative">
+            <label className="block text-sm font-medium text-gray-700">Search Charity List</label>
+            <input
                 type="text"
                 className="border p-2 mb-2 rounded-md w-full"
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                onFocus={() => setIsDropdownOpen(true)}
               />
-              {isDropdownOpen && (
-                <div className="absolute z-10 bg-white border rounded-md w-full">
-                  <select
-                    className="rounded-md border p-2 w-full"
-                    placeholder="Select Donation Profile"
-                    name="donation_profile_id"
-                    onChange={(e) => {
-                      setDonationProfileID(e.target.value);
-                      setIsDropdownOpen(false);
-                    }}
+              <button
+              type="button"
+                className="bg-primary text-white p-2 rounded-md ml-2"
+                onClick={fetchNewProfiles}
+              >
+                Search
+              </button>
+          </div>
+          <div className="mt-4">
+          {loading && <p>Loading profiles...</p>}
+            <ul className="space-y-2 max-h-60 overflow-y-auto border p-2 rounded-md">
+              {donationProfiles.length > 0 ? (
+                donationProfiles.map((profile) => (
+                  <li
+                    key={profile.id}
+                    className={`p-2 cursor-pointer rounded-md ${
+                      donationProfileID === profile.id ? "bg-blue-100" : "hover:bg-gray-100"
+                    }`}
+                    onClick={() => setDonationProfileID(profile.id)}
                   >
-                    <option value="">Select Charity</option>
-                    {donationProfilesLoading && (
-                      <option value="loading">Loading...</option>
-                    )}
-                    {!donationProfilesLoading &&
-                      filteredProfiles.map((profile) => (
-                        <option value={profile.id} key={profile.id}>
-                          {profile.title}
-                        </option>
-                      ))}
-                  </select>
-                </div>
+                    <p>{profile.title}</p>
+                  </li>
+                ))
+              ) : (
+                <li>No profiles found.</li>
               )}
-              </div>
-            </>
-          )}
-        </div>
+            </ul>
+          </div>
+        </>
+      )}
+    </div>
+    {console.log(donationProfileID)}
         <br />
         <h3 className="mt-20 mb-2 text-sm tracking-wider md:text-base">
           Profile Visibility

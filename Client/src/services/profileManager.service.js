@@ -594,8 +594,23 @@ const deleteFirestoreDocument = async (collection, docID) => {
       if (userDoc.exists()) {
         const userData = userDoc.data();
         const filePath = type === "profile" ? userData.profilePhotoPath : userData.coverPhotoPath;
+        const idriveKey = `ProfileManager/${userID}/${type === "profile" ? "profile" : "cover"}`;
         await deleteFileFromStorage(filePath);
-        const updateData = type === "profile" ? { profilePhotoPath: "", profilePhotoURL: "placeholder_url" } : { coverPhotoPath: "", coverPhotoURL: "placeholder_url" };
+
+        const response = await fetch(`/api/deleteProfile/${userID}/${type}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ key: idriveKey })
+          });
+    
+          if (!response.ok) {
+            throw new Error(`Failed to delete ${type} photo from IDrive Cloud`);
+          }
+    
+        const updateData = type === "profile" ? 
+        { profilePhotoPath: "", profilePhotoURL: "placeholder_url" } : { coverPhotoPath: "", coverPhotoURL: "placeholder_url" };
         await updateDoc(userDocRef, updateData);
       } else {
         throw new Error("User not found");
@@ -627,6 +642,22 @@ const deleteFirestoreDocument = async (collection, docID) => {
         throw new Error(`Failed to delete id from qrcodes: ${error.message}`);
     }
 };
+
+const deleteProfileFromIDrive = async (userId, profileId) => {
+    try {
+      const response = await fetch(`/api/deleteProfile/${userId}/${profileId}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const result = await response.json();
+      console.log(result.message);
+    } catch (error) {
+      console.error(`Failed to delete profile from IDrive Cloud: ${error.message}`);
+    }
+  };
+  
 
 const requestAccess = async (profileId) => {
     const userEmail = JSON.parse(localStorage.getItem("user")).email; 
@@ -819,5 +850,5 @@ const deleteSignUpQR = async (userId) => {
     }
 
 //export { CreateNewProfile, createPost, getProfileWithId, editProfileWithId, getPostsWithProfileId, addEvent, getEventsByProfileId, AddNewTribute, GetTributesById, getPostsWithUserId, getProfilesWithUserId, getProfileWithIdAndUserId, AddCommentToPost, getCommentsWithPostId, getDiscoverProfiles}
-export { deleteSignUpQR, deleteProfileQR, getQRIdsForProfiles,  createQRCode, deletePost, getLoggedInUser, checkUserProfiles, getUserProfiles, linkProfileToQR, CreateNewProfile, createPost, getProfileWithId, editProfileWithId, getPostsWithProfileId, addEvent, getEventsByProfileId, AddNewTribute, GetTributesById, getPostsWithUserId, getProfilesWithUserId, getProfileWithIdAndUserId, addFavoriteWithUserId, removeFavoriteWithUserId, getFavoriteProfilesWithUserId, addLikeWithUserId, removeLikeWithUserId, AddCommentToPost, getCommentsWithPostId, getDiscoverProfiles, deleteComment, addRequestedUserToProfile, addAllowedUserToProfile, removeAllowedUserFromProfile, removeRequestedUserFromProfile, deleteProfile, deletePostsByProfileId, deleteProfilePhoto, deleteFirestoreDocument, requestAccess, deleteTribute, deleteEvent, resetProfilePhoto, resetCoverPhoto, deleteFileFromStorage }
+export { deleteProfileFromIDrive, deleteSignUpQR, deleteProfileQR, getQRIdsForProfiles,  createQRCode, deletePost, getLoggedInUser, checkUserProfiles, getUserProfiles, linkProfileToQR, CreateNewProfile, createPost, getProfileWithId, editProfileWithId, getPostsWithProfileId, addEvent, getEventsByProfileId, AddNewTribute, GetTributesById, getPostsWithUserId, getProfilesWithUserId, getProfileWithIdAndUserId, addFavoriteWithUserId, removeFavoriteWithUserId, getFavoriteProfilesWithUserId, addLikeWithUserId, removeLikeWithUserId, AddCommentToPost, getCommentsWithPostId, getDiscoverProfiles, deleteComment, addRequestedUserToProfile, addAllowedUserToProfile, removeAllowedUserFromProfile, removeRequestedUserFromProfile, deleteProfile, deletePostsByProfileId, deleteProfilePhoto, deleteFirestoreDocument, requestAccess, deleteTribute, deleteEvent, resetProfilePhoto, resetCoverPhoto, deleteFileFromStorage }
 
