@@ -71,49 +71,42 @@ router.post('/upload/:userId/:profileId?', upload.single('file'), (req, res) => 
   });
 });
 
-router.delete('/delete/:userId/:profileId', (req, res) => {
-  const { userId, profileId } = req.params;
+// Route to handle deleting all files in a profile folder
+router.delete('/delete/:userId/:profileId', async (req, res) => {
+  const userId = req.params.userId;
+  const profileId = req.params.profileId;
+  const folderPath = `${userId}/${profileId}/`;
 
-  const folderPath = `ProfileManager/${userId}/${profileId}/`;
+  // List all objects in the specified folder
+  const listParams = {
+    Bucket: 'heartstribute.bucket',
+    Prefix: `ProfileManager/${folderPath}`
+  };
 
-  s3.listObjectsV2({ Bucket: 'heartstribute.bucket', Prefix: folderPath }, (err, data) => {
-    if (err) {
-      console.error('Error listing objects: ', err);
-      return res.status(500).send('Error listing objects: ' + err.message);
+  try {
+    const listedObjects = await s3.listObjectsV2(listParams).promise();
+
+    if (listedObjects.Contents.length === 0) {
+      return res.status(404).send('No files found for the specified profile.');
     }
 
-    if (!data.Contents || data.Contents.length === 0) {
-      console.log('No objects found with the given prefix.');
-      return res.status(404).send('No objects found to delete.');
-    }
-
+    // Prepare the list of objects to delete
     const deleteParams = {
       Bucket: 'heartstribute.bucket',
       Delete: {
-        Objects: data.Contents.map(object => ({ Key: object.Key })),
+        Objects: listedObjects.Contents.map(obj => ({ Key: obj.Key })),
         Quiet: false
       }
     };
 
-    s3.deleteObjects(deleteParams, (err, data) => {
-      if (err) {
-        console.error('Error deleting objects: ', err);
-        return res.status(500).send('Error deleting objects: ' + err.message);
-      }
+    // Delete the objects
+    await s3.deleteObjects(deleteParams).promise();
 
-      console.log(`Deleted all objects in folder: ${folderPath}`);
-
-      s3.deleteObject({ Bucket: 'heartstribute.bucket', Key: folderPath }, (err, data) => {
-        if (err) {
-          console.error('Error deleting folder: ', err);
-          return res.status(500).send('Error deleting folder: ' + err.message);
-        }
-
-        console.log(`Deleted folder: ${folderPath}`);
-        res.status(200).send({ message: 'Folder and all objects deleted successfully.' });
-      });
-    });
-  });
+    res.status(200).send({ message: 'All files in the profile folder deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting files: ', err);
+    res.status(500).send('Error deleting files: ' + err.message);
+  }
 });
 
 // Route to get metrics
