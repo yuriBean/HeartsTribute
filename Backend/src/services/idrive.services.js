@@ -72,13 +72,10 @@ router.post('/upload/:userId/:profileId?', upload.single('file'), (req, res) => 
 });
 
 router.delete('/delete/:userId/:profileId', (req, res) => {
-  const userId = req.params.userId;
-  const profileId = req.params.profileId;
-  
-  // Construct the folder path
+  const { userId, profileId } = req.params;
+
   const folderPath = `ProfileManager/${userId}/${profileId}/`;
 
-  // List all objects in the folder
   s3.listObjectsV2({ Bucket: 'heartstribute.bucket', Prefix: folderPath }, (err, data) => {
     if (err) {
       console.error('Error listing objects: ', err);
@@ -90,7 +87,6 @@ router.delete('/delete/:userId/:profileId', (req, res) => {
       return res.status(404).send('No objects found to delete.');
     }
 
-    // Prepare delete parameters
     const deleteParams = {
       Bucket: 'heartstribute.bucket',
       Delete: {
@@ -99,16 +95,23 @@ router.delete('/delete/:userId/:profileId', (req, res) => {
       }
     };
 
-    // Delete all objects
     s3.deleteObjects(deleteParams, (err, data) => {
       if (err) {
         console.error('Error deleting objects: ', err);
         return res.status(500).send('Error deleting objects: ' + err.message);
       }
 
-      const deletedUrls = data.Contents.map(object => `${publicUrl}${object.Key}`);
+      console.log(`Deleted all objects in folder: ${folderPath}`);
 
-      res.status(200).send({ message: 'Objects deleted successfully', deletedUrls });
+      s3.deleteObject({ Bucket: 'heartstribute.bucket', Key: folderPath }, (err, data) => {
+        if (err) {
+          console.error('Error deleting folder: ', err);
+          return res.status(500).send('Error deleting folder: ' + err.message);
+        }
+
+        console.log(`Deleted folder: ${folderPath}`);
+        res.status(200).send({ message: 'Folder and all objects deleted successfully.' });
+      });
     });
   });
 });
