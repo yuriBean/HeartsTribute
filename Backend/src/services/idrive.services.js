@@ -106,7 +106,9 @@ router.delete('/delete/:userId/:profileId', (req, res) => {
         return res.status(500).send('Error deleting objects: ' + err.message);
       }
 
-      res.status(200).send({ message: 'Folder deleted successfully' });
+      const deletedUrls = data.Contents.map(object => `${publicUrl}${object.Key}`);
+
+      res.status(200).send({ message: 'Objects deleted successfully', deletedUrls });
     });
   });
 });
