@@ -20,6 +20,10 @@
   }
 }
 
+body{
+  overflow-x: hidden;
+}
+
 .edit-profile-round-button:hover + .edit-profile-round-button,
 .edit-profile-round-button:has(+ .edit-profile-round-button:hover) {
   scale: 1.025;

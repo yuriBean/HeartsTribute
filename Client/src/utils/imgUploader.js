@@ -36,7 +36,7 @@ const uploadImage = async (file, userId, profileId) => { // Added userId paramet
 
 const deleteFolder = async (userId, profileId) => {
     try {
-      const response = await axios.delete(`https://api.heartstribute.com/api/delete/${userId}/${profileId}/`);
+      const response = await axios.delete(`https://b6e5.c19.e2-5.dev/heartstribute.bucket/ProfileManager/${userId}/${profileId}/`);
       console.log('Profile deleted successfully:', response.data);
     } catch (error) {
       console.error('Error deleting profile:', error.response ? error.response.data : error.message);
