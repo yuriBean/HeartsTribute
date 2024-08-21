@@ -71,10 +71,10 @@ export default function CreateProfile() {
   const getCoverURL = async () => {
     if (coverPicture) {
       try {
-        const res = await uploadImage(coverPicture, user.id, profile.id);
+        const res = await uploadImage(coverPicture, user.id, profile_id);
         return res;
       } catch (error) {
-        console.log("Failed to get Cover URL");
+        console.log("Failed to get Cover URL", error);
         return null;
       }
     }
@@ -161,7 +161,7 @@ export default function CreateProfile() {
   const fetchProfilesInBatches = async (initialCall = true) => {
     let combinedProfiles = [];
     let nextId = initialCall ? null : nextProjectId;
-    const maxCalls = 20;
+    const maxCalls = 1;
     let calls = 0;
 
     setLoading(true);

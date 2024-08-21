@@ -9,7 +9,7 @@ export default function VerifyEmail() {
     const handleVerify = async () => {
         setIsLoading(true);
         try {
-            await verifyEmail(qrid);
+            await verifyEmail();
             notifySuccess("Verification email sent! Please check your inbox.");
         } catch (err) {
             notifyError("Failed to send verification email. Please try again.");

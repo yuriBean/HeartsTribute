@@ -33,10 +33,10 @@ export const signin = async (email, password) => {
   }
 }
 
-export const verifyEmail = async (qrid) => {
+export const verifyEmail = async () => {
   try {
     await sendEmailVerification(auth.currentUser, {
-      url: `https://admin.heartstribute.com/redirect?qrid=${qrid}`,
+      url: `https://admin.heartstribute.com/redirect`,
       handleCodeInApp: true,
     });
   } catch (error) {
@@ -46,7 +46,7 @@ export const verifyEmail = async (qrid) => {
 
 export const signout = (email, password) => {
   signOut(auth).then(() => {
-    window.location.href = `/login?qrid=${qrid}`;
+    window.location.href = `/login`;
     localStorage.removeItem("user");
   }).catch((error) => {
   });

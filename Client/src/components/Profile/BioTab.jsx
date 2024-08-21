@@ -65,7 +65,7 @@ export default function BioTab() {
   return !loading ? (
     <div>
       
-      <div className="flex flex-col items-center justify-center md:flex-row md:justify-end">
+      <div className="flex flex-col items-center justify-center md:flex-row md:justify-end gap-2">
       <div className="flex gap-2"> 
         {profile?.memorial_video && (
         
