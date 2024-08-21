@@ -66,24 +66,28 @@ export default function BioTab() {
     <div>
       
       <div className="flex flex-col items-center justify-center md:flex-row md:justify-end">
-      {profile?.memorial_video && (
+      <div className="flex gap-2"> 
+        {profile?.memorial_video && (
+        
             <a
               href={profile?.memorial_video}
               target="_blank"
               rel="noreferrer"
-              className="bg-primary my-2 text-white px-4 py-2 rounded-lg mx-2"
+              className="bg-primary my-2 text-white px-4 py-2 rounded-lg"
             >
               Memorial Video
             </a>
         )}
         <button
           onClick={handleShare}
-          className="bg-primary my-2 text-white px-4 py-2 rounded-lg mx-2"
+          className="bg-primary my-2 text-white px-4 py-2 rounded-lg"
         >
           <FontAwesomeIcon icon={faShareAlt} className="mr-2" />
           Share
-        </button>
+        </button></div>
         <CheckProfileOwner>
+        <div className="flex gap-2"> 
+
           <button
             onClick={() => navigate(`/edit-profile/${profile.id}`)}
             className="bg-primary my-2 text-white px-4 py-2 rounded-lg"
@@ -92,10 +96,10 @@ export default function BioTab() {
           </button>
           <button
           onClick={handleDelete}
-          className="bg-red-600 my-2 text-white px-4 py-2 rounded-lg mx-2"
+          className="bg-red-600 my-2 text-white px-4 py-2 rounded-lg "
         >
           Delete Profile
-          </button>
+          </button></div>
           </CheckProfileOwner>
         </div>
       
