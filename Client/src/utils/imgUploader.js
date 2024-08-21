@@ -36,12 +36,20 @@ const uploadImage = async (file, userId, profileId) => { // Added userId paramet
 
 const deleteFolder = async (userId, profileId) => {
     try {
-      const response = await axios.delete(`https://b6e5.c19.e2-5.dev/heartstribute.bucket/ProfileManager/${userId}/${profileId}/`);
-      console.log('Profile deleted successfully:', response.data);
+        const response = await axios.delete(`https://api.heartstribute.com/api/delete/${userId}/${profileId}`);
+        
+        if (response.status === 200) {
+            console.log('All files in the profile folder deleted successfully:', response.data.message);
+            return true;
+        } else {
+            console.error('Error deleting files:', response.data);
+            return false;
+        }
     } catch (error) {
-      console.error('Error deleting profile:', error.response ? error.response.data : error.message);
+        console.error('Error deleting files:', error);
+        return false;
     }
-  };
+};
   
 
 export { uploadImage, deleteFolder };
