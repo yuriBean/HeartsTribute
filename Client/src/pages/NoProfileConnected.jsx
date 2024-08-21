@@ -27,7 +27,7 @@ export default function NoProfileConnected() {
           if (!qrid){
             notifyError('QR Code not detected. Please scan your QR Code and try again.');
           } else {
-          navigate(`/profile-manager/tribute-tags?qrid=${qrid}`);
+          navigate(`/?qrid=${qrid}`);
           }
         }
       } else {
