@@ -76,16 +76,17 @@ router.delete('/delete/:userId/:profileId', (req, res) => {
   const profileId = req.params.profileId;
   
   // Construct the folder path
-  const folderPath = `${userId}/${profileId}/`;
+  const folderPath = `ProfileManager/${userId}/${profileId}/`;
 
   // List all objects in the folder
-  s3.listObjectsV2({ Bucket: 'heartstribute.bucket', Prefix: `ProfileManager/${folderPath}` }, (err, data) => {
+  s3.listObjectsV2({ Bucket: 'heartstribute.bucket', Prefix: folderPath }, (err, data) => {
     if (err) {
       console.error('Error listing objects: ', err);
       return res.status(500).send('Error listing objects: ' + err.message);
     }
 
-    if (data.Contents.length === 0) {
+    if (!data.Contents || data.Contents.length === 0) {
+      console.log('No objects found with the given prefix.');
       return res.status(404).send('No objects found to delete.');
     }
 
