@@ -161,7 +161,7 @@ export default function CreateProfile() {
   const fetchProfilesInBatches = async (initialCall = true) => {
     let combinedProfiles = [];
     let nextId = initialCall ? null : nextProjectId;
-    const maxCalls = 1;
+    const maxCalls = 20;
     let calls = 0;
 
     setLoading(true);
@@ -511,7 +511,7 @@ export default function CreateProfile() {
               type="radio"
               value={true}
               checked={donationEnabled}
-              onChange={() => setDonationEnabled(true)}
+              onChange={() => {setDonationEnabled(true); fetchProfilesInBatches(true)}}
               className="mr-2"
             />
             Enabled

@@ -1,6 +1,6 @@
 import { auth, db } from "../../firebase";
 import { doc, setDoc, getDocs, query, where, collection, serverTimestamp } from "firebase/firestore";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification, sendPasswordResetEmail } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification, sendPasswordResetEmail, EmailAuthProvider } from "firebase/auth";
 import { errorMessagesFirebaseAuth } from "../utils/errorMessagesFirebaseAuth";
 
 
@@ -72,6 +72,7 @@ export const createUserRecord = async (uuid, email, first_name, last_name, qrid)
       created_at: serverTimestamp(),
       updated_at: serverTimestamp(),
       qrid: qrid,
+      emailVerified: true
     });
 
   } catch (error) {
