@@ -33,7 +33,7 @@ export const signinWithGoogle = async (qrid) => {
 
       if (await isNewUser(user.email)) {
         try {
-          await createUserRecord(user.uid, user.email, firstName, lastName);
+          await createUserRecord(user.uid, user.email, firstName, lastName, qrid);
           console.log("User record created successfully");
         } catch (error) {
           console.error("Error creating user record:", error);
@@ -66,7 +66,7 @@ export const signinWithFacebook = async (qrid) => {
       const { firstName, lastName } = extractName(user.displayName);
       if (await isNewUser(user.email)) {
         try {
-          await createUserRecord(user.uid, user.email, firstName, lastName);
+          await createUserRecord(user.uid, user.email, firstName, lastName, qrid);
           console.log("User record created successfully");
         } catch (error) {
           console.error("Error creating user record:", error);
