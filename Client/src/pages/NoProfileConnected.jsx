@@ -26,8 +26,6 @@ export default function NoProfileConnected() {
         if (unlinkedProfiles.length === 0) {
           if (!qrid){
             notifyError('QR Code not detected. Please scan your QR Code and try again.');
-          } else {
-          navigate(`/?qrid=${qrid}`);
           }
         }
       } else {
