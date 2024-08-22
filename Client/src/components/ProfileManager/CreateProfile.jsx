@@ -157,6 +157,8 @@ export default function CreateProfile() {
       setLoading(false);
     }
   };
+  // const [interval, setInterval] = useState(2000);
+  // const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   const fetchProfilesInBatches = async (initialCall = true) => {
     let combinedProfiles = [];
@@ -164,7 +166,7 @@ export default function CreateProfile() {
     const maxCalls = 20;
     let calls = 0;
 
-    setLoading(true);
+    // setLoading(true);
 
     while (calls < maxCalls) {
       let url = `https://api.globalgiving.org/api/public/projectservice/all/projects/active/summary.json?api_key=effb307b-a845-4e62-8146-2300502217ac`;
@@ -185,11 +187,13 @@ export default function CreateProfile() {
         const data = await response.json();
         combinedProfiles = [...combinedProfiles, ...data.projects.project];
         nextId = data.projects.nextProjectId;
-
+        // setAllProfiles((prevProfiles) => [...prevProfiles, ...combinedProfiles]);
         // Stop if there are no more profiles to fetch
         if (!data.projects.hasNext) {
           break;
         }
+        
+        // await delay(interval);
       } catch (error) {
         console.log(error);
         break;
@@ -200,7 +204,7 @@ export default function CreateProfile() {
 
     setAllProfiles((prevProfiles) => [...prevProfiles, ...combinedProfiles]);
     setNextProjectId(nextId);
-    setLoading(false);
+    // setLoading(false);
   };
 
   // Trigger filtering when the button is clicked
@@ -562,7 +566,7 @@ export default function CreateProfile() {
                   </li>
                 ))
               ) : (
-                <li>No profiles found.</li>
+                <li>Loading...</li>
               )}
             </ul>
           </div>
