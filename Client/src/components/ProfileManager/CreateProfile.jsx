@@ -218,11 +218,7 @@ export default function CreateProfile() {
     fetchProfilesInBatches(true); // Initial call
   };
 
-  useEffect(() => {
-    fetchProfilesInBatches();
-  }, []);
-
-  return !loading ? (
+ return !loading ? (
     <div className="mt-4 px-6 py-4 shadow-md md:px-12 md:py-8">
       <div className="mb-4 md:mb-12 text-center">
         <h1 className="text-2xl font-semibold tracking-widest md:text-2xl xl:text-3xl 2xl:text-4xl">
