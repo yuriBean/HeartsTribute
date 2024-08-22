@@ -69,7 +69,7 @@ export default function DiscoverPage() {
 
       if (qrid === 'null' || qrid === undefined || ( !qrid && !user.qrid)) {
         setShowModal(false);
-      } else {
+      } else if(user.qrid || qrid){
         setShowModal(true); // Show modal if either is not null
         setSavedQR(user.qrid); // Store the qrid from user
       }

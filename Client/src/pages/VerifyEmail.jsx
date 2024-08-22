@@ -12,7 +12,7 @@ export default function VerifyEmail() {
             await verifyEmail();
             notifySuccess("Verification email sent! Please check your inbox.");
         } catch (err) {
-            notifyError("Failed to send verification email. Please try again.");
+            console.log("Failed to send verification email. Please try again.", err);
         } finally {
             setIsLoading(false);
         }
