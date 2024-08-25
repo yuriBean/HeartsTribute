@@ -543,8 +543,7 @@ const resetProfilePhoto = async (userId) => {
     const userDocRef = doc(db, "users", userId);
     try {
         await updateDoc(userDocRef, {
-            profilePhotoPath: "./cover-placeholder.jpeg", // Reset to placeholder
-            profilePhotoURL: "./cover-placeholder.jpeg" // Set to placeholder URL
+            profile_picture: null // Reset to placeholder
         });
         console.log("Profile photo reset to placeholder for user:", userId);
     } catch (error) {

@@ -4,7 +4,6 @@ import { createUserRecord } from "./emailAuthServices";
 import { getDocs, query, where, collection } from "firebase/firestore";
 import { db } from "../../firebase";
 import generateRandomSequence from "../utils/generateRandomSequence";
-import { notifyError } from "../utils/toastNotifications";
 
 const usersRef = collection(db, "users");
 
@@ -54,7 +53,7 @@ export const signinWithGoogle = async (qrid) => {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.error("Error during sign-in:", errorMessage, errorCode);
-      notifyError('An error occurred while signing you in. You may already have another signin method.');
+      console.log('An error occurred while signing you in. You may already have another signin method.');
     });
 };
 
@@ -87,7 +86,7 @@ export const signinWithFacebook = async (qrid) => {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.error("Error during sign-in:", errorMessage, errorCode);
-      notifyError('An error occurred while signing you in. You may already have another signin method.');
+      console.log('An error occurred while signing you in. You may already have another signin method.');
     })
 }
 

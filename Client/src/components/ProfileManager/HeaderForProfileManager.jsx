@@ -4,17 +4,7 @@ import dateToNow from "../../utils/dateToNow";
 import Spinner from '../Common/Spinner';
 import ChangeProfilePictureModal from './ChangeProfilePictureModal';
 import { useState, useEffect } from 'react';
-import { deleteProfilePhoto } from "../../services/profileManager.service"; // Import the reset function
-import DraggableImage from '../Common/DraggableImage'; // Ensure the path is correct
-
-const dummyData = {
-  "name": "Robert T. Hawke",
-  "email": "robthehawke@email.com",
-  "join_date": "2 years",
-  "profile_picture": "/images/ProfilePicture.png",
-}
-
-
+import { deleteProfilePhoto, resetProfilePhoto } from "../../services/profileManager.service"; 
 
 export default function HeaderForProfileManager({ tab, setTab }) {
   const navigate = useNavigate();
@@ -34,8 +24,8 @@ export default function HeaderForProfileManager({ tab, setTab }) {
   const handleResetProfilePicture = async () => {
     if (window.confirm("Are you sure you want to reset your profile picture?")) {
       try {
-        await deleteProfilePhoto(managerProfile.id); // Call the reset function
-        alert("Profile picture reset to placeholder.");
+        await resetProfilePhoto(managerProfile.id); // Call the reset function
+        window.location.reload();
       } catch (error) {
         console.error("Failed to reset profile picture:", error);
       }
@@ -67,10 +57,10 @@ export default function HeaderForProfileManager({ tab, setTab }) {
         </div>
       </div>
       <div className="flex gap-2 justify-around p-2 lg:p-3">
-        <button className={`${location.pathname == '/profile-manager' ? 'bg-black text-white font-semibold' : 'text-black bg-white'} rounded text-[0.6rem] md:text-base lg:text-lg 2xl:text-xl tracking-widest py-2 lg:py-4 w-1/4`} onClick={() => { navigate("/profile-manager") }}>MY FAVOURITE</button>
-        <button className={`${location.pathname == '/profile-manager/posts' ? 'bg-black text-white font-semibold' : 'text-black bg-white'} rounded text-[0.6rem] md:text-base lg:text-lg 2xl:text-xl tracking-widest py-2 lg:py-4 w-1/4`} onClick={() => { navigate("posts") }}>POSTS</button>
-        <button className={`${location.pathname == '/profile-manager/tribute-tags' ? 'bg-black text-white font-semibold' : 'text-black bg-white'} rounded text-[0.6rem] md:text-base lg:text-lg 2xl:text-xl tracking-widest py-2 lg:py-4 w-1/4`} onClick={() => { navigate("tribute-tags") }}>TRIBUTE TAGS</button>
-        <button className={`${location.pathname == '/profile-manager/my-account' ? 'bg-black text-white font-semibold' : 'text-black bg-white'} rounded text-[0.6rem] md:text-base lg:text-lg 2xl:text-xl tracking-widest py-2 lg:py-4 w-1/4`} onClick={() => { navigate("my-account") }}>MY ACCOUNT</button>
+      <button className={`${location.pathname == '/profile-manager/tribute-tags' ? 'bg-black text-white font-semibold' : 'text-black bg-white'} rounded text-[0.6rem] md:text-base lg:text-lg 2xl:text-xl tracking-widest py-2 lg:py-4 w-1/3`} onClick={() => { navigate("tribute-tags") }}>TRIBUTE TAGS</button>
+        <button className={`${location.pathname == '/profile-manager' ? 'bg-black text-white font-semibold' : 'text-black bg-white'} rounded text-[0.6rem] md:text-base lg:text-lg 2xl:text-xl tracking-widest py-2 lg:py-4 w-1/3`} onClick={() => { navigate("/profile-manager") }}>MY FAVOURITE</button>
+        {/* <button className={`${location.pathname == '/profile-manager/posts' ? 'bg-black text-white font-semibold' : 'text-black bg-white'} rounded text-[0.6rem] md:text-base lg:text-lg 2xl:text-xl tracking-widest py-2 lg:py-4 w-1/4`} onClick={() => { navigate("posts") }}>POSTS</button> */}
+        <button className={`${location.pathname == '/profile-manager/my-account' ? 'bg-black text-white font-semibold' : 'text-black bg-white'} rounded text-[0.6rem] md:text-base lg:text-lg 2xl:text-xl tracking-widest py-2 lg:py-4 w-1/3`} onClick={() => { navigate("my-account") }}>MY ACCOUNT</button>
       </div>
       <ChangeProfilePictureModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </header>

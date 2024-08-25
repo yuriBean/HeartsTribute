@@ -6,6 +6,11 @@ export const getUserWithEmail = async (email) => {
   try {
     const q = query(collection(db, "users"), where("email", "==", email));
     const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      console.warn("No user found with the provided email:", email);
+      return null; // Return null if no user is found
+    }
     // send id of doc too
     const user = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     // localStorage.setItem("user", JSON.stringify(user[0]));

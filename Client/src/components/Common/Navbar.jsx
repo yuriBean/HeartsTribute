@@ -31,7 +31,7 @@ export default function Navbar() {
               Contact
             </a>
             {user && (
-              <Link to="/profile-manager">
+              <Link to="/profile-manager/tribute-tags">
                 <button className="rounded-ful w-9">
                   <img
                     src={
