@@ -187,30 +187,37 @@ const Dashboard = () => {
         setShowDefinedProfiles(!showDefinedProfiles);
     };
 
-const filteredProfiles = profiles.filter(profile => {
-    // Check for valid profile_id and qr_id
-    const profileId = profile.profile_id || "";  // Default to an empty string if profile_id is null or undefined
-    const qrId = profile.qr_id || "";            // Default to an empty string if qr_id is null or undefined
-
-    const hasProfileId = Boolean(profile.profile_id);
-
-    if (showDefinedProfiles) {
-        // Show profiles with a profile_id when toggle is on
-        return hasProfileId;
-    } else {
-        // Show profiles without a profile_id when toggle is off
-        return !hasProfileId;
-    }
-    if (profileID && qrID) {
-        return profileId.includes(profileID) && qrId.includes(qrID);
-    } else if (profileID) {
-        return profileId.includes(profileID);
-    } else if (qrID) {
-        return qrId.includes(qrID);
-    } else {
-        return true; // Show all if no filter is applied
-    }
-});
+    const filteredProfiles = profiles.filter(profile => {
+        // Check for valid profile_id and qr_id
+        const profileId = (profile.profile_id || "").toLowerCase();  
+        const qrId = (profile.qr_id || "").toLowerCase();           
+    
+        const hasProfileId = Boolean(profile.profile_id);
+    
+        // Convert search terms to lowercase
+        const searchProfileID = profileID?.toLowerCase() || "";
+        const searchQrID = qrID?.toLowerCase() || "";
+    
+        if (showDefinedProfiles) {
+            // Show profiles with a profile_id when toggle is on
+            if (!hasProfileId) return false;
+        } else {
+            // Show profiles without a profile_id when toggle is off
+            if (hasProfileId) return false;
+        }
+    
+        // Apply additional filtering based on profileID and qrID, case-insensitive
+        if (searchProfileID && searchQrID) {
+            return profileId.includes(searchProfileID) && qrId.includes(searchQrID);
+        } else if (searchProfileID) {
+            return profileId.includes(searchProfileID);
+        } else if (searchQrID) {
+            return qrId.includes(searchQrID);
+        } else {
+            return true; // Show all if no filter is applied
+        }
+    });
+    
     
     return (
         <div>
