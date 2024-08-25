@@ -5,7 +5,7 @@ import { set, useForm } from "react-hook-form"
 import { uploadImage } from "../../utils/imgUploader"
 import { createPost } from "../../services/profileManager.service"
 import Spinner from "../Common/Spinner"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { notifyError, notifySuccess } from "../../utils/toastNotifications"
 import { useProfile } from "../Providers/EditProfileProvider"
 
@@ -18,6 +18,7 @@ export default function AddPostOnProfile() {
   const [image, setImage] = useState(null)
   const [video, setVideo] = useState(null)
   const [videoUrl, setVideoUrl] = useState(null)
+  const navigate = useNavigate();
   const onSelectImage = (e) => {
     setImage(e)
     setVideo(null)
@@ -61,7 +62,7 @@ export default function AddPostOnProfile() {
       setImage(null)
       setVideo(null)
       await getPosts();
-      console.log(res)
+      navigate(-1);
     } catch (error) {
       notifyError("Failed to create post")
       console.log(error);
@@ -71,19 +72,19 @@ export default function AddPostOnProfile() {
 
   }
 
+  const handleCancel = (e) => {
+    e.preventDefault();
+    navigate(-1);
+  }
+
   return (!loading) ? (
 
     <form className='flex flex-col' onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-4 md:mb-8 flex flex-row justify-between items-center">
         <h1 className="tracking-widest font-medium text-2xl md:text-2xl xl:text-3xl 2xl:text-4xl">Create Post</h1>
-        <button type="submit" className='button-primary py-3 px-6'>
-          {
-            loading ? <span className="animate-spinner border"></span> : "Post"
-          }
-        </button>
       </div>
 
-      <Input register={register} title="title" label={"Title"} className={"mb-8 md:w-2/5"} type={"text"} id={"title"} name={"title"} />
+      <Input register={register} title="title" label={"Title"} className={"mb-8 md:w-2/5"} type={"text"} id={"title"} name={"title"} {...register("title", { required: "required" })} />
 
       <Label htmlFor="description">Description<span className="text-red-500">*</span> </Label>
       <textarea {...register("description", { required: "required" })} className='border p-2 mb-6 rounded-md' name="description" id="description" cols="30" rows="10"></textarea>
@@ -116,6 +117,21 @@ export default function AddPostOnProfile() {
           onChange={onVideoUrlChange}
         />
       </div>
+        <div className="flex justify-end gap-2">
+      <button type="submit" className='button-primary py-3 px-6'>
+          {
+            loading ? <span className="animate-spinner border"></span> : "Add Post"
+          }
+        </button>
+        <button type="button" className='button-primary bg-red-500 py-3 px-6'
+        onClick={handleCancel}>
+          {
+            loading ? <span className="animate-spinner border"></span> : "Cancel"
+          }
+        </button>
+
+        </div>
+
     </form>
   ) : (
     <Spinner />

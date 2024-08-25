@@ -7,13 +7,14 @@ import { uploadImage } from "../../utils/imgUploader";
 import Spinner from "../Common/Spinner";
 import { notifySuccess, notifyError } from "../../utils/toastNotifications";
 import { usePublicProfile } from "../Providers/PublicProfileProvider";
+import { useNavigate } from "react-router-dom";
 
 export default function PayTribute({ setShow }) {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const { profile, getTributes } = usePublicProfile();
   const user = JSON.parse(localStorage.getItem("user"));
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -67,6 +68,11 @@ export default function PayTribute({ setShow }) {
       setLoading(false);
     }
   };
+
+  const handleCancel = (e) => {
+    e.preventDefault();
+    navigate(-1);
+  }
   
   return !loading ? (
     <div className="px-8 py-10">
@@ -105,7 +111,8 @@ export default function PayTribute({ setShow }) {
             onSelectValue={onSelectImage}
           
           />
-          <button className="button-primary self-end">
+          <div className="flex justify-end gap-2">
+          <button className="button-primary">
             {loading ? (
               <svg
                 aria-hidden="true"
@@ -127,6 +134,10 @@ export default function PayTribute({ setShow }) {
               <>Add Tribute</>
             )}
           </button>
+          <button onClick={handleCancel} className="button-primary bg-red-500">
+          Cancel
+        </button>
+        </div>
         </form>
       )}
     </div>

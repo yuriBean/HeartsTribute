@@ -11,6 +11,7 @@ import Spinner from "../Common/Spinner";
 import { useProfile } from "../Providers/EditProfileProvider";
 import { notifySuccess } from "../../utils/toastNotifications";
 import debounce from "lodash.debounce"; 
+import { useNavigate } from "react-router-dom";
 
 export default function EditProfileForm() {
   const { profile, loading, setLoading, getProfile } = useProfile();
@@ -27,7 +28,7 @@ export default function EditProfileForm() {
   const user = (localStorage.getItem("user")) ? JSON.parse(localStorage.getItem("user")) : null;
   const [searchTerm, setSearchTerm] = useState("");
   const [allProfiles, setAllProfiles] = useState([]);
-
+  const navigate = useNavigate();
   const onSelectProfilePicture = (e) => {
     setProfilePicture(e);
   };
@@ -77,7 +78,7 @@ export default function EditProfileForm() {
       // window.location.reload()
       await getProfile();
       notifySuccess("Profile Updated Successfully");
-
+      navigate(-1);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -170,6 +171,11 @@ export default function EditProfileForm() {
   useEffect(() => {
     console.log(modifiedData);
   }, [modifiedData]);
+
+  const handleCancel = (e) => {
+    e.preventDefault();
+    navigate(-1);
+  }
 
   return !loading ? (
     <div className="">
@@ -495,9 +501,14 @@ export default function EditProfileForm() {
             }}
           />
         </div>
+        <div className="flex justify-end gap-2">
         <button className="mt-4 cursor-default self-end rounded-md bg-[#346164] px-8 py-2 text-sm font-bold text-white outline-none md:py-3 md:text-base xl:text-lg">
           Save Changes
         </button>
+        <button onClick={handleCancel} className="mt-4 cursor-default self-end rounded-md bg-red-500 px-8 py-2 text-sm font-bold text-white outline-none md:py-3 md:text-base xl:text-lg">
+          Cancel
+        </button>
+        </div>
       </form>
     </div>
   ) : (

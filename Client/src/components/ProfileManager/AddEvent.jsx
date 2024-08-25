@@ -6,8 +6,9 @@ import { addEvent } from "../../services/profileManager.service";
 import { uploadImage } from "../../utils/imgUploader";
 import Spinner from "../Common/Spinner";
 import { notifyError, notifySuccess } from "../../utils/toastNotifications";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useProfile } from "../Providers/EditProfileProvider";
+import { Label } from "./AddPost";
 
 export default function AddEvent() {
   const { profile_id } = useParams();
@@ -15,7 +16,7 @@ export default function AddEvent() {
   const [loading, setLoading] = useState(false);
   const { getEvents } = useProfile();
   const user = JSON.parse(localStorage.getItem("user"));
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -60,6 +61,7 @@ export default function AddEvent() {
       setImage(null);
       notifySuccess("Event Added Successfully");
       getEvents();
+      navigate(-1);
     } catch (error) {
       console.log(error.message);
       notifyError("Failed to Add Event. Please try again.");
@@ -73,6 +75,11 @@ export default function AddEvent() {
       reset();
     }
   }, [isSubmitSuccessful]);
+
+  const handleCancel = (e) => {
+    e.preventDefault();
+    navigate(-1);
+  }
 
   return !loading ? (
     <>
@@ -111,7 +118,16 @@ export default function AddEvent() {
           name="event_date"
           className="w-2/3 md:w-1/6 px-4 py-3 tracking-wider"
         />
-        <Input
+
+        {/* description */}
+        <Label>Description</Label>
+        <textarea
+          {...register("description")}
+          className="rounded-md border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="Add Event Description"
+        />
+
+        {/* <Input
           register={register}
           errors={errors}
           type={"time"}
@@ -119,7 +135,7 @@ export default function AddEvent() {
           id="event_time"
           name="event_time"
           className="w-2/3 md:w-1/6 px-4 py-3 tracking-wider"
-        />
+        /> */}
         <ChooseFile
           value={image}
           label="Choose Event Image"
@@ -135,7 +151,7 @@ export default function AddEvent() {
             className="aspect-ratio mx-auto"
           />
         )}
-        <Input
+        {/* <Input
           register={register}
           errors={errors}
           name="event_location"
@@ -144,15 +160,9 @@ export default function AddEvent() {
           id="event_location"
           placeholder={"Add Event Location"}
           icon={"/images/location.svg"}
-        />
-        {/* description */}
-        <textarea
-          {...register("description")}
-          className="rounded-md border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
-          placeholder="Add Event Description"
-        />
-
-        <button className="button-primary self-end rounded-md" type="submit">
+        /> */}
+        <div className="flex justify-end gap-2">
+        <button className="button-primary rounded-md" type="submit">
           {loading ? (
             <svg
               aria-hidden="true"
@@ -174,6 +184,10 @@ export default function AddEvent() {
             <>Add Event</>
           )}
         </button>
+        <button onClick={handleCancel} className="button-primary bg-red-500">
+          Cancel
+        </button>
+        </div>
       </form>
     </>
   ) : (
