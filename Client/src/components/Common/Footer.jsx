@@ -2,15 +2,15 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <div className="bg-black px-10 py-10 lg:px-16">
+    <div className="bg-black px-10 py-8 lg:px-16">
       <div className="flex flex-col items-center justify-between gap-4 lg:flex-row">
-        <div className="text-white lg:w-1/2">
-          <img src="/images/colorfilter.svg" alt="" />
-          <p className="my-2 text-xl">
+        <div className=" flex items-center gap-2 text-white lg:w-1/2">
+          <img src="/hearts-favicon.png" className="h-12" alt="" />
+          {/* <p className="my-1 text-xl">
             Honor your loved ones by sharing their unique stories, preserving
             their legacy and keeping their memories alive for generations to
             come.
-          </p>
+          </p> */} 
           <p>Hearts Tribute</p>
         </div>
         <div className="inline space-x-4">
@@ -23,7 +23,7 @@ export default function Footer() {
           </a>
         </div>
       </div>
-      <div className="my-10 h-[1px] w-full bg-gray-700"></div>
+      <div className="my-5 h-[1px] w-full bg-gray-700"></div>
       <div className="flex justify-between text-sm text-white">
         <p>&copy; 2024 Hearts Tribute. All rights reserved</p>
 

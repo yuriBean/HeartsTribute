@@ -489,19 +489,6 @@ export default function CreateProfile() {
         )}
         <br />
         <h3 className="mb-2 text-sm tracking-wider md:text-base">
-          Profile Visibility
-        </h3>
-        <hr />
-        <br />
-        <div className="flex space-x-4 mx-auto">
-          <Label>Make profile private</Label>
-          <ToggleSwitch
-            checker={!profileVisibility}
-            onClick={() => setProfileVisibility(!profileVisibility)}
-          />
-        </div>
-        <br />
-        <h3 className="mb-2 text-sm tracking-wider md:text-base">
         Donate in Their Memory
         </h3>
         <hr />
@@ -572,6 +559,20 @@ export default function CreateProfile() {
           </div>
         </>
       )}
+              <br />
+        <h3 className="mb-2 text-sm tracking-wider md:text-base">
+          Profile Visibility
+        </h3>
+        <hr />
+        <br />
+        <div className="flex space-x-4 mx-auto">
+          <Label>Make profile private</Label>
+          <ToggleSwitch
+            checker={!profileVisibility}
+            onClick={() => setProfileVisibility(!profileVisibility)}
+          />
+        </div>
+
     </div>
         <button className="mt-20 cursor-pointer self-end rounded-md bg-[#346164] px-8 py-2 text-sm font-bold text-white outline-none md:py-3 md:text-base xl:text-lg">
           {loading ? (

@@ -67,6 +67,7 @@ export default function PostModal({ setIsOpen, post, profile, onPostDeleted  }) 
   const handleDeletePost = async () => {
     if (window.confirm("Are you sure you want to delete this post? This action cannot be undone.")) {
         try {
+          setLoading(true);
             await deletePost(post.id); 
             notifySuccess("Post deleted successfully");
             onPostDeleted();

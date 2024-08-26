@@ -69,9 +69,8 @@ export default function PayTribute({ setShow }) {
     }
   };
 
-  const handleCancel = (e) => {
-    e.preventDefault();
-    navigate(-1);
+  const handleCancel = () => {
+    setShow(false);    
   }
   
   return !loading ? (

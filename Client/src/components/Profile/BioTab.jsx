@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { usePublicProfile } from "../Providers/PublicProfileProvider";
 import Spinner from "../Common/Spinner";
 import { notifySuccess, notifyError } from "../../utils/toastNotifications";
@@ -11,11 +11,12 @@ import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
 import { deleteFolder } from "../../utils/imgUploader";
 
 export default function BioTab() {
-  const { profile, loading } = usePublicProfile();
+  const { profile } = usePublicProfile();
   const user  = localStorage.getItem("user")
   ? JSON.parse(localStorage.getItem("user"))
   : null;
-  
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   const handleShare = () => {
     if (navigator.share) {
@@ -36,6 +37,7 @@ export default function BioTab() {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this profile? This action cannot be undone.")) {
       try {
+        setLoading(true);
         await deletePostsByProfileId(profile.id);
 
         if (profile?.profile_picture) {
@@ -52,14 +54,15 @@ export default function BioTab() {
         console.log(profile.id);
         await deleteProfileQR(profile.id);
         notifySuccess("Profile deleted successfully");
-        navigate("/");
+        setLoading(false);
+        navigate("/profile-manager/tribute-tags");
       } catch (error) {
         notifyError(`Failed to delete profile: ${error.message}`);
       }
     }
   };
 
-  const daysLeft = profile ? Math.ceil((new Date(profile.expiry_date) - new Date()) / (1000 * 60 * 60 * 24)) : null;
+  // const daysLeft = profile ? Math.ceil((new Date(profile.expiry_date) - new Date()) / (1000 * 60 * 60 * 24)) : null;
 
 
   return !loading ? (
@@ -94,12 +97,23 @@ export default function BioTab() {
           >
             Edit Profile
           </button>
+
+          {!profile.visibility &&(
+          <button
+          className='bg-primary my-2 text-white px-4 py-2 rounded-lg'
+            onClick={() => navigate(`/edit-profile/${profile.id}/manage-access`)}
+        >
+            Manage Access
+        </button>
+          )}
           <button
           onClick={handleDelete}
           className="bg-red-600 my-2 text-white px-4 py-2 rounded-lg "
         >
           Delete Profile
-          </button></div>
+          </button>
+
+        </div>
           </CheckProfileOwner>
         </div>
       
@@ -112,7 +126,7 @@ export default function BioTab() {
       </h2> */}
 
       {/* section to show city, state, funeral_date, cemetery_location add check that if values undefined show None */}
-      <CheckProfileOwner>
+      {/* <CheckProfileOwner>
       {profile.expiry_date && (
       <div className="self-end bg-[#FAFAFA] py-5 my-10 rounded-md text-gray-700">
       <p className="self-end bg-[#FAFAFA] text-xs sm:text-sm py-1 rounded-md align-end">
@@ -124,7 +138,7 @@ export default function BioTab() {
             </p>
       </div>
       )}
-    </CheckProfileOwner>
+    </CheckProfileOwner> */}
 
 
       <div className="flex justify-between items-center ">

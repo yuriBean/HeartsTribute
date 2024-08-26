@@ -14,11 +14,21 @@ export default function MyFavoriteCard({ profile }) {
                         <h1 className="uppercase text-sm font-medium tracking-wider md:text-lg xl:text-xl">
                             {profile.first_name + " " + profile.last_name}
                         </h1>
+                        {profile.expiry_date ? (
+            <p className="self-end bg-[#FAFAFA] text-2xs m-1 sm:text-sm py-1 rounded-md align-end">
+              Days left until deletion: <span className="text-red-500"> {Math.ceil((new Date(profile.expiry_date) - new Date()) / (1000 * 60 * 60 * 24))}</span>
+            </p>
+      ):(
+      <p className="self-end text-green bg-[#FAFAFA] text-2xs m-1 sm:text-sm py-1 rounded-md align-end">
+              Activated 
+            </p>
+      )}                        
                         {/* <p className="mb-2 text-xs md:mb-1 md:text-sm xl:text-sm">
                             {profile.title || profile.breed}
                         </p> */}
                     </div>
                 </div>
+
             </div>
         </Link>
     );
