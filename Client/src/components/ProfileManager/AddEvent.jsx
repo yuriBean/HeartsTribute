@@ -59,12 +59,12 @@ export default function AddEvent() {
       console.log("Event Added");
       reset();
       setImage(null);
-      notifySuccess("Event Added Successfully");
+      notifySuccess("Milestone Added Successfully");
       getEvents();
       navigate(-1);
     } catch (error) {
       console.log(error.message);
-      notifyError("Failed to Add Event. Please try again.");
+      notifyError("Failed to Add Milestone. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -86,10 +86,11 @@ export default function AddEvent() {
       <div className={`mb-4 flex items-center justify-between md:mb-8`}>
         <div>
           <h1
-            className={`mb-1 text-xl font-medium tracking-widest md:text-2xl xl:text-3xl 2xl:text-4xl`}
+            className={`mb-3 text-xl font-medium tracking-widest md:text-2xl xl:text-3xl 2xl:text-4xl`}
           >
-            Add New Event
+            Add New Milestone
           </h1>
+          <p>Celebrate important moments and achievements by adding milestones to the timeline. Capture significant events and create a visual journey of memorable occasions.</p>
         </div>
         {/* <button className='button-primary'>
           Add Event
@@ -104,28 +105,29 @@ export default function AddEvent() {
           errors={errors}
           name="event_name"
           type="text"
-          label="Event Name"
+          label="Milestone Name"
           id="event_name"
-          placeholder={"Add Event Name"}
+          placeholder={"Add Milestone Name"}
           className="px-4 py-3 tracking-wider"
         />
+                <Label>Description</Label>
+        <textarea
+          {...register("description")}
+          className="rounded-md border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="Add Milestone Description"
+        />
+
         <Input
           register={register}
           errors={errors}
           type={"date"}
-          label="Event Date"
+          label="Milestone Date"
           id="event_date"
           name="event_date"
           className="w-2/3 md:w-1/6 px-4 py-3 tracking-wider"
         />
 
         {/* description */}
-        <Label>Description</Label>
-        <textarea
-          {...register("description")}
-          className="rounded-md border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
-          placeholder="Add Event Description"
-        />
 
         {/* <Input
           register={register}
@@ -138,7 +140,7 @@ export default function AddEvent() {
         /> */}
         <ChooseFile
           value={image}
-          label="Choose Event Image"
+          label="Choose Milestone Image"
           id="event_image"
           name="event_image"
           accept="image/*"
@@ -162,6 +164,9 @@ export default function AddEvent() {
           icon={"/images/location.svg"}
         /> */}
         <div className="flex justify-end gap-2">
+        <button onClick={handleCancel} className="button-primary bg-red-500">
+          Cancel
+        </button>
         <button className="button-primary rounded-md" type="submit">
           {loading ? (
             <svg
@@ -181,11 +186,8 @@ export default function AddEvent() {
               />
             </svg>
           ) : (
-            <>Add Event</>
+            <>Add Milestone</>
           )}
-        </button>
-        <button onClick={handleCancel} className="button-primary bg-red-500">
-          Cancel
         </button>
         </div>
       </form>

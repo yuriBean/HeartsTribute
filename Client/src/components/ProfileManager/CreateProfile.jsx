@@ -220,7 +220,7 @@ export default function CreateProfile() {
     setAllProfiles([]);
     setNextProjectId(null);
     fetchProfilesInBatches(true); // Initial call
-  };
+  }; 
 
  return !loading ? (
     <div className="mt-4 px-6 py-4 shadow-md md:px-12 md:py-8">

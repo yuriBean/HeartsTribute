@@ -6,7 +6,7 @@ export default function dateToNow(seconds) {
 }
 
 export const  formatDate = (dateString) => {
-  if (!dateString) return "N/A";
+  if (!dateString) return "Present";
   const date = new Date(dateString);
   return format(date, 'dd-MM-yyyy');
 };

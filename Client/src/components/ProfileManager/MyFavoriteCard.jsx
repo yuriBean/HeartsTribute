@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function MyFavoriteCard({ profile }) {
     return (
         <Link to={`/profile/${profile.id}`}>
-            <div className="m-1 rounded-lg bg-white py-7 font-poppins shadow-md hover:scale-110 md:justify-center">
+            <div className="m-1 rounded-lg bg-white py-7 font-poppins shadow-2xl hover:scale-110 md:justify-center">
                 <div className="mx-auto flex w-3/5 items-center space-x-2">
                     <img
                         src={profile.profile_picture}
@@ -14,20 +14,24 @@ export default function MyFavoriteCard({ profile }) {
                         <h1 className="uppercase text-sm font-medium tracking-wider md:text-lg xl:text-xl">
                             {profile.first_name + " " + profile.last_name}
                         </h1>
-                        {profile.expiry_date ? (
-            <p className="self-end bg-[#FAFAFA] text-2xs m-1 sm:text-sm py-1 rounded-md align-end">
-              Days left until deletion: <span className="text-red-500"> {Math.ceil((new Date(profile.expiry_date) - new Date()) / (1000 * 60 * 60 * 24))}</span>
-            </p>
-      ):(
-      <p className="self-end text-green bg-[#FAFAFA] text-2xs m-1 sm:text-sm py-1 rounded-md align-end">
-              Activated 
-            </p>
-      )}                        
                         {/* <p className="mb-2 text-xs md:mb-1 md:text-sm xl:text-sm">
                             {profile.title || profile.breed}
                         </p> */}
                     </div>
+                    
                 </div>
+                <div className="flex flex-col justify-end items-center">
+
+                {profile.expiry_date ? (
+                                <p className=" text-4xs mt-4 sm:text-sm rounded-md  text-center" style={{ fontSize: '13px'}}>
+                                <span className="text-red-500"> {Math.ceil((new Date(profile.expiry_date) - new Date()) / (1000 * 60 * 60 * 24))} day(s) left to link Tribute Tag</span>
+                                </p>
+                        ):(
+                        <p className="self-end text-green text-2xs m-1 sm:text-sm py-1 rounded-md align-end" style={{ fontSize: '13px'}}>
+                                Tribute Tag Linked 
+                                </p>
+                        )}
+                        </div>                        
 
             </div>
         </Link>

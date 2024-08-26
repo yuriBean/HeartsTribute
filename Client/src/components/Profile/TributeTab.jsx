@@ -22,10 +22,10 @@ export default function TributeTab() {
 
     return !loading ? (
         <div>
-            <div className="flex items-center justify-between">
-                <h1 className="text-2xl">
+            <div className="flex items-center justify-end">
+                {/* <h1 className="text-2xl">
                     {show ? "Pay Tribute" : "Tributes"}
-                </h1>
+                </h1> */}
                 {!show && (
                     <button
                         onClick={() => setShow(!show)}
@@ -49,8 +49,8 @@ export default function TributeTab() {
                 </div>
             )}
             {!show && tributes.length === 0 && (
-                <div className="flex h-96 items-center justify-center">
-                    <h1 className="text-3xl">No tributes Posted yet</h1>
+                <div className="flex items-center justify-center">
+                    <h1 className="text-2xl">No Tributes posted yet!</h1>
                 </div>
             )}
         </div>

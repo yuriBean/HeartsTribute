@@ -37,7 +37,7 @@ export default function MediaTab() {
       </CheckProfileOwner>
 
       {posts.length === 0 ? (
-        <h1 className="text-3xl text-center">No Media Posted Yet!</h1>
+        <h1 className="text-2xl text-center">No media uploaded yet, add photos or videos on this page.</h1>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 rounded-lg place-items-center">
           {posts.map((post) => (

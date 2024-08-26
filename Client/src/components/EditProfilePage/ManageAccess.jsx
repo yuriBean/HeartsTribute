@@ -66,8 +66,9 @@ export default function ManageAccess() {
     <div className="space-y-4 px-2 py-10 mb-20">
 
       <div className="my-4">
-        <h1 className="text-2xl font-bold">Grant Access to New User</h1>
-        <div className="flex flex-col md:flex-row justify-between items-center my-2">
+        <h1 className="text-2xl font-bold my-2">Manage Access</h1>
+        <p>Share your profile privately with chosen family members and friends.</p>
+        <div className="flex flex-col md:flex-row justify-between items-center my-4">
           <input
             type="email"
             value={emailInput}
@@ -83,8 +84,8 @@ export default function ManageAccess() {
           </button>
         </div>
       </div>
-      <p className="text-sm md:text-xl text-center font-bold">
-        These Users will have access to your profile even if it is private
+      <p className="text-sm my-5 md:text-lg text-left">
+      These users will have access to this profile, even if it's private, and will be able to post tributes.
       </p>
 
       {profile.requestedUsers && profile.requestedUsers.length > 0 ? (
@@ -113,9 +114,14 @@ export default function ManageAccess() {
           ))}
         </div>
       ) : (
-        <h1 className="text-2xl font-bold">
-          No Access Requests at the moment
+        <>
+        <h1 className="text-2xl my-3 " >
+        Pending access requests
         </h1>
+        <p>
+          No Access Requests at the moment
+        </p>
+        </>
       )}
 
       {profile.allowedUsers && profile.allowedUsers.length > 0 ? (
@@ -136,7 +142,10 @@ export default function ManageAccess() {
           ))}
         </div>
       ) : (
-        <h1 className="text-2xl font-bold">No Allowed Users</h1>
+        <>
+        <h1 className="text-2xl my-3"> Allowed Users</h1>
+        <p> No Allowed Users</p>
+        </>
       )}
     </div>
   ) : (

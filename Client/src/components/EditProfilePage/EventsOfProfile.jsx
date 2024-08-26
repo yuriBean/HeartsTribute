@@ -28,8 +28,8 @@ export default function EventsOfProfile() {
       <div className='space-y-4 px-2 py-10 mb-20'>
         <p className='font-medium pb-8'>
           {events.length > 0 ? 
-            `${events.length} ${events.length === 1 ? "Event" : "Events"}` : 
-            "No Events"}
+            `${events.length} ${events.length === 1 ? "Milestone" : "Milestones"}` : 
+            "No Milestones"}
         </p>
         {events.length > 0 ? (
           events.map(event => (
@@ -47,9 +47,9 @@ export default function EventsOfProfile() {
         ) : (
           <div className='space-y-4 py-36 px-10 flex flex-col items-center justify-center'>
             <img className='w-32' src="/images/stopwatch.svg" alt="No Events" />
-            <h3 className='text-2xl text-gray-800 tracking-wider'>No timeline events found</h3>
+            <h3 className='text-2xl text-gray-800 tracking-wider'>No timeline milestones found</h3>
             <p className='text-xl text-gray-800 tracking-wide'>
-              No events have been added yet in this timeline.
+              No milestones have been added yet in this timeline.
             </p>
           </div>
         )}

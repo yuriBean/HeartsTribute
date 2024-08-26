@@ -42,7 +42,7 @@ export const signinWithGoogle = async (qrid) => {
       console.log(user);
       if (user) {
         if(qrid === 'null' || !qrid || qrid === undefined){
-          window.location.href = `/`;
+          window.location.href = `/profile-manager/tribute-tags`;
         }
         else
           window.location.href = `/no-profile-connected?qrid=${qrid}`;
@@ -75,7 +75,7 @@ export const signinWithFacebook = async (qrid) => {
       console.log(user);
       if (user) {
         if(qrid === 'null' || !qrid || qrid === undefined){
-          window.location.href = `/`;
+          window.location.href = `/profile-manager/tribute-tags`;
         }
         else
           window.location.href = `/no-profile-connected?qrid=${qrid}`;

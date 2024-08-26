@@ -34,7 +34,7 @@ export default function HeaderForProfileManager({ tab, setTab }) {
   
 
   return (!loading) ? (
-    <header className="flex flex-col bg-gradient-to-r from-primary to-[#61D2B7] font-poppins rounded-lg">
+    <header className="flex flex-col bg-[#346164] font-poppins rounded-lg">
       <div className="flex flex-col md:flex-row gap-y-2 items-center mx-auto my-6 md:mx-0 md:my-10 md:ml-10">
         <div className="relative w-[200px]   rounded-full aspect-square">
           <img src={managerProfile?.profile_picture || "/images/placeholder-profile.jpg"} className="w-[200px] aspect-square rounded-full object-cover" alt="profile pic" />
@@ -58,7 +58,7 @@ export default function HeaderForProfileManager({ tab, setTab }) {
       </div>
       <div className="flex gap-2 justify-around p-2 lg:p-3">
       <button className={`${location.pathname == '/profile-manager/tribute-tags' ? 'bg-black text-white font-semibold' : 'text-black bg-white'} rounded text-[0.6rem] md:text-base lg:text-lg 2xl:text-xl tracking-widest py-2 lg:py-4 w-1/3`} onClick={() => { navigate("tribute-tags") }}>TRIBUTE TAGS</button>
-        <button className={`${location.pathname == '/profile-manager' ? 'bg-black text-white font-semibold' : 'text-black bg-white'} rounded text-[0.6rem] md:text-base lg:text-lg 2xl:text-xl tracking-widest py-2 lg:py-4 w-1/3`} onClick={() => { navigate("/profile-manager") }}>MY FAVOURITE</button>
+        <button className={`${location.pathname == '/profile-manager' ? 'bg-black text-white font-semibold' : 'text-black bg-white'} rounded text-[0.6rem] md:text-base lg:text-lg 2xl:text-xl tracking-widest py-2 lg:py-4 w-1/3`} onClick={() => { navigate("/profile-manager") }}>MY FAVOURITES</button>
         {/* <button className={`${location.pathname == '/profile-manager/posts' ? 'bg-black text-white font-semibold' : 'text-black bg-white'} rounded text-[0.6rem] md:text-base lg:text-lg 2xl:text-xl tracking-widest py-2 lg:py-4 w-1/4`} onClick={() => { navigate("posts") }}>POSTS</button> */}
         <button className={`${location.pathname == '/profile-manager/my-account' ? 'bg-black text-white font-semibold' : 'text-black bg-white'} rounded text-[0.6rem] md:text-base lg:text-lg 2xl:text-xl tracking-widest py-2 lg:py-4 w-1/3`} onClick={() => { navigate("my-account") }}>MY ACCOUNT</button>
       </div>

@@ -26,7 +26,7 @@ export default function Tribute({ tribute, onDelete }) {
       id="tribute"
       className="pb-1 pt-4 px-2 border-1 space-y-2 flex flex-col justify-between rounded-md bg-white drop-shadow-xl h-[25rem] w-full "
     >
-      <h2 className="font-semibold tracking-widest">{tribute.title}</h2>
+      <h2 className="font-semibold tracking-widest overflow-hidden">{tribute.title}</h2>
       <div className="h-full w-full overflow-hidden flex items-center justify-center flex-grow">
         {/* if tribute.image is null the show profile.profile_picture */}
         {tribute.image ? (
@@ -35,10 +35,11 @@ export default function Tribute({ tribute, onDelete }) {
             className="aspect-square w-full h-full rounded-md object-cover"
           />
         ) : (
-          <img
-            src={profile.profile_picture}
-            className="aspect-square w-full h-full rounded-md object-cover"
-          />
+          <p></p>
+          // <img
+          //   src={profile.profile_picture}
+          //   className="aspect-square w-full h-full rounded-md object-cover"
+          // />
         )}
       </div>
       <div className="flex items-center justify-between ">

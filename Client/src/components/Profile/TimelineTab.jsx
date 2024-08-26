@@ -84,6 +84,7 @@ export default function TimelineTab() {
       image: profile.profile_picture,
     };
 
+    
     const deathEvent = {
       id: "death",
       event_name: "Departed",
@@ -110,7 +111,7 @@ export default function TimelineTab() {
             onClick={() => navigate(`/edit-profile/${profile.id}/add-event`)}
             className="bg-primary my-2 text-white px-4 py-2 rounded-lg"
           >
-            Add Event
+            Add Milestone
           </button>
           {/* <button
             onClick={() => navigate(`/edit-profile/${profile.id}/add-event`)}
@@ -120,18 +121,19 @@ export default function TimelineTab() {
           </button> */}
         </div>
       </CheckProfileOwner>
-      <h1 className="text-center text-lg mb-6 font-bold tracking-widest xl:text-xl">
+      <div className="flex flex-col justify-center gap-2 items-center">
+      <h1 className="text-center text-lg font-bold tracking-widest xl:text-xl">
       {profile.last_name ? (
-  `${profile.first_name} ${profile.last_name}'s Life Events`
+  `${profile.first_name} ${profile.last_name}'s Life Milestones`
 ) : (
-  `${profile.first_name}'s Life Events`
+  `${profile.first_name}'s Life Milestones`
 )}
           </h1>
-      <small className="text-lg">
-        Tap or hover over the events to uncover more
-        details and heartfelt memories. Scroll left or right to explore all the significant events on the
+      <small className="text-lg mt-5">
+        Tap or hover over the milestones to uncover more
+        details and heartfelt memories. Scroll left or right to explore all the significant milestones on the
         timeline.
-      </small>
+      </small></div>
       <div
         ref={containerRef}
         className="scrollbar no-scrollbar relative flex h-[600px] w-full items-center justify-between overflow-x-auto bg-white py-16 drop-shadow-lg"
@@ -151,11 +153,19 @@ export default function TimelineTab() {
               </span>
               <br />
               <button className="peer h-12 w-12 cursor-pointer rounded-full bg-primary">
-                <img
+                {profile.death_date ? (
+                  <img
                   className="mx-auto h-8 w-8"
                   src={event.event_name === "Born" ? "/images/birth.svg" : event.event_name === "Died" ? "/images/tombstone.svg" : "/images/calendar.svg"}
                   alt={event.event_name.toLowerCase()}
+                />):
+                (
+                  <img
+                  className="mx-auto h-8 w-8"
+                  src={event.event_name === "Born" ? "/images/birth.svg": "/images/calendar.svg" }
+                  alt={event.event_name.toLowerCase()}
                 />
+                )}
               </button>
               <br />
               <span className="text-sm tracking-wide overflow-x-hidden transition-all delay-150 xl:text-base">

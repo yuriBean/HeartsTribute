@@ -84,33 +84,43 @@ export default function PayTribute({ setShow }) {
           className="flex flex-col space-y-4 md:space-y-6"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <Input
-            register={register}
+          <p className="text-lg">Honor loved ones by adding personal messages and memories. Create and share a heartfelt tribute easily.</p>
+          <textarea {...register("title", { required: "required" })}
             errors={errors}
             name="title"
             type="text"
-            label="Title"
+            label="Tribute Text"
             id="title"
-            placeholder={"Add Title"}
+            placeholder={"Add Tribute Text"}
             className="px-4 py-3 tracking-wider"
-          />
-          {image && (
-            <img
-              src={URL.createObjectURL(image)}
-              alt="Profile Picture"
-              className="w-[200px] h-[200px] mx-auto object-cover"
-            />
-          )}
+          ></textarea>
+        <div className="flex gap-3 items-center">
+        <div className=" sm:w-full">
+        
           <ChooseFile
             value={image}
-            label="Choose Tribute Image (Optional)"
+            label="Upload Tribute Image (Optional)"
             id="tribute_image"
             name="tribute_image"
             accept="image/*"
             onSelectValue={onSelectImage}
-          
-          />
+            
+          /></div>
+          <div className="">
+            {image && (
+            <img
+              src={URL.createObjectURL(image)}
+              alt="Profile Picture"
+              className="w-40 h-40 mx-auto object-cover hidden sm:block"
+            />
+          )}</div>
+
+          </div>
           <div className="flex justify-end gap-2">
+          <button onClick={handleCancel} className="button-primary bg-red-500">
+          Cancel
+        </button>
+
           <button className="button-primary">
             {loading ? (
               <svg
@@ -133,9 +143,6 @@ export default function PayTribute({ setShow }) {
               <>Add Tribute</>
             )}
           </button>
-          <button onClick={handleCancel} className="button-primary bg-red-500">
-          Cancel
-        </button>
         </div>
         </form>
       )}

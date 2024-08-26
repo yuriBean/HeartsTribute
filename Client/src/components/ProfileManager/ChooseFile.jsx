@@ -13,8 +13,19 @@ export default function ChooseFile({
   const [selectedFile, setSelectedFile] = useState(value);
 
   const handleFileChange = (file) => {
-    setSelectedFile(file);
-    onSelectValue(file);
+    
+    try {
+      // Assuming file size limit is set to 10 MB
+      if (file.size > 10 * 1024 * 1024) {
+        alert('File size exceeds the 10 MB limit.');
+        return;
+      }
+      setSelectedFile(file);    
+      onSelectValue(file);
+    } catch (error) {
+      console.error('File upload failed:', error);
+      alert('Failed to upload file.');
+    }
   };
 
   const handleRemoveFile = () => {
@@ -27,7 +38,7 @@ export default function ChooseFile({
       <div className="mb-1">
         <Label>
           {label}
-          {<span className="text-red-500">*</span>}
+          {/* {<span className="text-red-500">*</span>} */}
         </Label>
       </div>
       <div className="flex flex-col">
@@ -45,7 +56,7 @@ export default function ChooseFile({
             color: "white",
           }}
           children={
-            <div className="w-full px-2 py-16 mb-2 text-xs md:text-sm flex items-center justify-center border-2 border-dashed text-primary font-bold text-center rounded-md cursor-pointer">
+            <div className="w-full px-2 py-16 mb-2 text-xs md:text-sm flex items-center justify-center border-2 border-gray-300 border-dashed text-primary font-bold text-center rounded-md cursor-pointer">
               <p>
                 Drag & Drop your file here or{" "}
                 <span className="underline">click to browse </span>

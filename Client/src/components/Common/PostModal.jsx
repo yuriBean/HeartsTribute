@@ -193,7 +193,7 @@ export default function PostModal({ setIsOpen, post, profile, onPostDeleted  }) 
                     This post has no comments yet!
                   </p>
                   <p className="text-sm tracking-wide 2xl:text-base">
-                    Be the fist to share your opinion and leave a comment below.
+                    Be the first to share your opinion and leave a comment below.
                   </p>
                 </div>
               ))}

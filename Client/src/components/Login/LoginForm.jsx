@@ -42,7 +42,7 @@ export default function LoginForm( { qrid }) {
       if(qrid){
       navigate(`/no-profile-connected?qrid=${qrid}`); 
       } else if (qrid === 'null' || qrid === undefined || !qrid) {
-        navigate (`/`);
+        navigate (`/profile-manager/tribute-tags`);
       }
 
     } catch (error) {

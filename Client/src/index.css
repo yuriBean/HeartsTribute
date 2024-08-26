@@ -7,7 +7,7 @@
 
 @layer components {
   .body-margin{
-    @apply mx-8 md:mx-[10%] pb-10 ;
+    @apply mx-8 md:mx-[10%] py-3 ;
   }
   .button-primary {
     @apply bg-[#346164] rounded  outline-none flex items-center font-bold text-xs md:text-sm xl:text-base text-white py-2 px-4 md:py-3 2xl:py-4;

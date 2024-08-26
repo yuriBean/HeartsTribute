@@ -7,7 +7,7 @@ import { Router } from 'express';
 const router = Router();
 
 // Set up Multer for file uploads
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: 'uploads/', limits: { fileSize: 10 * 1024 * 1024 }  });
 
 // Get the directory name of the current module
 const __filename = fileURLToPath(import.meta.url);

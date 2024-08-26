@@ -178,17 +178,18 @@ export default function EditProfileForm() {
   }
 
   return !loading ? (
-    <div className="">
-      <div className="mb-4 md:mb-12">
+    <div className="mt-4 px-6 py-4 shadow-md md:px-12 md:py-8">
+      <div className="mb-4 md:mb-12 text-center">
         <h1 className="text-2xl font-semibold tracking-widest md:text-2xl xl:text-3xl 2xl:text-4xl">
           Edit Profile
         </h1>
       </div>
 
+      <div className="mb-4 space-x-4 flex justify-center"></div>
       <form className="flex flex-col" onSubmit={onSubmit}>
-        <h3 className="mb-2 text-sm tracking-wider md:text-base">
+        {/* <h3 className="mb-2 text-sm tracking-wider md:text-base">
           Edit Your Personal Information
-        </h3>
+        </h3> */}
         <hr />
         <div className="my-3 grid grid-cols-1 gap-y-2 md:w-2/3 md:grid-cols-2 md:gap-x-4 md:gap-y-4 md:space-y-0">
           <InputForEdit
@@ -289,7 +290,7 @@ export default function EditProfileForm() {
               value={coverPicture}
             />
           </div>
-
+          <small>Please provide a YouTube video link to share a memorial video. Only YouTube links are supported.</small>
           <div className="md:col-span-2">
             <InputForEdit
               value={profile?.memorial_video}
@@ -297,7 +298,8 @@ export default function EditProfileForm() {
               modifiedData={modifiedData}
               type="text"
               name="memorial_video"
-              label="Memorial Video URL"
+              placeholder={"Enter the YouTube video link"}
+              label="Memorial Video Link"
               id="memorial_video"
               className="px-4 py-3 tracking-wider"
             />
@@ -310,7 +312,8 @@ export default function EditProfileForm() {
             <textarea
               className="px-4 py-3 tracking-wider w-full border rounded-md"
               name="bio"
-              value={modifiedData.bio || profile?.bio}
+              // value={modifiedData.bio || profile?.bio}
+              placeholder={"Provide a brief biography or share special memories,anecdotes, or significant life events. This will help others remember and celebrate their life."}
               onChange={(e) => handleChange("bio", e.target.value)}
               rows={6}
             />
@@ -337,7 +340,7 @@ export default function EditProfileForm() {
             modifiedData={modifiedData}
             type="date"
             name="death_date"
-            label="Date Of Passing"
+            label="Date Of Passing (leave blank if not applicable)"
             id="death_date"
             className="px-4 py-3 tracking-wider"
           />
@@ -412,7 +415,7 @@ export default function EditProfileForm() {
         <div className="mb-4">
           {profile?.donation_profile_title && (
             <p className="text-sm font-semibold">
-              Current Donation Profile: {profile?.donation_profile_title}
+              Current Selected Charity: {profile?.donation_profile_title}
             </p>
           )}
         </div>
@@ -446,6 +449,7 @@ export default function EditProfileForm() {
           </p>
           <div className="md:col-span-2 relative">
             <label className="block text-sm font-medium text-gray-700">Search Charity List</label>
+            <small>List of charities may take a few seconds to load.</small>
             <div className="flex"></div>
             <input
                 type="text"
@@ -502,11 +506,12 @@ export default function EditProfileForm() {
           />
         </div>
         <div className="flex justify-end gap-2">
-        <button className="mt-4 cursor-default self-end rounded-md bg-[#346164] px-8 py-2 text-sm font-bold text-white outline-none md:py-3 md:text-base xl:text-lg">
-          Save Changes
-        </button>
         <button onClick={handleCancel} className="mt-4 cursor-default self-end rounded-md bg-red-500 px-8 py-2 text-sm font-bold text-white outline-none md:py-3 md:text-base xl:text-lg">
           Cancel
+        </button>
+
+        <button className="mt-4 cursor-default self-end rounded-md bg-[#346164] px-8 py-2 text-sm font-bold text-white outline-none md:py-3 md:text-base xl:text-lg">
+          Save Changes
         </button>
         </div>
       </form>

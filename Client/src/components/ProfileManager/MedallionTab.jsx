@@ -18,16 +18,7 @@ export default function MedallionTab() {
             <div
                 className={`${showCreateProfile ? "hidden" : "flex"} mb-4 items-center justify-between md:mb-8`}
             >
-                <div>
-                    <h1
-                        className={`mb-1 text-xl font-semibold tracking-widest md:text-2xl xl:text-3xl 2xl:text-4xl`}
-                    >
-                        Profiles
-                    </h1>
-                    <p>
-                        You have {profiles.length} Profile
-                        {profiles.length == 1 ? "" : "s"}
-                    </p>
+                <div className="flex flex-col justify-end items-end">
                 </div>
                 <button
                     onClick={() => setToShowCreateProfile(!showCreateProfile)}
@@ -39,6 +30,15 @@ export default function MedallionTab() {
                     CREATE NEW PROFILE
                 </button>
             </div>
+            <h1
+                        className={`text-xl mb-2 font-semibold tracking-widest md:text-2xl xl:text-3xl 2xl:text-4xl`}
+                    >
+                        Profiles
+                    </h1>
+
+            <p className="mb-8">
+                    Select a profile to view or edit. You have 30 days to link your profile to a Tribute Tag. Profiles not linked within this period will be deleted.
+                    </p>
             {!showCreateProfile && <MedallionBody />}
 
             {showCreateProfile && <CreateProfile />}
