@@ -222,6 +222,12 @@ export default function CreateProfile() {
     fetchProfilesInBatches(true); // Initial call
   }; 
 
+  const handleCancel = (e) => {
+    e.preventDefault();
+    setShowProfileSelection(false);
+  }
+
+
  return !loading ? (
     <div className="mt-4 px-6 py-4 shadow-md md:px-12 md:py-8">
       <div className="mb-4 md:mb-12 text-center">
@@ -354,15 +360,9 @@ export default function CreateProfile() {
               />
             </>
           )}
-          <div className="md:col-span-2">
+          <div className="md:col-span-2 flex gap-3 items-center">
             {/* Show image when selected */}
-            {profilePicture && (
-              <img
-                src={URL.createObjectURL(profilePicture)}
-                alt="Profile Picture"
-                className="w-[200px] h-[200px] mx-auto rounded-full object-cover"
-              />
-            )}
+            <div className=" sm:w-full">
             <ChooseFile
               label="Choose Profile Picture"
               id="profile_picture"
@@ -370,17 +370,21 @@ export default function CreateProfile() {
               accept="image/*"
               onSelectValue={onSelectProfilePicture}
               value={profilePicture}
-            />
-          </div>
-          <div className="md:col-span-2">
-            {/* Show image when selected */}
-            {coverPicture && (
+            /></div>
+            <div>
+            {profilePicture && (
               <img
-                src={URL.createObjectURL(coverPicture)}
+                src={URL.createObjectURL(profilePicture)}
                 alt="Profile Picture"
-                className="aspect-ratio mx-auto"
+                className="w-40 h-40 mx-auto rounded-full object-cover"
               />
-            )}
+            )}</div>
+          </div>
+          <div className="md:col-span-2 flex gap-3 items-center">
+            {/* Show image when selected */}
+            <div className=" sm:w-full">
+            
+            
             <ChooseFile
               label="Choose Cover Picture"
               id="cover_picture"
@@ -388,14 +392,22 @@ export default function CreateProfile() {
               accept="image/*"
               onSelectValue={onSelectCoverPicture}
               value={coverPicture}
-            />
+            /></div>
+            <div>
+            {coverPicture && (
+              <img
+                src={URL.createObjectURL(coverPicture)}
+                alt="Cover Picture"
+                className="w-40 h-40 object-cover mx-auto"
+              />
+            )}</div>
           </div>
           <div className="md:col-span-2">
             <Input
               register={register}
               name="memorial_video"
               type="text"
-              label="YouTube Video Link(Optional)"
+              label="YouTube Video Link (Optional)"
               id="memorial_video"
               placeholder={"Memorial Video URL"}
               className="px-4 py-3 tracking-wider"
@@ -430,7 +442,10 @@ export default function CreateProfile() {
           <Input
             register={register}
             type={"date"}
-            label="Date Of Passing"
+            label={
+              <>
+                Date Of Passing <small className="text-xs">(leave blank if not applicable)</small>
+              </>           }
             id="death_date"
             name="death_date"
           />
@@ -574,6 +589,10 @@ export default function CreateProfile() {
         </div>
 
     </div>
+    <div className="flex justify-end gap-2">
+    <button onClick={handleCancel} className="mt-4 cursor-default self-end rounded-md bg-red-500 px-8 py-2 text-sm font-bold text-white outline-none md:py-3 md:text-base xl:text-lg">
+          Cancel
+        </button>
         <button className="mt-20 cursor-pointer self-end rounded-md bg-[#346164] px-8 py-2 text-sm font-bold text-white outline-none md:py-3 md:text-base xl:text-lg">
           {loading ? (
             <svg
@@ -596,6 +615,7 @@ export default function CreateProfile() {
             <>Save Changes</>
           )}
         </button>
+        </div>
       </form>
     </div>
   ) : (

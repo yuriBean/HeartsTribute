@@ -185,13 +185,13 @@ export default function EditProfileForm() {
         </h1>
       </div>
 
-      <div className="mb-4 space-x-4 flex justify-center"></div>
+      <div className="mb-4 space-x-4 flex "></div>
       <form className="flex flex-col" onSubmit={onSubmit}>
         {/* <h3 className="mb-2 text-sm tracking-wider md:text-base">
           Edit Your Personal Information
         </h3> */}
         <hr />
-        <div className="my-3 grid grid-cols-1 gap-y-2 md:w-2/3 md:grid-cols-2 md:gap-x-4 md:gap-y-4 md:space-y-0">
+        <div className="my-3 grid grid-cols-1 gap-y-2 md:w-2/3 md:grid-cols-2 md:gap-x-4 md:gap-y-4 md:space-y-0 mx-auto">
           <InputForEdit
             value={profile?.first_name}
             handleChange={handleChange}
@@ -322,7 +322,7 @@ export default function EditProfileForm() {
         <br />
         <h3 className="mb-2 text-sm tracking-wider md:text-base">Lifetime</h3>
         <hr />
-        <div className="my-3 grid grid-cols-1 gap-y-2 md:w-2/3 md:grid-cols-2 md:gap-x-4 md:gap-y-4 md:space-y-0">
+        <div className="my-3 grid grid-cols-1 gap-y-2 md:w-2/3 md:grid-cols-2 md:gap-x-4 md:gap-y-4 md:space-y-0 mx-auto">
           {/* for birth_date and death_date  */}
           <InputForEdit
             value={profile?.birth_date}
@@ -340,7 +340,10 @@ export default function EditProfileForm() {
             modifiedData={modifiedData}
             type="date"
             name="death_date"
-            label="Date Of Passing (leave blank if not applicable)"
+            label={
+              <>
+                Date Of Passing <small className="text-xs">(leave blank if not applicable)</small>
+              </>           }
             id="death_date"
             className="px-4 py-3 tracking-wider"
           />
@@ -352,8 +355,8 @@ export default function EditProfileForm() {
               Location
             </h3>
             <hr />
-            <div className="my-4 flex flex-col space-y-1 md:w-2/3 md:flex-row md:space-x-4 md:space-y-0">
-              {/* for City and State */}
+            <div className="my-3 grid grid-cols-1 gap-y-2 md:w-2/3 md:grid-cols-2 md:gap-x-4 md:gap-y-4 md:space-y-0 mx-auto">
+            {/* for City and State */}
               <InputForEdit
                 value={profile?.city}
                 handleChange={handleChange}
@@ -385,8 +388,8 @@ export default function EditProfileForm() {
                 className="px-4 py-3 tracking-wider"
               />
             </div>
-            <div className="my-3 grid grid-cols-1 gap-y-2 md:w-2/3 md:grid-cols-2 md:gap-x-4 md:gap-y-4 md:space-y-0">
-              <InputForEdit
+            <div className="my-3 grid grid-cols-1 gap-y-2 md:w-2/3 md:grid-cols-2 md:gap-x-4 md:gap-y-4 md:space-y-0 mx-auto">
+            <InputForEdit
                 name={"cemetery_location"}
                 type="text"
                 label="Cemetery Location"
@@ -412,14 +415,14 @@ export default function EditProfileForm() {
           Donate in Their Memory
         </h3>
         <hr />
-        <div className="mb-4">
+        <div className="mb-4 space-x-4 mx-auto">
           {profile?.donation_profile_title && (
             <p className="text-sm font-semibold">
               Current Selected Charity: {profile?.donation_profile_title}
             </p>
           )}
         </div>
-        <div className="mb-4 space-x-4">
+        <div className="mb-4 space-x-4 mx-auto">
           <Label>
             <input
               type="radio"
@@ -491,11 +494,11 @@ export default function EditProfileForm() {
     </div>
     {console.log(donationProfileID)}
         <br />
-        <h3 className="mt-20 mb-2 text-sm tracking-wider md:text-base">
+        <h3 className="mb-2 text-sm tracking-wider md:text-base">
           Profile Visibility
         </h3>
         <hr />
-        <div className="my-4 flex flex-row justify-between space-x-4 md:w-2/3 md:justify-start">
+        <div className="flex space-x-4 mx-auto ">
           <Label>Make Profile Private</Label>
           <ToggleSwitch
             checker={!checker}
