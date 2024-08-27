@@ -298,7 +298,7 @@ export default function EditProfileForm() {
               modifiedData={modifiedData}
               type="text"
               name="memorial_video"
-              placeholder={"Enter the YouTube video link"}
+              placeholder= {"Enter the YouTube video link"}
               label="Memorial Video Link"
               id="memorial_video"
               className="px-4 py-3 tracking-wider"

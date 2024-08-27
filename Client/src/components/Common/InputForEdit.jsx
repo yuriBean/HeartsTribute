@@ -10,6 +10,7 @@ export default function InputForEdit({
     modifiedData,
     handleChange,
     value,
+    placeholder,
 }) {
     return (
         <div className="relative flex w-full flex-col">
@@ -34,6 +35,7 @@ export default function InputForEdit({
                         : value || ""
                 }
                 onChange={(e) => handleChange(name, e.target.value)}
+                placeholder={placeholder}
                 className={`peer rounded-md border p-2 ${icon ? "pl-8" : ""} ${className}`}
             />
         </div>
