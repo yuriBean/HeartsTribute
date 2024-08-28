@@ -199,6 +199,6 @@ export default function AddEvent() {
       </form>
     </>
   ) : (
-    <Spinner text="Creating Event..." />
+    <Spinner text="Creating Milestone..." />
   );
 }

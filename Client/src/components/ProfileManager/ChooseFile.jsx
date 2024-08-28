@@ -9,6 +9,7 @@ export default function ChooseFile({
   id,
   name,
   accept,
+  required = true
 }) {
   const [selectedFile, setSelectedFile] = useState(value);
 
@@ -38,7 +39,7 @@ export default function ChooseFile({
       <div className="mb-1">
         <Label>
           {label}
-          {/* {<span className="text-red-500">*</span>} */}
+          {required && <span className="text-red-500">*</span>}
         </Label>
       </div>
       <div className="flex flex-col">

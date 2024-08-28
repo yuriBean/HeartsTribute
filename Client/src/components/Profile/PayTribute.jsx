@@ -86,7 +86,7 @@ export default function PayTribute({ setShow }) {
           onSubmit={handleSubmit(onSubmit)}
         >
           <p className="text-lg mb-3">Honor loved ones by adding personal messages and memories. Create and share a heartfelt tribute easily.</p>
-          <Label>Add Tribute</Label>
+          <Label>Add Tribute<span className="text-red-500">*</span></Label>
           <textarea {...register("title", { required: "required" })}
             errors={errors}
             name="title"
@@ -106,6 +106,7 @@ export default function PayTribute({ setShow }) {
             name="tribute_image"
             accept="image/*"
             onSelectValue={onSelectImage}
+            required={false}
             
           /></div>
           <div className="">
