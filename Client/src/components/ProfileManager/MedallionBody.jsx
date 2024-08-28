@@ -46,7 +46,7 @@ export default function MedallionBody() {
             </div>
         ) : (
             <div className="flex h-96 items-center justify-center">
-                <h1 className="text-2xl font-semibold">No profile has been created. Click on 'Create New Profile' button to get started.</h1>
+                <h1 className="text-2xl text-center">No profile has been created. Click on 'Create New Profile' button to get started.</h1>
             </div>
         )
     ) : (
