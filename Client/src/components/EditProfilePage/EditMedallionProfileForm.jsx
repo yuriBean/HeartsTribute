@@ -86,6 +86,7 @@ export default function EditProfileForm() {
   };
   const handleChange = (name, value) => {
     if (profile[name] === value) {
+      console.log('kenshi',profile[name]);
       const updatedData = { ...modifiedData };
       delete updatedData[name]; 
       setModifiedData(updatedData);
@@ -315,7 +316,7 @@ export default function EditProfileForm() {
             <textarea
               className="px-4 py-3 tracking-wider w-full border rounded-md"
               name="bio"
-              // value={modifiedData.bio || profile?.bio}
+              value={modifiedData.bio || profile?.bio}
               placeholder={"Provide a brief biography or share special memories,anecdotes, or significant life events. This will help others remember and celebrate their life."}
               onChange={(e) => handleChange("bio", e.target.value)}
               rows={6}
@@ -380,7 +381,7 @@ export default function EditProfileForm() {
                 id="state"
                 className="px-4 py-3 tracking-wider"
               />
-              <InputForEdit
+              {/* <InputForEdit
                 value={profile?.country}
                 handleChange={handleChange}
                 modifiedData={modifiedData}
@@ -389,7 +390,7 @@ export default function EditProfileForm() {
                 label="Country"
                 id="country"
                 className="px-4 py-3 tracking-wider"
-              />
+              /> */}
             </div>
             <div className="my-3 grid grid-cols-1 gap-y-2 md:w-2/3 md:grid-cols-2 md:gap-x-4 md:gap-y-4 md:space-y-0 mx-auto">
             <InputForEdit

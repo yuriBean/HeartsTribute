@@ -29,7 +29,7 @@ export default function HeaderForPublicProfile() {
         <div className="bg-[#346164] pb-4 rounded-lg">
           <div className="flex w-full justify-center">
             <img
-              className="mx-auto aspect-video h-[40vh] md:h-[40vh] w-[93%] rounded-bl-full rounded-br-full border-8 border-t-0 border-white object-top object-cover"
+              className="mx-auto aspect-video h-[50vh] md:h-[50vh] w-[93%] rounded-bl-full rounded-br-full border-8 border-t-0 border-white object-top object-cover"
               src={profile?.cover_picture || "/cover-placeholder.jpeg"}
               loading="lazy"
             />

@@ -466,13 +466,13 @@ export default function CreateProfile( {setToShowCreateProfile}) {
                 label="State"
                 id="state"
               />
-              <Input
+              {/* <Input
                 register={register}
                 name={"country"}
                 type="text"
                 label="Country"
                 id="country"
-              />
+              /> */}
               {/* for cemetery_location , funeral_date, nickname, hobbies */}
             </div>
             <div className="my-3 grid grid-cols-1 gap-y-2 md:w-2/3 md:grid-cols-2 md:gap-x-4 md:gap-y-4 md:space-y-0 mx-auto">
