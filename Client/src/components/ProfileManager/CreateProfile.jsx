@@ -435,6 +435,7 @@ export default function CreateProfile( {setToShowCreateProfile}) {
               </>           }
             id="death_date"
             name="death_date"
+            required={false}
           />
         </div>
         <br />
