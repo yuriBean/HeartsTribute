@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Label } from "./AddPostOnProfile";
 import ToggleSwitch from "../Common/ToggleSwitch";
 import ChooseFile from "../ProfileManager/ChooseFile";
@@ -10,7 +10,6 @@ import { uploadImage } from "../../utils/imgUploader";
 import Spinner from "../Common/Spinner";
 import { useProfile } from "../Providers/EditProfileProvider";
 import { notifySuccess } from "../../utils/toastNotifications";
-import debounce from "lodash.debounce"; 
 import { useNavigate } from "react-router-dom";
 
 export default function EditProfileForm() {
@@ -22,8 +21,7 @@ export default function EditProfileForm() {
   const [donationEnabled, setDonationEnabled] = useState(false);
   const [donationProfiles, setDonationProfiles] = useState([]);
   const [nextProjectId, setNextProjectId] = useState(null);
-  const [hasNext, setHasNext] = useState(false);
-  const [donationProfilesLoading, setDonationProfilesLoading] = useState(false);
+  const [bio, setBio] = useState(profile?.bio || "");
   const [donationProfileID, setDonationProfileID] = useState(null);
   const user = (localStorage.getItem("user")) ? JSON.parse(localStorage.getItem("user")) : null;
   const [searchTerm, setSearchTerm] = useState("");
@@ -85,6 +83,10 @@ export default function EditProfileForm() {
     }
   };
   const handleChange = (name, value) => {
+    if (name === "bio") {
+      setBio(value);
+    }
+
     if (profile[name] === value) {
       console.log('kenshi',profile[name]);
       const updatedData = { ...modifiedData };
@@ -94,6 +96,11 @@ export default function EditProfileForm() {
       setModifiedData((prev) => ({ ...prev, [name]: value }));
     }
   };
+
+  useEffect(() => {
+    // Sync bio with profile.bio when profile changes
+    setBio(profile?.bio || "");
+  }, [profile?.bio]);
 
   const fetchProfilesInBatches = async (initialCall = true) => {
     let combinedProfiles = [];
@@ -316,7 +323,7 @@ export default function EditProfileForm() {
             <textarea
               className="px-4 py-3 tracking-wider w-full border rounded-md"
               name="bio"
-              value={modifiedData.bio || profile?.bio}
+              value={bio}
               placeholder={"Provide a brief biography or share special memories,anecdotes, or significant life events. This will help others remember and celebrate their life."}
               onChange={(e) => handleChange("bio", e.target.value)}
               rows={6}
