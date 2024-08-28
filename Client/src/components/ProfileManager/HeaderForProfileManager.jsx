@@ -50,7 +50,7 @@ export default function HeaderForProfileManager({ tab, setTab }) {
             <img className='w-4' src="/images/calendar.svg" alt="" />
             <span>Joined: {dateToNow(managerProfile?.created_at.seconds)}</span>
           </button>
-          <button onClick={handleResetProfilePicture} className="bg-transparent text-red-800 border-red-800 border-solid border-2 rounded mt-2 px-3 py-2 text-sm">
+          <button onClick={handleResetProfilePicture} className="bg-white text-red-800 border-red-800 border-solid border-2 rounded mt-2 px-3 py-2 text-xs font-sans font-medium">
             Reset Profile Picture
           </button>
 
