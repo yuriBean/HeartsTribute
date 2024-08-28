@@ -11,10 +11,12 @@ import {
   notifyInfo,
   notifyError,
 } from "../../utils/toastNotifications";
+import { useNavigate } from "react-router-dom";
 
 export default function ManageAccess() {
   const { profile, loading, getProfile } = useProfile();
   const [emailInput, setEmailInput] = useState("");
+  const navigate = useNavigate();
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -61,6 +63,11 @@ export default function ManageAccess() {
   };
 
   useEffect(() => {}, []);
+
+  const handleCancel = (e) => {
+    e.preventDefault();
+    navigate(-1);
+  }
 
   return !loading && profile ? (
     <div className="space-y-4 px-2 py-10 mb-20">
@@ -147,6 +154,11 @@ export default function ManageAccess() {
         <p> No Allowed Users</p>
         </>
       )}
+      <div className="flex justify-end">
+      <button onClick={handleCancel} className="button-primary bg-red-500">
+          Cancel
+        </button>
+        </div>
     </div>
   ) : (
     <Spinner />

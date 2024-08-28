@@ -495,7 +495,6 @@ export default function EditProfileForm() {
         </>
       )}
     </div>
-    {console.log(donationProfileID)}
         <br />
         <h3 className="mb-2 text-sm tracking-wider md:text-base">
           Profile Visibility

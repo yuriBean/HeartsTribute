@@ -530,6 +530,7 @@ export default function CreateProfile( {setToShowCreateProfile}) {
           </p>
           <div className="md:col-span-2 relative">
             <label className="block text-sm font-medium text-gray-700">Search Charity List</label>
+            <small>List of charities may take a few seconds to load.</small>
             <input
                 type="text"
                 className="border p-2 mb-2 rounded-md w-full md:w-80"

@@ -8,6 +8,7 @@ import Spinner from "../Common/Spinner";
 import { notifySuccess, notifyError } from "../../utils/toastNotifications";
 import { usePublicProfile } from "../Providers/PublicProfileProvider";
 import { useNavigate } from "react-router-dom";
+import { Label } from "../ProfileManager/AddPost";
 
 export default function PayTribute({ setShow }) {
   const [image, setImage] = useState(null);
@@ -84,7 +85,8 @@ export default function PayTribute({ setShow }) {
           className="flex flex-col space-y-4 md:space-y-6"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <p className="text-lg">Honor loved ones by adding personal messages and memories. Create and share a heartfelt tribute easily.</p>
+          <p className="text-lg mb-3">Honor loved ones by adding personal messages and memories. Create and share a heartfelt tribute easily.</p>
+          <Label>Add Tribute</Label>
           <textarea {...register("title", { required: "required" })}
             errors={errors}
             name="title"
