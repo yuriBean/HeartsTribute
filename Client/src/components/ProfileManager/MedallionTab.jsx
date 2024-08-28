@@ -41,7 +41,7 @@ export default function MedallionTab() {
                     </p>
             {!showCreateProfile && <MedallionBody />}
 
-            {showCreateProfile && <CreateProfile />}
+            {showCreateProfile && <CreateProfile setToShowCreateProfile={setToShowCreateProfile} />}
         </div>
     );
 }

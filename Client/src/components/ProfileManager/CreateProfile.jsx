@@ -10,7 +10,7 @@ import ToggleSwitch from "../Common/ToggleSwitch";
 import { notifySuccess, notifyError } from "../../utils/toastNotifications";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
-export default function CreateProfile() {
+export default function CreateProfile( {setToShowCreateProfile}) {
   const {
     register,
     handleSubmit,
@@ -211,9 +211,8 @@ export default function CreateProfile() {
     fetchProfilesInBatches(true); 
   }; 
 
-  const handleCancel = (e) => {
-    e.preventDefault();
-    setShowProfileSelection(false);
+  const handleCancel = () => {
+    setToShowCreateProfile(false);
   }
 
  return !loading ? (
