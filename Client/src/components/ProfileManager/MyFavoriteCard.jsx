@@ -27,7 +27,7 @@ export default function MyFavoriteCard({ profile }) {
                                 <span className="text-red-500"> {Math.ceil((new Date(profile.expiry_date) - new Date()) / (1000 * 60 * 60 * 24))} day(s) left to link Tribute Tag</span>
                                 </p>
                         ):(
-                        <p className="self-end text-green text-2xs m-1 sm:text-sm py-1 rounded-md align-end" style={{ fontSize: '13px'}}>
+                        <p className="text-4xs mt-4 sm:text-sm rounded-md text-center text-green-500" style={{ fontSize: '13px'}}>
                                 Tribute Tag Linked 
                                 </p>
                         )}
