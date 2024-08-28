@@ -13,6 +13,7 @@ export default function MedallionTab() {
             profiles.length,
         );
     }, []);
+
     return (
         <div className={`rounded-md px-4 py-8`}>
             <div
@@ -36,9 +37,11 @@ export default function MedallionTab() {
                         Profiles
                     </h1>
 
-            <p className="mb-8">
+                {profiles.length > 0 && (            
+                    <p className="mb-8">
                     Select a profile to view or edit. You have 30 days to link your profile to a Tribute Tag. Profiles not linked within this period will be deleted.
                     </p>
+                    )}
             {!showCreateProfile && <MedallionBody />}
 
             {showCreateProfile && <CreateProfile setToShowCreateProfile={setToShowCreateProfile} />}

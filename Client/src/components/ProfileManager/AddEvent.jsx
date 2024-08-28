@@ -138,6 +138,9 @@ export default function AddEvent() {
           name="event_time"
           className="w-2/3 md:w-1/6 px-4 py-3 tracking-wider"
         /> */}
+
+      <div className="md:col-span-2 flex gap-3 items-center">
+            <div className=" sm:w-full">
         <ChooseFile
           value={image}
           label="Choose Milestone Image"
@@ -146,13 +149,16 @@ export default function AddEvent() {
           accept="image/*"
           onSelectValue={onSelectImage}
         />
+        </div>
+        <div>
         {image && (
           <img
             src={URL.createObjectURL(image)}
             alt="Profile Picture"
-            className="aspect-ratio mx-auto"
+            className="w-40 h-40 mx-auto object-cover"
           />
-        )}
+        )}</div>
+          </div>
         {/* <Input
           register={register}
           errors={errors}

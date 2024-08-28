@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MyFavoriteCard from "./MyFavoriteCard";
 import Spinner from "../Common/Spinner";
-import { Link } from "react-router-dom";
 import { useProfileManager } from "../Providers/ProfileManagerProvider";
 import ScrollAnimation from "react-animate-on-scroll";
 

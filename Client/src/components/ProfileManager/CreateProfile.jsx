@@ -394,7 +394,11 @@ export default function CreateProfile( {setToShowCreateProfile}) {
               register={register}
               name="memorial_video"
               type="text"
-              label="YouTube Video Link (Optional)"
+              label={
+                <>Memorial Video Link (Optional)
+                  <br></br><small>Please provide a YouTube video link to share a memorial video. Only YouTube links are supported.</small>
+
+                </>}
               id="memorial_video"
               placeholder={"Memorial Video URL"}
               className="px-4 py-3 tracking-wider"
@@ -411,6 +415,7 @@ export default function CreateProfile( {setToShowCreateProfile}) {
               {...register("bio", {
                 required: `bio is required`,
               })}
+              placeholder={"Provide a brief biography or share special memories,anecdotes, or significant life events. This will help others remember and celebrate their life."}
               rows={6}
             />
           </div>
@@ -575,6 +580,11 @@ export default function CreateProfile( {setToShowCreateProfile}) {
             onClick={() => setProfileVisibility(!profileVisibility)}
           />
         </div>
+        {!profileVisibility && (
+          <p className="mt-2 text-sm text-gray-600">
+            You can manage access to this profile from the profile page.
+          </p>
+          )}
 
     </div>
     <div className="flex justify-end gap-2">

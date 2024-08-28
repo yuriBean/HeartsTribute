@@ -290,7 +290,6 @@ export default function EditProfileForm() {
               value={coverPicture}
             />
           </div>
-          <small>Please provide a YouTube video link to share a memorial video. Only YouTube links are supported.</small>
           <div className="md:col-span-2">
             <InputForEdit
               value={profile?.memorial_video}
@@ -299,7 +298,11 @@ export default function EditProfileForm() {
               type="text"
               name="memorial_video"
               placeholder= {"Enter the YouTube video link"}
-              label="Memorial Video Link"
+              label={
+                <>Memorial Video Link (Optional)
+                  <br></br><small>Please provide a YouTube video link to share a memorial video. Only YouTube links are supported.</small>
+
+                </>}
               id="memorial_video"
               className="px-4 py-3 tracking-wider"
             />
@@ -498,7 +501,7 @@ export default function EditProfileForm() {
           Profile Visibility
         </h3>
         <hr />
-        <div className="flex space-x-4 mx-auto ">
+        <div className="flex space-x-4 mx-auto">
           <Label>Make Profile Private</Label>
           <ToggleSwitch
             checker={!checker}
@@ -508,6 +511,11 @@ export default function EditProfileForm() {
             }}
           />
         </div>
+        {!checker && (
+          <p className="mt-2 text-sm text-gray-600 text-center">
+            You can manage access to this profile from the profile page.
+          </p>
+          )}
         <div className="flex justify-end gap-2">
         <button onClick={handleCancel} className="mt-4 cursor-default self-end rounded-md bg-red-500 px-8 py-2 text-sm font-bold text-white outline-none md:py-3 md:text-base xl:text-lg">
           Cancel
