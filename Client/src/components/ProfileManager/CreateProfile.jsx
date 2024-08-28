@@ -105,7 +105,7 @@ export default function CreateProfile( {setToShowCreateProfile}) {
     }
 
     const creationDate = new Date(data.created_at);
-    const expiryDate = new Date(creationDate.getTime() + 45 * 24 * 60 * 60 * 1000); 
+    const expiryDate = new Date(creationDate.getTime() + 30 * 24 * 60 * 60 * 1000); 
     data.expiry_date = expiryDate.toISOString(); 
 
     try {
