@@ -71,41 +71,36 @@ router.post('/upload/:userId/:profileId?', upload.single('file'), (req, res) => 
   });
 });
 
-// Route to handle deleting all files in a profile folder
-router.delete('/delete/:userId/:profileId', async (req, res) => {
-  const userId = req.params.userId;
-  const profileId = req.params.profileId;
-  const folderPath = `${userId}/${profileId}/`;
+router.delete('/delete', async (req, res) => {
+  const fileUrl = req.query.fileUrl;
 
-  // List all objects in the specified folder
-  const listParams = {
-    Bucket: 'heartstribute.bucket',
-    Prefix: `ProfileManager/${folderPath}`
-  };
+  if (!fileUrl) {
+    return res.status(400).send('File URL is required');
+  }
 
   try {
-    const listedObjects = await s3.listObjectsV2(listParams).promise();
+    const key = fileUrl.replace(publicUrl, '');
+    console.log(key);
+    const sanitizedKey = key.startsWith('/') ? key.slice(1) : key;
 
-    if (listedObjects.Contents.length === 0) {
-      return res.status(404).send('No files found for the specified profile.');
-    }
+    console.log('Deleting file with key:', sanitizedKey);
 
-    // Prepare the list of objects to delete
-    const deleteParams = {
+    const params = {
       Bucket: 'heartstribute.bucket',
-      Delete: {
-        Objects: listedObjects.Contents.map(obj => ({ Key: obj.Key })),
-        Quiet: false
-      }
+      Key: sanitizedKey,
     };
 
-    // Delete the objects
-    await s3.deleteObjects(deleteParams).promise();
-
-    res.status(200).send({ message: 'All files in the profile folder deleted successfully' });
+     s3.deleteObject(params, function(err, data) {
+      if (err) {
+        console.log("Error:", err);
+      } else {
+        console.log("Success:", data);
+      }});
+    
+    res.status(200).send({ message: 'File deleted successfully' });
   } catch (err) {
-    console.error('Error deleting files: ', err);
-    res.status(500).send('Error deleting files: ' + err.message);
+    console.error('Error deleting file:', err);
+    res.status(500).send('Error deleting file: ' + err.message);
   }
 });
 

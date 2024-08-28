@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import ChooseFile from "./ChooseFile";
 import { Label } from "./AddPost";
-import { CreateNewProfile, linkProfileToQR, getUserProfiles, createQRCode } from "../../services/profileManager.service";
+import { CreateNewProfile, linkProfileToQR, getUserProfiles } from "../../services/profileManager.service";
 import { uploadImage } from "../../utils/imgUploader";
 import { useForm } from "react-hook-form";
 import Input from "../Common/Input";
@@ -9,7 +9,6 @@ import Spinner from "../Common/Spinner";
 import ToggleSwitch from "../Common/ToggleSwitch";
 import { notifySuccess, notifyError } from "../../utils/toastNotifications";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import debounce from "lodash.debounce";
 
 export default function CreateProfile() {
   const {
@@ -30,18 +29,15 @@ export default function CreateProfile() {
   const [profileType, setProfileType] = useState("human");
   const [donationEnabled, setDonationEnabled] = useState(false);
   const [donationProfiles, setDonationProfiles] = useState([]);
-  const [donationProfilesLoading, setDonationProfilesLoading] = useState(false);
   const [donationProfileID, setDonationProfileID] = useState(null);
   const [profileVisibility, setProfileVisibility] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showProfileSelection, setShowProfileSelection] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const qrid = searchParams.get("qrid");
   const { profile_id } = useParams();
   const [nextProjectId, setNextProjectId] = useState(null);
-  const [hasNext, setHasNext] = useState(false);
   const [allProfiles, setAllProfiles] = useState([]);
 
   const handleProfileTypeChange = (e) => {
@@ -56,6 +52,7 @@ export default function CreateProfile() {
   const onSelectCoverPicture = (e) => {
     setCoverPicture(e);
   };
+
   const getProfileURL = async () => {
     if (profilePicture) {
       try {
@@ -68,9 +65,11 @@ export default function CreateProfile() {
     }
     return null;
   };
+  
   const getCoverURL = async () => {
     if (coverPicture) {
       try {
+        console.log("oooba", profile_id);
         const res = await uploadImage(coverPicture, user.id, profile_id);
         return res;
       } catch (error) {
@@ -157,16 +156,12 @@ export default function CreateProfile() {
       setLoading(false);
     }
   };
-  // const [interval, setInterval] = useState(2000);
-  // const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   const fetchProfilesInBatches = async (initialCall = true) => {
     let combinedProfiles = [];
     let nextId = initialCall ? null : nextProjectId;
     const maxCalls = 20;
     let calls = 0;
-
-    // setLoading(true);
 
     while (calls < maxCalls) {
       let url = `https://api.globalgiving.org/api/public/projectservice/all/projects/active/summary.json?api_key=effb307b-a845-4e62-8146-2300502217ac`;
@@ -187,13 +182,10 @@ export default function CreateProfile() {
         const data = await response.json();
         combinedProfiles = [...combinedProfiles, ...data.projects.project];
         nextId = data.projects.nextProjectId;
-        // setAllProfiles((prevProfiles) => [...prevProfiles, ...combinedProfiles]);
-        // Stop if there are no more profiles to fetch
         if (!data.projects.hasNext) {
           break;
         }
         
-        // await delay(interval);
       } catch (error) {
         console.log(error);
         break;
@@ -204,10 +196,8 @@ export default function CreateProfile() {
 
     setAllProfiles((prevProfiles) => [...prevProfiles, ...combinedProfiles]);
     setNextProjectId(nextId);
-    // setLoading(false);
   };
 
-  // Trigger filtering when the button is clicked
   useEffect(() => {
     const filtered = allProfiles.filter((profile) =>
       profile.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -215,18 +205,16 @@ export default function CreateProfile() {
     setDonationProfiles(filtered);
   }, [searchTerm, allProfiles]);
 
-  // Clear profiles and fetch anew
   const fetchNewProfiles = () => {
     setAllProfiles([]);
     setNextProjectId(null);
-    fetchProfilesInBatches(true); // Initial call
+    fetchProfilesInBatches(true); 
   }; 
 
   const handleCancel = (e) => {
     e.preventDefault();
     setShowProfileSelection(false);
   }
-
 
  return !loading ? (
     <div className="mt-4 px-6 py-4 shadow-md md:px-12 md:py-8">

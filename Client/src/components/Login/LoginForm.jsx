@@ -53,9 +53,9 @@ export default function LoginForm( { qrid }) {
   };
   const onGoogleSignin = async () => {
     try {
-      // setLoading(true);
+      setLoading(true);
       await signinWithGoogle(qrid);
-      // setLoading(false);
+      setLoading(false);
     } catch (error) {
       setErrors([]);
       setErrors((errors) => [...errors, error.message]);
@@ -64,7 +64,9 @@ export default function LoginForm( { qrid }) {
 
   const onFacebookSignin = async () => {
     try {
+      setLoading(true);
       await signinWithFacebook(qrid);
+      setLoading(false);
     } catch (error) {
       console.error("Facebook sign-in error:", error);
     }

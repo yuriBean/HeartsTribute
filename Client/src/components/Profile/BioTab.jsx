@@ -42,14 +42,13 @@ export default function BioTab() {
 
         if (profile?.profile_picture) {
           console.log("Deleting profile picture:", profile.profile_picture);
-          // await deleteFileFromStorage(profile.profile_picture);
         }
         if (profile?.cover_picture) {
           console.log("Deleting cover picture:", profile.cover_picture); 
-          // await deleteFileFromStorage(profile.cover_picture);
         }
 
-        await deleteFolder(user.id, profile.id)
+        await deleteFolder(profile.cover_picture);
+        await deleteFolder(profile.profile_picture);
         await deleteFirestoreDocument("profiles", profile.id);
         console.log(profile.id);
         await deleteProfileQR(profile.id);
@@ -61,9 +60,6 @@ export default function BioTab() {
       }
     }
   };
-
-  // const daysLeft = profile ? Math.ceil((new Date(profile.expiry_date) - new Date()) / (1000 * 60 * 60 * 24)) : null;
-
 
   return !loading ? (
     <div>
