@@ -119,9 +119,9 @@ router.get('/metrics', async (req, res) => {
         Value: 'StandardStorage'
       }
     ],
-    StartTime: new Date(Date.now() - 24 * 60 * 60 * 1000), // Last 24 hours
+    StartTime: new Date(Date.now() - 24 * 60 * 60 * 1000), 
     EndTime: new Date(),
-    Period: 86400, // One day in seconds
+    Period: 86400,
     Statistics: ['Average']
   };
 
