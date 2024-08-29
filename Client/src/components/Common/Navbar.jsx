@@ -92,7 +92,7 @@ export default function Navbar() {
 
           {user ? (
             <>
-              <Link to="/profile-manager">Profile Manager Settings</Link>
+              <Link to="/profile-manager/tribute-tags">Profile Manager Settings</Link>
               <Link to="/signout">Sign out</Link>
             </>
           ) : (

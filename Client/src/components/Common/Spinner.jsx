@@ -6,6 +6,14 @@ export default function Spinner({ text = "Loading..." }) {
     useEffect(() => {
         if (spinnerRef.current) {
             spinnerRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+            
+            // Set a timeout to scroll to the top after 5 seconds
+            const timeoutId = setTimeout(() => {
+                window.scrollTo(0,0);
+            }, 1500);
+
+            // Cleanup function to clear the timeout if the component unmounts
+            return () => clearTimeout(timeoutId);
         }
     }, []);
 

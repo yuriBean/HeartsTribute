@@ -7,7 +7,7 @@ import { signinWithGoogle, signinWithFacebook } from "../../auth/socialAuthServi
 import { signin } from "../../auth/emailAuthServices";
 import { useNavigate, Link } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
-// import { set } from "date-fns";
+import Spinner from "../Common/Spinner"
 
 export default function LoginForm( { qrid }) {
   const navigate = useNavigate();
@@ -72,7 +72,8 @@ export default function LoginForm( { qrid }) {
     }
   };  
 
-  return (
+  return !loading ? (
+    <>
     <div className="mx-4 flex h-full flex-col items-center justify-between space-y-4 md:space-y-0 px-4 md:px-16">
       <header className="mb-2 text-xl xl:text-2xl 2xl:text-3xl 3xl:mb-8 3xl:text-5xl">
         <img src="/hearts-logo.png" alt="" className="w-32" />
@@ -177,5 +178,8 @@ export default function LoginForm( { qrid }) {
       </main>
       <div className="hidden tall:block"></div>
     </div>
+    </>
+  ) : (
+    <Spinner text="Loading..." />
   );
 }

@@ -38,7 +38,7 @@ const deleteFolder = async (fileUrl) => {
     try {
       console.log('Deleting file:', fileUrl); // Log URL for debugging
   
-      const response = await axios.delete('https://api.heartstribute.com/api/delete', {
+      const response = await axios.delete(`https://api.heartstribute.com/api/delete`, {
         params: { fileUrl }
       });
   
