@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import Post from "../Common/Post";
 import ScrollAnimation from "react-animate-on-scroll";
 import { useProfile } from "../Providers/EditProfileProvider";
@@ -6,9 +5,6 @@ import { useProfile } from "../Providers/EditProfileProvider";
 export default function PostsOfProfile() {
     const { posts, profile } = useProfile();
 
-    useEffect(() => {
-        console.log("Posts : ", posts);
-    }, []);
     return posts.length === 0 ? (
         <h1 className="text-center text-2xl">No Posts Yet! </h1>
     ) : (

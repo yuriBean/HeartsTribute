@@ -42,7 +42,6 @@ export default function Post({ post, profile }) {
 
   const addLike = async () => {
     try {
-      console.log("liked posts : ", liked_posts);
       setLikedPosts([...liked_posts, post.id]);
       setLikes(likes + 1);
       await addLikeWithUserId(userFromLocalStorage.id, post.id);
@@ -87,14 +86,6 @@ export default function Post({ post, profile }) {
     setLikes(post.likes);
   }, [post.likes]);
 
-  // useEffect(() => {
-  //     if (open) {
-  //         document.body.style.overflow = "hidden";
-  //     } else {
-  //         document.body.style.overflow = "";
-  //     }
-  // }, [open]);
-
 
   const getEmbedUrl = (url) => {
     const videoId = url.split("v=")[1]?.split("&")[0];
@@ -102,7 +93,7 @@ export default function Post({ post, profile }) {
   };
 
   const handlePostDelete = () => {
-    window.location.reload(); // Refresh the page to reflect the changes
+    window.location.reload();
   }
   
   return (
@@ -113,7 +104,6 @@ export default function Post({ post, profile }) {
       className="border-1 flex h-[25rem] w-full cursor-pointer flex-col justify-between px-2 py-2 shadow-lg hover:scale-105"
     >
       <div className="flex h-full w-full flex-grow items-center justify-center overflow-hidden">
-        {/* image if post.image exists if not then post. video as a embedded video */}
         {post?.image ? (
           <img
             className="h-full w-full object-cover rounded-md"

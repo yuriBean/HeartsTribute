@@ -46,9 +46,6 @@ export default function HeaderForEditProfile() {
           <h1 className="text-2xl font-semibold md:text-3xl xl:text-4xl 3xl:text-6xl">
             {profile?.first_name + " " + profile?.last_name}
           </h1>
-          {/* <h3 className="font-sans text-sm font-medium tracking-widest md:mb-6 md:text-base xl:text-lg 3xl:text-xl">
-            {profile?.title || profile?.breed}
-          </h3> */}
           <button className="mx-auto mt-3 flex cursor-default items-center gap-3 rounded bg-[#346164] px-4 py-2 font-sans text-xs font-medium md:mx-0 md:py-3 md:text-sm xl:text-base">
             <img
               className="w-4"
@@ -66,7 +63,6 @@ export default function HeaderForEditProfile() {
         />
       </div>
 
-      {/* buttons round full 4 , 1 to show total posts , 1 for total events and 1 each for add event and add post */}
       <div className="relative flex flex-wrap justify-center gap-4 md:mr-10">
         <button
           className={`edit-profile-round-button ${

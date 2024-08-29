@@ -19,7 +19,6 @@ export default function QRCode() {
             const QRrecord = await getQRCode(qr_id);
             setQrRecord(QRrecord);
             const isOwner = await getPrivateOwner(QRrecord.profile_id, user.uid);
-            console.log(isOwner);
             if (!QRrecord) {
                 navigate("/404");
             } else {
@@ -33,7 +32,6 @@ export default function QRCode() {
                     }
                 } else {
                     navigate(`/no-profile-connected?qrid=${qr_id}`);
-                    console.log(qr_id);
                 }
             }
         } catch (error) {

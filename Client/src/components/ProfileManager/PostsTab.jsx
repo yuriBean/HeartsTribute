@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Post from "../Common/Post";
 import AddPost from "./AddPost";
 import PostsOfUser from "./PostsOfUser";
 

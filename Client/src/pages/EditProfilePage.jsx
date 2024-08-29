@@ -11,7 +11,6 @@ export default function EditProfilePage() {
     <EditProfileProvider profile_id={profile_id}>
       <Layout>
         <div className="body-margin">
-          {/* <HeaderForEditProfile /> */}
           <main className="rounded-md shadow-md px-6 py-12 md:px-12 md:py-24 ">
             <Outlet />
           </main>

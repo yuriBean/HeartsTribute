@@ -1,18 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MedallionBody from "./MedallionBody";
 import CreateProfile from "./CreateProfile";
 import { useProfileManager } from "../Providers/ProfileManagerProvider";
 
 export default function MedallionTab() {
     const [showCreateProfile, setToShowCreateProfile] = useState(false);
-    const { profiles, getAllProfiles } = useProfileManager();
-    // const [loading , setLoading] = useState(false);
-    useEffect(() => {
-        console.log(
-            "Profiles from heading of meddallion tab: ",
-            profiles.length,
-        );
-    }, []);
+    const { profiles } = useProfileManager();
 
     return (
         <div className={`rounded-md px-4 py-8`}>

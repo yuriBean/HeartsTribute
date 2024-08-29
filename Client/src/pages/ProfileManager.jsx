@@ -5,8 +5,6 @@ import { useState } from "react"
 import { Outlet } from "react-router-dom"
 import { ProfileManagerProvider } from "../components/Providers/ProfileManagerProvider"
 
-
-
 export default function ProfileManager() {
   const [tab, setTab] = useState(1)
   return (

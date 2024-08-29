@@ -7,7 +7,6 @@ const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    // Render a loading indicator or placeholder while loading the auth state
     return <Spinner />;
   }
 

@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-import Hamburger from "/images/hamburger.png";
-import Cross from "/images/close.png";
+import React, { useState } from "react";
 import ScrollAnimation from "react-animate-on-scroll";
 import Layout from "../components/Layout/Layout";
 
@@ -38,7 +36,6 @@ export default function LandingPage() {
 
   return (
     <>
-      {/* Top Section */}
       <Layout>
         <div className={`${open ? "fixed" : "relative"}`}>
           {/* Hero Section */}

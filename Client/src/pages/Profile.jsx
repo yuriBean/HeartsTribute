@@ -1,6 +1,4 @@
 import React from 'react'
-import TimelineTab from '../components/Profile/TimelineTab'
-import TributeTab from '../components/Profile/TributeTab'
 import Layout from '../components/Layout/Layout'
 
 import { Outlet } from 'react-router-dom'
@@ -19,9 +17,7 @@ export default function Profile() {
             <Layout>
                 <div>
                     <div className={`body-margin`}>
-                        {/* Profile and Headline */}
                         <HeaderForPublicProfile />
-                        {/* Tabs */}
                         <div className='py-2'>
                             <div className="tab flex justify-around w-full gap-2">
                                 <button onClick={() => navigate(`/profile/${profile_id}`)} className={`${location.pathname === `/profile/${profile_id}` ? 'bg-black text-white' : 'text-black bg-gray-200'} rounded text-[0.6rem] md:text-base lg:text-lg 2xl:text-xl tracking-widest py-2 lg:py-4 w-1/4`} >BIO</button>

@@ -29,7 +29,6 @@ export default function PostModal({ setIsOpen, post, profile, onPostDeleted  }) 
           : user?.email,
         user_profile_picture: user?.profile_picture || "",
       };
-      console.log("Data to send ", data);
       setText("");
       const res = await AddCommentToPost(data, post.id);
       setLoading(false);

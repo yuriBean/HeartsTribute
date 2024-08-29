@@ -16,12 +16,10 @@ export default function EventsOfProfile() {
   }, [getEvents]);
 
   const handleDelete = async (id) => {
-    // Filter out the deleted event locally
     setLoading(true);
     await getEvents();  
     setLoading(false);
   };
-
 
   return (
     !loading ? (

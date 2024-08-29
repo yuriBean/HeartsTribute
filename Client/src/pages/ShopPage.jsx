@@ -1,11 +1,7 @@
-import React, { useState } from "react";
 import Layout from "../components/Layout/Layout";
 
-import Hamburger from "/images/hamburger.png";
-import Cross from "/images/close.png";
 
 export default function ShopPage() {
-  const [open, setOpen] = useState(false);
   return (
     <>
 

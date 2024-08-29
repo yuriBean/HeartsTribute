@@ -62,11 +62,10 @@ export default function NoProfileConnected() {
         throw new Error("Invalid profile ID or QR ID.");
       }
       setLoading(true);
-      // Check if the QRID already exists and is not linked to another profile
-      await linkProfileToQR(profileId, qrid); // Link existing profile to QR code
+      await linkProfileToQR(profileId, qrid); 
       setLoading(false);
       notifySuccess("Profile linked successfully!");
-      navigate(`/profile/${profileId}`); // Redirect to the linked profile
+      navigate(`/profile/${profileId}`); 
     } catch (error) {
       console.error("Failed to link profile", error);
       notifyError("Failed to activate your Tribute Tag. Please try scanning it again. If the issue persists, contact support.");
@@ -76,8 +75,6 @@ export default function NoProfileConnected() {
   };
 
   useEffect(() => {
-    // if(qrid===null)
-    //   navigate('/');
     checkUserProfiles();
   }, []);
 

@@ -7,7 +7,6 @@ const QRCodeScanner = () => {
 
   const handleScan = (data) => {
     if (data) {
-      // Redirect to the login page when a valid QR code is scanned
       navigate('/login');
     }
   };

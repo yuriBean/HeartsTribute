@@ -1,6 +1,6 @@
 import React from "react";
 import { usePublicProfile } from "../Providers/PublicProfileProvider";
-import { deleteTribute } from "../../services/profileManager.service"; // Import deleteTribute
+import { deleteTribute } from "../../services/profileManager.service";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
@@ -28,7 +28,6 @@ export default function Tribute({ tribute, onDelete }) {
     >
       <h2 className="font-semibold tracking-widest overflow-auto">{tribute.title}</h2>
       <div className="h-full w-full overflow-hidden flex items-center justify-center flex-grow">
-        {/* if tribute.image is null the show profile.profile_picture */}
         {tribute.image ? (
           <img
             src={tribute.image}
@@ -36,10 +35,6 @@ export default function Tribute({ tribute, onDelete }) {
           />
         ) : (
           <p></p>
-          // <img
-          //   src={profile.profile_picture}
-          //   className="aspect-square w-full h-full rounded-md object-cover"
-          // />
         )}
       </div>
       <div className="flex items-center justify-between ">

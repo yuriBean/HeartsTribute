@@ -14,13 +14,12 @@ export default function SignupForm({ qrid }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState([]);
   const [terms, setTerms] = useState(false);
-  const [tributeTagID, setTributeTagID] = useState(null); // Store the scanned tribute tag ID
+  const [tributeTagID, setTributeTagID] = useState(null); 
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch the tribute tag ID from the scanned QR code (implementation depends on your app)
-    const fetchedTagID = "unique-tribute-tag-id"; // Example
+    const fetchedTagID = "unique-tribute-tag-id"; 
     setTributeTagID(fetchedTagID);
   }, []);
 
@@ -46,9 +45,7 @@ export default function SignupForm({ qrid }) {
   };
 
   const onChange = (e) => {
-    console.log(e.target.name, e.target.value);
     if (e.target.name === "FirstName") {
-      console.log(e.target.name);
       setFirstName(e.target.value);
     }
     if (e.target.name === "LastName") {

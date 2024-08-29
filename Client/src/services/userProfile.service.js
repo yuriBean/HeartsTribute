@@ -1,4 +1,4 @@
-import { collection, addDoc, doc, getDoc, setDoc, updateDoc, query, getDocs, where, serverTimestamp } from "firebase/firestore";
+import { collection, doc, updateDoc, query, getDocs, where, serverTimestamp } from "firebase/firestore";
 import { db } from "../../firebase";
 
 
@@ -9,11 +9,9 @@ export const getUserWithEmail = async (email) => {
 
     if (querySnapshot.empty) {
       console.warn("No user found with the provided email:", email);
-      return null; // Return null if no user is found
+      return null; 
     }
-    // send id of doc too
     const user = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    // localStorage.setItem("user", JSON.stringify(user[0]));
     return user[0];
   } catch (error) {
     console.error("Error getting document:", error);

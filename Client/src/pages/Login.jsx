@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 export default function Login() {
 
   const [searchParams] = useSearchParams();
-  const qrid = searchParams.get("qrid"); // Capture the qrid from the query parameters
+  const qrid = searchParams.get("qrid"); 
 
   return (
     <div className="flex flex-col md:flex-row xl:space-x-4 3xl:space-x-8 md:py-2 md:px-2 lg:px-3 lg:py-3 xl:px-4 xl:py-4 2xl:px-16 2xl:py-8 3xl:px-20 3xl:py-8 4xl:px-28 4xl:py-20 min-h-screen">

@@ -16,7 +16,6 @@ export default function InputBoxProfileManager({value = null, setValue = null, l
         placeholder={placeholder}
         name={name}
         id={id}
-        // value={value}
         onChange={(e) => setValue(e.target.value)}
         className={`border p-2 rounded-md ${icon ? "pl-8" : ""}`+ className}
       />

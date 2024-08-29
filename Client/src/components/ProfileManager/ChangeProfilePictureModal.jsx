@@ -39,14 +39,11 @@ export default function ChangeProfilePictureModal({ isOpen, setIsOpen }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(file);
-    console.log(currentImage);
-    console.log(managerProfile);
     if (file.name == currentImage || file.name == "") {
       notifyError("Please select a new image to upload");
       return;
     }
-    console.log("Uplloading image");
+    console.log("Uploading image");
     setLoading(true);
     const url = await uploadImage(file, user.id, profile_id);
     await updateProfilePicture(url);

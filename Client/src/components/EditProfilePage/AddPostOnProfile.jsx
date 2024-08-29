@@ -36,9 +36,8 @@ export default function AddPostOnProfile() {
     setImage(null)
     setVideo("")
   }
-  const onSubmit = async (data) => {
-    // e.preventDefault()
-    // console.log(data)
+  const onSubmit = async (e, data) => {
+     e.preventDefault()
     if (!image && !video && !videoUrl) {
       alert('Please select an image or a video or a video url')
       return;

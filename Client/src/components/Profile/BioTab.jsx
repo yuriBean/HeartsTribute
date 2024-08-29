@@ -28,7 +28,6 @@ export default function BioTab() {
         })
         .catch((error) => console.log("Error sharing", error));
     } else {
-      // copy the link to clipboard
       navigator.clipboard.writeText(window.location.href);
       notifySuccess("Link copied to clipboard");
     }
@@ -50,7 +49,6 @@ export default function BioTab() {
         await deleteFolder(profile.cover_picture);
         await deleteFolder(profile.profile_picture);
         await deleteFirestoreDocument("profiles", profile.id);
-        console.log(profile.id);
         await deleteProfileQR(profile.id);
         notifySuccess("Profile deleted successfully");
         setLoading(false);

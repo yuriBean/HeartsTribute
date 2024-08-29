@@ -21,7 +21,6 @@ export const EditProfileProvider = ({ profile_id, children }) => {
         return;
       }
       console.log("From Profile Provider : ", res);
-      // if authorized then get post and events
       await fetchPostsAndEvents();
       setProfile(res);
     } catch (error) {

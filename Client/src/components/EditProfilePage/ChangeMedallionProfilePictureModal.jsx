@@ -19,7 +19,6 @@ export default function ChangeMedallionProfilePictureModal({
   );
   const [loading, setLoading] = useState(false);
   const onSelectValue = (e) => {
-    console.log("file chan ge");
     setFile(e);
     setCurrentImage(URL.createObjectURL(e));
   };
@@ -42,14 +41,11 @@ export default function ChangeMedallionProfilePictureModal({
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(file);
-    console.log(currentImage);
-    console.log(profile);
     if (file.name == currentImage || file.name == "") {
       notifyError("Please select a new image to upload");
       return;
     }
-    console.log("Uplloading image");
+    console.log("Uploading image");
     setLoading(true);
     const url = await uploadImage(file, user.id, profile.id);
     await updateProfilePicture(url);

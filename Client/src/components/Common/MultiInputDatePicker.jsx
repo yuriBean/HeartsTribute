@@ -43,9 +43,7 @@ export default function MultiInputDatePicker({ label }) {
 }
 
 const SelectBox = ({ value, setValue, options }) => {
-    useEffect(() => {
-        console.log(value);
-    }, []);
+ 
     return (
         <select
             value={value}

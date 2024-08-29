@@ -28,14 +28,12 @@ export default function LoginForm( { qrid }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log("login");
-    setErrors([]); // Clear errors at the start of the submit
+    setErrors([]);
     if (!recaptcha) {
       setErrors(["Please verify captcha"]);
       return;
     }
     try {
-      console.log(email, password);
       setLoading(true);
       await signin(email, password);
       setLoading(false);

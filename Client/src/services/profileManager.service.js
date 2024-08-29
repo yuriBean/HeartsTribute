@@ -173,11 +173,8 @@ const addFavoriteWithUserId = async (user_id, profile_id) => {
         console.log("User ID: from add favorite ", user_id)
         console.log("Profile ID: from add favorite ", profile_id)
         const userRef = doc(db, "users", user_id);
-        // get user document
         const userDoc = await getDoc(userRef);
-        // if favorite_profiles field exists
         if (userDoc.data().favorite_profiles) {
-            // add profile_id to favorite_profiles with arrayUnion
             const res = await updateDoc(userRef, {
                 favorite_profiles: arrayUnion(profile_id),
                 updated_at: serverTimestamp()
@@ -185,7 +182,6 @@ const addFavoriteWithUserId = async (user_id, profile_id) => {
             });
             console.log("Result from favorite : ", res);
         } else {
-            // create favorite_profiles field
             await updateDoc(userRef, {
                 favorite_profiles: [profile_id]
             });
@@ -198,7 +194,6 @@ const addFavoriteWithUserId = async (user_id, profile_id) => {
 const removeFavoriteWithUserId = async (user_id, profile_id) => {
     try {
         const userRef = doc(db, "users", user_id);
-        const userDoc = await getDoc(userRef);
         await updateDoc(userRef, {
             favorite_profiles: arrayRemove(profile_id)
         });
@@ -235,20 +230,15 @@ const addLikeWithUserId = async (user_id, post_id) => {
     try {
         console.log("User ID: from add favorite ", user_id)
         console.log("Profile ID: from add favorite ", post_id)
-        // increment likes in post doc
         const userRef = doc(db, "users", user_id);
-        // get user document
         const userDoc = await getDoc(userRef);
-        // if favorite_profiles field exists
         if (userDoc.data().liked_posts) {
-            // add post_id to favorite_profiles with arrayUnion
             const res = await updateDoc(userRef, {
                 liked_posts: arrayUnion(post_id),
                 updated_at: serverTimestamp()
             });
             console.log("Result from favorite : ", res);
         } else {
-            // create liked_posts field
             await updateDoc(userRef, {
                 liked_posts: [post_id],
                 updated_at: serverTimestamp()
@@ -256,7 +246,6 @@ const addLikeWithUserId = async (user_id, post_id) => {
         }
         const postRef = doc(db, "posts", post_id);
         const postDoc = await getDoc(postRef);
-        // check if likes not present than add likes field
         if (!postDoc.data().likes) {
             await updateDoc(postRef, {
                 likes: 1
@@ -276,7 +265,6 @@ const addLikeWithUserId = async (user_id, post_id) => {
 const removeLikeWithUserId = async (user_id, post_id) => {
     try {
         const userRef = doc(db, "users", user_id);
-        const userDoc = await getDoc(userRef);
         const postRef = doc(db, "posts", post_id);
         const postDoc = await getDoc(postRef);
         const postLikes = postDoc.data().likes;
@@ -307,11 +295,9 @@ const AddCommentToPost = async (data, post_id) => {
 };
 const deleteComment = async (post_id, comment_id, user_id) => {
     try {
-        console.log(post_id)
         const postRef = doc(db, 'posts', post_id);
         const commentRef = doc(postRef, 'comments', comment_id);
         const commentDoc = await getDoc(commentRef);
-        // console.log(commentDoc.data());
         if (commentDoc.data().user_id === user_id) {
             await deleteDoc(commentRef);
         } else {
@@ -336,7 +322,6 @@ const getDiscoverProfiles = async (startAfterDoc) => {
     try {
         console.log("Getting discover profiles:", startAfterDoc);
 
-        // Define the base query
         let profilesQuery = query(
             collection(db, 'profiles'),
             where("visibility", "==", true),
@@ -355,14 +340,13 @@ const getDiscoverProfiles = async (startAfterDoc) => {
         const profilesSnapshot = await getDocs(profilesQuery);
         const profiles = profilesSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
 
-        // Return profiles and the last document
         return { profiles, lastDoc: profilesSnapshot.docs[profilesSnapshot.docs.length - 1] };
     } catch (error) {
         console.error('Error getting discover profiles:', error);
         return { profiles: [], lastDoc: null }; // Return an empty array or handle the error as needed
     }
 };
-// function that adds a email to field called requestedUsers in a profile document, if the requestedUsers field does not exist it creates it
+
 const addRequestedUserToProfile = async (profile_id, email) => {
     try {
         const profileRef = doc(db, "profiles", profile_id);
@@ -397,7 +381,7 @@ const removeAllowedUserFromProfile = async (profile_id, email) => {
         console.error("Error removing requested user from profile:", error);
     }
 }
-// function that removes a email to field called requestedUsers in a profile document
+
 const removeRequestedUserFromProfile = async (profile_id, email) => {
     try {
         const profileRef = doc(db, "profiles", profile_id);
@@ -414,7 +398,6 @@ const removeRequestedUserFromProfile = async (profile_id, email) => {
     }
 }
 
-// function that adds a email to field called allowedUsers in a profile document, if the allowedUsers field does not exist it creates it, remove user from requestedUsers
 const addAllowedUserToProfile = async (profile_id, email) => {
     try {
         const profileRef = doc(db, "profiles", profile_id);
@@ -451,13 +434,11 @@ const deleteProfile = async (profile_id) => {
     }
 };
 
-// Delete a single post
 const deletePost = async (postId) => {
     try {
         const postRef = doc(db, "posts", postId);
         const postDoc = await getDoc(postRef);
         if (postDoc.exists()) {
-            // Delete associated comments
             await deleteCommentsByPostId(postId);
             await deleteDoc(postRef);
             console.log("Post deleted with ID: ", postId);
@@ -479,14 +460,13 @@ const deleteCommentsByPostId = async (postId) => {
 };
 
 
-// Delete all posts associated with a profile
 const deletePostsByProfileId = async (profileId) => {
     try {
         const postsQuery = query(collection(db, "posts"), where("profile_id", "==", profileId));
         const querySnapshot = await getDocs(postsQuery);
         
         const deletePromises = querySnapshot.docs.map(doc => deleteDoc(doc.ref));
-        await Promise.all(deletePromises); // Wait for all deletions to complete
+        await Promise.all(deletePromises); 
     } catch (error) {
         console.error("Error deleting posts:", error);
         throw new Error("Failed to delete posts");
@@ -499,16 +479,14 @@ const deleteTribute = async (tributeId) => {
         const tributeDoc = await getDoc(tributeRef);
         if (tributeDoc.exists()) {
             const tributeData = tributeDoc.data();
-            const imagePath = tributeData.imagePath; // Assuming imagePath is the field storing the image path
-
-            // Delete the image from Firebase Storage
+            const imagePath = tributeData.imagePath; 
+            
             if (imagePath) {
                 const imageRef = ref(storage, imagePath);
                 await deleteObject(imageRef);
                 console.log(`Image deleted successfully: ${imagePath}`);
             }
 
-            // Delete the tribute document
             await deleteDoc(tributeRef);
             console.log("Tribute deleted with ID: ", tributeId);
         } else {
@@ -519,14 +497,12 @@ const deleteTribute = async (tributeId) => {
     }
 };
 
-// Function to delete an event and its associated photos
 const deleteEvent = async (eventId) => {
     try {
         const eventRef = doc(db, "events", eventId);
         const eventDoc = await getDoc(eventRef);
         if (eventDoc.exists()) {
-            // Delete associated photos
-            const photoPath = eventDoc.data().photoPath; // Assuming you store the photo path
+            const photoPath = eventDoc.data().photoPath; 
             if (photoPath) {
                 const photoRef = ref(storage, photoPath);
                 await deleteObject(photoRef);
@@ -543,7 +519,7 @@ const resetProfilePhoto = async (userId) => {
     const userDocRef = doc(db, "users", userId);
     try {
         await updateDoc(userDocRef, {
-            profile_picture: null // Reset to placeholder
+            profile_picture: null 
         });
         console.log("Profile photo reset to placeholder for user:", userId);
     } catch (error) {
@@ -556,8 +532,8 @@ const resetCoverPhoto = async (userId) => {
     const userDocRef = doc(db, "users", userId);
     try {
         await updateDoc(userDocRef, {
-            coverPhotoPath: "", // Reset to placeholder
-            coverPhotoURL: "placeholder_url" // Set to placeholder URL
+            coverPhotoPath: "", 
+            coverPhotoURL: "placeholder_url" 
         });
         console.log("Cover photo reset to placeholder for user:", userId);
     } catch (error) {
@@ -573,7 +549,6 @@ const deleteFirestoreDocument = async (collection, docID) => {
     }
   };
   
-  // Function to delete a file from iDrive
   const deleteFileFromStorage = async (filePath) => {
     const fileRef = ref(storage, filePath);
     try {
@@ -585,7 +560,6 @@ const deleteFirestoreDocument = async (collection, docID) => {
     }
   };
   
-  // Function to delete profile photo or cover photo
   const deleteProfilePhoto = async (userID, type) => {
     const userDocRef = doc(db, "users", userID);
     try {
@@ -671,7 +645,7 @@ const requestAccess = async (profileId) => {
         const profileDoc = await getDoc(profileRef);
         if (profileDoc.exists()) {
             await updateDoc(profileRef, {
-                requestedUsers: arrayUnion(userEmail) // Add the user's email to the requestedUsers array
+                requestedUsers: arrayUnion(userEmail) 
             });
             console.log("Access request sent successfully for profile:", profileId);
         } else {
@@ -757,7 +731,6 @@ const createQRCode = async (profileId, qrid) => {
     try {
       const qrCodesRef = collection(db, "qrcodes");
   
-      // Check if the profileId or qrid already exists in the collection
       const profileIdQuery = query(qrCodesRef, where("profile_id", "==", profileId));
       const qridQuery = query(qrCodesRef, where("qr_id", "==", qrid));
   
@@ -783,7 +756,7 @@ const createQRCode = async (profileId, qrid) => {
   
       const docRef = await addDoc(qrCodesRef, data);
 
-      const profileRef = doc(db, "profiles", profileId); // Adjust the path according to your collection structure
+      const profileRef = doc(db, "profiles", profileId); 
       await updateDoc(profileRef, { expiry_date: null });
 
       console.log("Document written with ID: ", docRef.id);
@@ -801,7 +774,7 @@ const checkUserProfiles = async (userId) => {
         const q = query(profilesRef, where("user_id", "==", userId));
         const querySnapshot = await getDocs(q);
         const profiles = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        return profiles; // Return the profiles found
+        return profiles; 
     } catch (error) {
         console.error("Error checking user profiles:", error);
         throw new Error("Failed to check user profiles");
@@ -810,7 +783,7 @@ const checkUserProfiles = async (userId) => {
 
 const getLoggedInUser = () => {
     const auth = getAuth();
-    return auth.currentUser; // Returns the currently logged-in user
+    return auth.currentUser; 
 };
 
 const getQRIdsForProfiles = async (profileIds) => {
@@ -829,14 +802,13 @@ const getQRIdsForProfiles = async (profileIds) => {
 const deleteSignUpQR = async (userId) => {
     try {
         const qrCodesRef = collection(db, "users");
-        console.log("Deleting QR for user:", userId);
         const q = query(qrCodesRef, where("uid", "==", userId));
         const querySnapshot = await getDocs(q);
     
         if (!querySnapshot.empty) {
           for (const doc of querySnapshot.docs) {
             await updateDoc(doc.ref, {
-              qrid: deleteField(), // Correctly delete the `qrid` field
+              qrid: deleteField(), 
             });
             console.log(`QR ID has been removed from document ID ${doc.id}`);
           }
@@ -848,6 +820,5 @@ const deleteSignUpQR = async (userId) => {
       }
     }
 
-//export { CreateNewProfile, createPost, getProfileWithId, editProfileWithId, getPostsWithProfileId, addEvent, getEventsByProfileId, AddNewTribute, GetTributesById, getPostsWithUserId, getProfilesWithUserId, getProfileWithIdAndUserId, AddCommentToPost, getCommentsWithPostId, getDiscoverProfiles}
 export { deleteProfileFromIDrive, deleteSignUpQR, deleteProfileQR, getQRIdsForProfiles,  createQRCode, deletePost, getLoggedInUser, checkUserProfiles, getUserProfiles, linkProfileToQR, CreateNewProfile, createPost, getProfileWithId, editProfileWithId, getPostsWithProfileId, addEvent, getEventsByProfileId, AddNewTribute, GetTributesById, getPostsWithUserId, getProfilesWithUserId, getProfileWithIdAndUserId, addFavoriteWithUserId, removeFavoriteWithUserId, getFavoriteProfilesWithUserId, addLikeWithUserId, removeLikeWithUserId, AddCommentToPost, getCommentsWithPostId, getDiscoverProfiles, deleteComment, addRequestedUserToProfile, addAllowedUserToProfile, removeAllowedUserFromProfile, removeRequestedUserFromProfile, deleteProfile, deletePostsByProfileId, deleteProfilePhoto, deleteFirestoreDocument, requestAccess, deleteTribute, deleteEvent, resetProfilePhoto, resetCoverPhoto, deleteFileFromStorage }
 

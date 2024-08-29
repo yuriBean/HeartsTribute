@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Create a context
 const ProjectContext = createContext();
 
 export const ProjectProvider = ({ children }) => {
@@ -9,7 +8,7 @@ export const ProjectProvider = ({ children }) => {
   async function fetchSignedUrl() {
     const response = await fetch('https://api.globalgiving.org/api/public/projectservice/all/projects/active/download.xml?api_key=effb307b-a845-4e62-8146-2300502217ac');
     const data = await response.json();
-    return data.url; // Assuming the URL is returned in a key called 'url'
+    return data.url;
   }
   async function fetchAndParseXml(xmlUrl) {
     const response = await fetch(xmlUrl);
@@ -17,13 +16,11 @@ export const ProjectProvider = ({ children }) => {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
     
-    // Extract project IDs and names
     const projects = Array.from(xmlDoc.getElementsByTagName('project')).map(project => ({
       id: project.getElementsByTagName('id')[0].textContent,
       name: project.getElementsByTagName('title')[0].textContent
     }));
   
-    console.log('Parsed Projects:', projects); // Debugging line
     return projects;
     }
   useEffect(() => {
@@ -53,5 +50,4 @@ export const ProjectProvider = ({ children }) => {
   );
 };
 
-// Hook to use the ProjectContext
 export const useProjects = () => useContext(ProjectContext);

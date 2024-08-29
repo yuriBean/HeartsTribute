@@ -3,12 +3,12 @@ import Spinner from "../Common/Spinner";
 import { usePublicProfile } from "../Providers/PublicProfileProvider";
 import CheckProfileOwner from "../CheckProfileOwner";
 import { useNavigate } from "react-router-dom";
-import { deleteEvent } from "../../services/profileManager.service"; // Import deleteEvent
+import { deleteEvent } from "../../services/profileManager.service";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export default function TimelineTab() {
-  const { profile, events, getEvents, getProfile } = usePublicProfile();
+  const { profile, events, getEvents } = usePublicProfile();
   const [loading, setLoading] = useState(false);
   const [isReadMore, setIsReadMore] = useState(false);
   const [sortedEvents, setSortedEvents] = useState([]);
@@ -42,7 +42,6 @@ export default function TimelineTab() {
   useEffect(() => {
     if (ulRef.current && lineRef.current) {
       lineRef.current.style.width = `${ulRef.current.scrollWidth}px`;
-      console.log(ulRef.current.scrollWidth);
     }
   }, [sortedEvents]);
 
@@ -75,7 +74,6 @@ export default function TimelineTab() {
   }, [sortedEvents]);
 
   useEffect(() => {
-    // Create birth event
     const birthEvent = {
       id: "birth",
       event_name: "Born",
@@ -84,7 +82,6 @@ export default function TimelineTab() {
       image: profile.profile_picture,
     };
   
-    // Conditionally create death event only if death_date is not empty
     const deathEvent = profile.death_date
       ? {
           id: "death",
@@ -95,15 +92,12 @@ export default function TimelineTab() {
         }
       : null;
   
-    // Filter out any null events (like if deathEvent is null)
     const updatedEvents = events.length > 0 
       ? [birthEvent, ...events, deathEvent].filter(event => event && event.event_date) 
       : [birthEvent, deathEvent].filter(event => event && event.event_date);
   
-    // Sort events by date
     updatedEvents.sort((a, b) => new Date(a.event_date) - new Date(b.event_date));
   
-    // Update the events state with sorted events
     setSortedEvents(updatedEvents);
   }, [events, profile]);
   
@@ -117,12 +111,6 @@ export default function TimelineTab() {
           >
             Add Milestone
           </button>
-          {/* <button
-            onClick={() => navigate(`/edit-profile/${profile.id}/add-event`)}
-            className="bg-red-500 ml-2 my-2 text-white px-4 py-2 rounded-lg"
-          >
-            Delete Event
-          </button> */}
         </div>
       </CheckProfileOwner>
       <div className="flex flex-col justify-center gap-2 items-center">

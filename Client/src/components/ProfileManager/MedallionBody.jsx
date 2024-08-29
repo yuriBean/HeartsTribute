@@ -6,7 +6,6 @@ import ScrollAnimation from "react-animate-on-scroll";
 
 export default function MedallionBody() {
     const [loading, setLoading] = useState(false);
-    const user = JSON.parse(localStorage.getItem("user"));
 
     const { profiles, getAllProfiles } = useProfileManager();
     useEffect(() => {
@@ -29,16 +28,6 @@ export default function MedallionBody() {
 
                     <div key={profile.id} className="relative">
                         <MyFavoriteCard profile={profile} />
-                        {/* <Link to={`/edit-profile/` + profile.id}>
-                            <button className="absolute -bottom-1 -right-1 m-0 aspect-square w-8 rounded-full bg-[#61D2B7] hover:scale-105">
-                                <img
-                                    src="/images/pencil.svg"
-                                    alt="edit"
-                                    className="mx-auto"
-                                />
-                            </button>
-                        </Link> */}
-
                     </div>
                     </ScrollAnimation>
                 ))}

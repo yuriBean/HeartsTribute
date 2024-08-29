@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { getUserProfiles, linkProfileToQR } from '../../services/profileManager.service'; // Adjust the import based on your service structure
-import Modal from 'react-modal'; // Ensure you have Modal installed
+import { getUserProfiles, linkProfileToQR } from '../../services/profileManager.service'; 
+import Modal from 'react-modal'; 
 import Spinner from '../../components/Common/Spinner';
 
 const SplashScreen = () => {
@@ -26,13 +26,12 @@ const SplashScreen = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const profiles = await getUserProfiles(user.id);
-      const unlinkedProfiles = profiles.filter(profile => !profile.qr_id); // Assuming qr_id indicates linkage
+      const unlinkedProfiles = profiles.filter(profile => !profile.qr_id); 
       setProfiles(unlinkedProfiles);
       setLoading(false);
       if (unlinkedProfiles.length > 0) {
         setIsModalOpen(true);
       } else {
-        // No profiles found, navigate to create profile
         navigate('/create-profile', { state: { qrId: uniqueId } });
       }
     } catch (error) {

@@ -6,7 +6,6 @@ import Spinner from "../components/Common/Spinner";
 const CheckAuth = ({ children }) => {
   const { user, loading } = useAuth();
 
-  // if user then navigate to the home page
   if (loading) {
     return <Spinner />;
   }

@@ -8,7 +8,6 @@ import {
 } from "../../services/profileManager.service";
 import {
   notifySuccess,
-  notifyInfo,
   notifyError,
 } from "../../utils/toastNotifications";
 import { useNavigate } from "react-router-dom";
@@ -32,7 +31,7 @@ export default function ManageAccess() {
       await addAllowedUserToProfile(profile.id, email);
       notifySuccess("Access Granted");
       getProfile();
-      setEmailInput(""); // Clear the input field after granting access
+      setEmailInput(""); 
     } catch (error) {
       console.error(error);
       notifyError("Error granting access");

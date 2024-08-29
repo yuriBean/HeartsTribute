@@ -92,7 +92,6 @@ export const PublicProfileProvider = ({ profile_id, children }) => {
         ? JSON.parse(localStorage.getItem("user"))
         : null;
       setFavorites(userFromLocalStorage.favorite_profiles || []);
-      console.log("Favorites : ", favorites);
     } catch (error) {
       console.error(error);
     }

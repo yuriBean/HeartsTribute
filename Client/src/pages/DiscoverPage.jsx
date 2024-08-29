@@ -25,8 +25,6 @@ export default function DiscoverPage() {
 
     const { profiles: newProfiles, lastDoc: newLastDoc } =
       await getDiscoverProfiles(lastDoc);
-    console.log("new profiles: ", newProfiles);
-    console.log("last doc: ", newLastDoc);
 
     if (newProfiles.length === 0) {
       setHasMore(false);
@@ -65,7 +63,6 @@ export default function DiscoverPage() {
 
   useEffect(() => {
     const checkProfile = async () => {
-    console.log(user.qrid)
 
       if (qrid === 'null' || qrid === undefined || ( !qrid && !user.qrid)) {
         setShowModal(false);
@@ -80,7 +77,6 @@ export default function DiscoverPage() {
 
   const handleCreateProfile = async () => {
     
-    console.log("user    ", user.uid);
     if (savedQR && !qrid) {
       await deleteSignUpQR(user.uid);
       navigate(`/no-profile-connected?qrid=${savedQR}`);

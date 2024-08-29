@@ -14,9 +14,6 @@ export default function MyFavoriteCard({ profile }) {
                         <h1 className="uppercase text-sm font-medium tracking-wider md:text-lg xl:text-xl">
                             {profile.first_name + " " + profile.last_name}
                         </h1>
-                        {/* <p className="mb-2 text-xs md:mb-1 md:text-sm xl:text-sm">
-                            {profile.title || profile.breed}
-                        </p> */}
                     </div>
                     
                 </div>

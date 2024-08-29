@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ChooseFile from "../ProfileManager/ChooseFile";
 import Input from "../Common/Input";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { uploadImage } from "../../utils/imgUploader";
 import { createPost } from "../../services/profileManager.service";
 import Spinner from "../Common/Spinner";
@@ -77,7 +77,6 @@ export default function AddPost() {
       }
       if (videoUrl != "") {
         data.video = videoUrl;
-        console.log("video", videoUrl);
       }
       data.user_id = managerProfile.id;
       const res = await createPost(data);

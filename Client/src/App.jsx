@@ -1,7 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import {
   createBrowserRouter,
-  createHashRouter,
   RouterProvider,
 } from "react-router-dom";
 import { AuthProvider } from "./utils/AuthContext";
@@ -16,9 +15,7 @@ const Login = lazy(() => import("./pages/Login"));
 const CreateAccount = lazy(() => import("./pages/CreateAccount"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
 const CompleteRegistration = lazy(() => import("./pages/CompleteRegistration"));
-const Home = lazy(() => import("./pages/Home"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
-const LandingPage = lazy(() => import("./pages/LandingPage"));
 const Profile = lazy(() => import("./pages/Profile"));
 const ShopPage = lazy(() => import("./pages/ShopPage"));
 const ProfileManager = lazy(() => import("./pages/ProfileManager"));
@@ -90,7 +87,6 @@ const router = createBrowserRouter([
   {
     path: "/verify-email",
     element: (
-      // <PrivateRoute>
       <Suspense fallback={<Spinner />}>
         <VerifyEmail />
       </Suspense>

@@ -23,9 +23,6 @@ export default function TributeTab() {
     return !loading ? (
         <div>
             <div className="flex items-center justify-end">
-                {/* <h1 className="text-2xl">
-                    {show ? "Pay Tribute" : "Tributes"}
-                </h1> */}
                 {!show && (
                     <button
                         onClick={() => setShow(!show)}

@@ -85,9 +85,6 @@ export default function EditProfileForm() {
       const update = await editProfileWithId(profile.id, modifiedData);
       console.log(update);
 
-      // refresh page
-      // window.location.reload()
-      await getProfile();
       notifySuccess("Profile Updated Successfully");
       navigate(-1);
       setLoading(false);
@@ -101,7 +98,6 @@ export default function EditProfileForm() {
     }
 
     if (profile[name] === value) {
-      console.log('kenshi',profile[name]);
       const updatedData = { ...modifiedData };
       delete updatedData[name]; 
       setModifiedData(updatedData);
@@ -111,7 +107,6 @@ export default function EditProfileForm() {
   };
 
   useEffect(() => {
-    // Sync bio with profile.bio when profile changes
     setBio(profile?.bio || "");
   }, [profile?.bio]);
 
@@ -143,7 +138,6 @@ export default function EditProfileForm() {
         combinedProfiles = [...combinedProfiles, ...data.projects.project];
         nextId = data.projects.nextProjectId;
 
-        // Stop if there are no more profiles to fetch
         if (!data.projects.hasNext) {
           break;
         }
@@ -188,10 +182,6 @@ export default function EditProfileForm() {
       setDonationProfileID(profile?.donation_profile_id);
     }
   }, [profile]);
-
-  useEffect(() => {
-    console.log(modifiedData);
-  }, [modifiedData]);
 
   const handleCancel = (e) => {
     e.preventDefault();

@@ -1,9 +1,8 @@
 import Layout from "../components/Layout/Layout";
-import { Link } from "react-router-dom";
 import { addRequestedUserToProfile } from "../services/profileManager.service";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
-import { notifyInfo, notifyError, notifySuccess } from "../utils/toastNotifications";
+import { notifyError, notifySuccess } from "../utils/toastNotifications";
 import { useNavigate } from "react-router-dom";
 
 export default function RequestAccess() {
