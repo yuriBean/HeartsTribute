@@ -100,28 +100,37 @@ export default function PostModal({ setIsOpen, post, profile, onPostDeleted  }) 
           <img src="/images/close.svg" alt="Close" className="h-5 w-5" />
         </button>
         <div className="aspect-square min-h-[50%] w-full lg:w-[45%]">
-          {post?.image ? (
-            <img
-              className="h-full w-full object-cover"
-              src={post?.image || post?.media}
-              alt=""
-            />
-          ) : // if the url has youtube use iframe else use video
-          post?.video?.includes("youtube") ? (
-            <iframe
-              className="h-full w-full"
-              src={getEmbedUrl(post?.video)}
-              title="Video Player"
-              allow="accelerometer;  gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          ) : (
-            <img
+        {post?.image ? (
+          <img
             className="h-full w-full object-cover rounded-md"
-            src="/cover-placeholder.jpeg" // Updated to use the public folder
+            src={post?.image || post?.media}
+            alt=""
+          />
+        ) : post?.video?.includes("youtube") ? (
+          <iframe
+            className="h-full w-full rounded-md"
+            src={getEmbedUrl(post?.video)}
+            title="Video Player"
+            allow="accelerometer;  gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        ) : post?.video ? (
+          <video
+            className="h-full w-full object-cover rounded-md"
+            src={post?.video}
+            controls
+            onError={() => {
+              console.error("Error loading video:", post?.video);
+            }}
+          ></video>
+        ) : (
+          <img
+            className="h-full w-full object-cover rounded-md"
+            src="/cover-placeholder.jpeg"
             alt="Placeholder"
           />
-            )}
+        )}
+
         </div>
         <div className="scrollbar flex w-full flex-grow flex-col justify-between px-5 py-2 text-center md:flex-grow-0 md:overflow-hidden lg:w-[60%] 2xl:px-10 2xl:py-5">
           <div>

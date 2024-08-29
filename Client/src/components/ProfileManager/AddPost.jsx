@@ -39,7 +39,6 @@ export default function AddPost() {
   };
   const onSubmit = async (data) => {
     // e.preventDefault()
-    console.log(data);
     if (!image && !video && !videoUrl) {
       alert("Please select an image or a video or a video url");
       return;
@@ -151,7 +150,7 @@ export default function AddPost() {
         rows="10"
       ></textarea>
       {image && (
-        <img src={URL.createObjectURL(image)} alt="post" className="mb-6" />
+        <img src={URL.createObjectURL(image)} alt="post" className="mb-6 hidden sm-block" />
       )}
       <ChooseFile
         value={image}
@@ -166,7 +165,7 @@ export default function AddPost() {
         <video
           src={URL.createObjectURL(video)}
           controls
-          className="mb-6"
+          className="mb-6 hidden sm-block"
         ></video>
       )}
       <ChooseFile
@@ -179,7 +178,7 @@ export default function AddPost() {
       />
       <small className="text-gray-600 py-6 xl:text-sm">OR</small>
       {/* Input for videoUrl */}
-      {videoUrl && <video src={getEmbedUrl(videoUrl)} controls className="mb-6"></video>}
+      {videoUrl && <video src={getEmbedUrl(videoUrl)} controls className="mb-6 hidden sm-block"></video>}
       <div className="relative flex flex-col w-full">
         <Label htmlFor="video">Video Url</Label>
         <input

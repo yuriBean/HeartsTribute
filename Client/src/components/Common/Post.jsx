@@ -52,7 +52,6 @@ export default function Post({ post, profile }) {
         : null;
       notifySuccess("Post Liked");
     } catch (error) {
-      console.log("Error adding favorite: ", error);
       notifyError("Error Adding Like");
     }
   };
@@ -81,11 +80,8 @@ export default function Post({ post, profile }) {
     if (!userFromLocalStorage) {
       return;
     }
-    console.log("User Data : ", userFromLocalStorage);
     setLikedPosts(userFromLocalStorage.liked_posts || []);
     setLikes(post.likes);
-    console.log("liked posts : ", liked_posts);
-    console.log("Post  ", post);
   }, []);
   useEffect(() => {
     setLikes(post.likes);
@@ -120,12 +116,11 @@ export default function Post({ post, profile }) {
         {/* image if post.image exists if not then post. video as a embedded video */}
         {post?.image ? (
           <img
-            className="h-full w-full object-cover rounded-md object-cover"
+            className="h-full w-full object-cover rounded-md"
             src={post?.image || post?.media}
             alt=""
           />
-        ) : // if the url has youtube use iframe else use video
-        post?.video?.includes("youtube") ? (
+        ) : post?.video?.includes("youtube") ? (
           <iframe
             className="h-full w-full rounded-md"
             src={getEmbedUrl(post?.video)}
@@ -133,14 +128,23 @@ export default function Post({ post, profile }) {
             allow="accelerometer;  gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>
+        ) : post?.video ? (
+          <video
+            className="h-full w-full object-cover rounded-md"
+            src={post?.video}
+            controls
+            onError={() => {
+              console.error("Error loading video:", post?.video);
+            }}
+          ></video>
         ) : (
           <img
-          className="h-full w-full object-cover rounded-md"
-          src="/cover-placeholder.jpeg" // Updated to use the public folder
-          alt="Placeholder"
-        />
-
+            className="h-full w-full object-cover rounded-md"
+            src="/cover-placeholder.jpeg"
+            alt="Placeholder"
+          />
         )}
+
       </div>
       <div className="flex h-[11rem] flex-col justify-between">
         <div>
