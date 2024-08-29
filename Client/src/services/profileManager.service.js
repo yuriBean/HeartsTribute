@@ -8,7 +8,7 @@ import { deleteField } from "firebase/firestore";
 const CreateNewProfile = async (data) => {
     try {
         const now = new Date();
-        const expiryDate = new Date(now.getTime() + 45 * 24 * 60 * 60 * 1000); // 45 days from now
+        const expiryDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // 45 days from now
         data.expiry_date = expiryDate.toISOString();
         data.created_at = serverTimestamp();
         data.updated_at = serverTimestamp();

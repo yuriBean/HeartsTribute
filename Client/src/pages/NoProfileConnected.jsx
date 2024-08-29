@@ -61,8 +61,10 @@ export default function NoProfileConnected() {
       if (!profileId || !qrid || qrid==='null') {
         throw new Error("Invalid profile ID or QR ID.");
       }
+      setLoading(true);
       // Check if the QRID already exists and is not linked to another profile
       await linkProfileToQR(profileId, qrid); // Link existing profile to QR code
+      setLoading(false);
       notifySuccess("Profile linked successfully!");
       navigate(`/profile/${profileId}`); // Redirect to the linked profile
     } catch (error) {
@@ -79,11 +81,7 @@ export default function NoProfileConnected() {
     checkUserProfiles();
   }, []);
 
-  if (loading) {
-    return <Spinner text="Loading profiles..." />;
-  }
-
-  return (
+  return !loading ? (
     <Layout>
       <div className="flex flex-col items-center justify-center h-[40rem]">
         {user ? (
@@ -142,5 +140,8 @@ export default function NoProfileConnected() {
         )}
       </div>
     </Layout>
-  );
-}
+    ):
+    (
+      <Spinner />
+    );
+  }

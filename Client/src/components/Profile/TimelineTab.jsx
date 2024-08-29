@@ -75,7 +75,7 @@ export default function TimelineTab() {
   }, [sortedEvents]);
 
   useEffect(() => {
-    // Create birth and death events
+    // Create birth event
     const birthEvent = {
       id: "birth",
       event_name: "Born",
@@ -83,26 +83,30 @@ export default function TimelineTab() {
       description: `${profile.first_name} ${profile.last_name} was born.`,
       image: profile.profile_picture,
     };
-
-    
-    const deathEvent = {
-      id: "death",
-      event_name: "Departed",
-      event_date: profile.death_date,
-      description: `${profile.first_name} ${profile.last_name} passed away.`,
-      image: profile.profile_picture,
-    };
-
-    // Add birth and death events to the events array
-    const updatedEvents = events.length > 0 ? [birthEvent, ...events, deathEvent].filter(event => event.event_date) : [birthEvent, deathEvent];
-
+  
+    // Conditionally create death event only if death_date is not empty
+    const deathEvent = profile.death_date
+      ? {
+          id: "death",
+          event_name: "Departed",
+          event_date: profile.death_date,
+          description: `${profile.first_name} ${profile.last_name} passed away.`,
+          image: profile.profile_picture,
+        }
+      : null;
+  
+    // Filter out any null events (like if deathEvent is null)
+    const updatedEvents = events.length > 0 
+      ? [birthEvent, ...events, deathEvent].filter(event => event && event.event_date) 
+      : [birthEvent, deathEvent].filter(event => event && event.event_date);
+  
     // Sort events by date
     updatedEvents.sort((a, b) => new Date(a.event_date) - new Date(b.event_date));
-
+  
     // Update the events state with sorted events
     setSortedEvents(updatedEvents);
   }, [events, profile]);
-
+  
   return !loading ? (
     <div className="mb-20 space-y-4 rounded-md px-2 py-2">
       <CheckProfileOwner>
@@ -153,10 +157,10 @@ export default function TimelineTab() {
               </span>
               <br />
               <button className="peer h-12 w-12 cursor-pointer rounded-full bg-primary">
-                {profile.death_date ? (
+                {profile.death_date === "" ? (
                   <img
                   className="mx-auto h-8 w-8"
-                  src={event.event_name === "Born" ? "/images/birth.svg" : event.event_name === "Died" ? "/images/tombstone.svg" : "/images/calendar.svg"}
+                  src={event.event_name === "Born" ? "/images/birth.svg" : event.event_name === "Departed" ? "/images/tombstone.svg" : "/images/calendar.svg"}
                   alt={event.event_name.toLowerCase()}
                 />):
                 (

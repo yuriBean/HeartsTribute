@@ -1,7 +1,7 @@
 import Spinner from "../components/Common/Spinner";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getQRCode } from "../services/qrcode.services";
+import { getQRCode, getPrivateOwner } from "../services/qrcode.services";
 import { requestAccess } from "../services/profileManager.service"; // Import the function to request access
 
 export default function QRCode() {
@@ -9,16 +9,22 @@ export default function QRCode() {
     const { qr_id } = useParams();
     const [loading, setLoading] = useState(true);
     const [qrRecord, setQrRecord] = useState(null);
+    const user = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
+    : null;
+
 
     const getQR = async () => {
         try {
             const QRrecord = await getQRCode(qr_id);
             setQrRecord(QRrecord);
+            const isOwner = await getPrivateOwner(QRrecord.profile_id, user.uid);
+            console.log(isOwner);
             if (!QRrecord) {
                 navigate("/404");
             } else {
                 if (QRrecord.profile_id) {
-                    if (QRrecord.profile_visibility) 
+                    if (QRrecord.profile_visibility || isOwner) 
                     // if (QRrecord) 
                         {
                         navigate(`/profile/${QRrecord.profile_id}`); // Redirect to public profile

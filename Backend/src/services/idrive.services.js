@@ -77,6 +77,7 @@ router.delete('/delete', async (req, res) => {
   if (!fileUrl) {
     return res.status(400).send('File URL is required');
   }
+  
 
   try {
     const key = fileUrl.replace(publicUrl, '');

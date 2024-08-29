@@ -15,3 +15,22 @@ export const getQRCode = async (qr_id) => {
   }
 
 }
+
+export const getPrivateOwner = async (profileID, userID) => {
+  try {
+    const profileRef = doc(db, "profiles", profileID);
+    console.log(profileRef);
+    const profileDoc = await getDoc(profileRef);
+
+    if (profileDoc.exists()) {
+      return true;
+    }
+
+    const profileData = profileDoc.docs[0].data();
+    console.log(profileData);
+    return profileData.user_id === userID;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
