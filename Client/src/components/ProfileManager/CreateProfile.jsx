@@ -69,7 +69,6 @@ export default function CreateProfile( {setToShowCreateProfile}) {
   const getCoverURL = async () => {
     if (coverPicture) {
       try {
-        console.log("oooba", profile_id);
         const res = await uploadImage(coverPicture, user.id, profile_id);
         return res;
       } catch (error) {
@@ -88,6 +87,19 @@ export default function CreateProfile( {setToShowCreateProfile}) {
       alert("Fill all the required fields");
       return;
     }
+
+    const isImage = (file) => file && file.type.startsWith('image/');
+  
+    if (profilePicture && !isImage(profilePicture)) {
+      alert("Profile picture must be an image");
+      return;
+    }
+  
+    if (coverPicture && !isImage(coverPicture)) {
+      alert("Cover picture must be an image");
+      return;
+    }
+  
 
     setLoading(true);
 

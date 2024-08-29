@@ -43,20 +43,25 @@ export default function AddEvent() {
     return null;
   };
 
-  const onSubmit = async (data) => {
-    // e.preventDefault()
+  const onSubmit = async (e, data) => {
+    e.preventDefault();
     if (image === null || errors.length > 0) {
-      // alert("Fill all the fields");
       notifyError("All Fields are required. Please fill all the fields.");
       return;
     }
+
+    const isImage = (file) => file && file.type.startsWith('image/');
+  
+    if (image && !isImage(image)) {
+      alert("Uploaded media must be an image");
+      return;
+    }
+
     setLoading(true);
     data.profile_id = profile_id;
     [data.image] = await Promise.all([getImgURL()]);
     try {
-      console.log(data);
       await addEvent(data);
-      console.log("Event Added");
       reset();
       setImage(null);
       notifySuccess("Milestone Added Successfully");
@@ -92,9 +97,6 @@ export default function AddEvent() {
           </h1>
           <p>Celebrate important moments and achievements by adding milestones to the timeline. Capture significant events and create a visual journey of memorable occasions.</p>
         </div>
-        {/* <button className='button-primary'>
-          Add Event
-        </button> */}
       </div>
       <form
         className="flex flex-col space-y-4 md:space-y-6"
@@ -127,18 +129,6 @@ export default function AddEvent() {
           className="w-2/3 md:w-1/6 px-4 py-3 tracking-wider"
         />
 
-        {/* description */}
-
-        {/* <Input
-          register={register}
-          errors={errors}
-          type={"time"}
-          label="Event TIme"
-          id="event_time"
-          name="event_time"
-          className="w-2/3 md:w-1/6 px-4 py-3 tracking-wider"
-        /> */}
-
       <div className="md:col-span-2 flex gap-3 items-center">
             <div className=" sm:w-full">
         <ChooseFile
@@ -155,20 +145,10 @@ export default function AddEvent() {
           <img
             src={URL.createObjectURL(image)}
             alt="Profile Picture"
-            className="w-40 h-40 mx-auto object-cover"
+            className="w-40 h-40 mx-auto object-cover hidden sm:block"
           />
         )}</div>
           </div>
-        {/* <Input
-          register={register}
-          errors={errors}
-          name="event_location"
-          type="text"
-          label="Location"
-          id="event_location"
-          placeholder={"Add Event Location"}
-          icon={"/images/location.svg"}
-        /> */}
         <div className="flex justify-end gap-2">
         <button onClick={handleCancel} className="button-primary bg-red-500">
           Cancel

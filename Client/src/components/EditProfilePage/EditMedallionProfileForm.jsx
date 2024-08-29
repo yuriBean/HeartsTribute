@@ -44,6 +44,19 @@ export default function EditProfileForm() {
       alert("Nothing to update");
       return;
     }
+
+    const isImage = (file) => file && file.type.startsWith('image/');
+  
+    if (profilePicture && !isImage(profilePicture)) {
+      alert("Profile picture must be an image");
+      return;
+    }
+  
+    if (coverPicture && !isImage(coverPicture)) {
+      alert("Cover picture must be an image");
+      return;
+    }
+  
     try {
       setLoading(true);
       if (profilePicture.name !== profile.profile_picture) {

@@ -46,6 +46,14 @@ export default function PayTribute({ setShow }) {
       alert("Fill all the fields");
       return;
     }
+
+    const isImage = (file) => file && file.type.startsWith('image/');
+  
+    if (image && !isImage(image)) {
+      alert("Uploaded media must be an image");
+      return;
+    }
+
     setLoading(true);
     data.image = await getImgURL();
     data.display_name =

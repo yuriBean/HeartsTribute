@@ -37,12 +37,36 @@ export default function AddPost() {
     setImage(null);
     setVideo("");
   };
-  const onSubmit = async (data) => {
-    // e.preventDefault()
+
+  const validateMedia = () => {
+    const isImage = (file) => file && file.type.startsWith('image/');
+    const isVideo = (file) => file && file.type.startsWith('video/');
+
+    if (image && !isImage(image)) {
+      notifyError("Selected image file is not a valid image.");
+      return false;
+    }
+
+    if (video && !isVideo(video)) {
+      notifyError("Selected video file is not a valid video.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const onSubmit = async (e, data) => {
+    e.preventDefault();
     if (!image && !video && !videoUrl) {
       alert("Please select an image or a video or a video url");
       return;
     }
+    
+    if (!validateMedia()) {
+      alert("Selected video file is not a valid video.");
+      return; 
+    }
+
     try {
       setLoading(true);
       if (image) {
@@ -62,7 +86,6 @@ export default function AddPost() {
       setImage(null);
       setVideo(null);
       notifySuccess("Post Created Successfully");
-      // reset()
       await getPosts();
       console.log(res);
     } catch (error) {
@@ -150,7 +173,7 @@ export default function AddPost() {
         rows="10"
       ></textarea>
       {image && (
-        <img src={URL.createObjectURL(image)} alt="post" className="mb-6 hidden sm-block" />
+        <img src={URL.createObjectURL(image)} alt="post" className="mb-6 hidden sm:block" />
       )}
       <ChooseFile
         value={image}
@@ -165,7 +188,7 @@ export default function AddPost() {
         <video
           src={URL.createObjectURL(video)}
           controls
-          className="mb-6 hidden sm-block"
+          className="mb-6 hidden sm:block"
         ></video>
       )}
       <ChooseFile
@@ -178,7 +201,7 @@ export default function AddPost() {
       />
       <small className="text-gray-600 py-6 xl:text-sm">OR</small>
       {/* Input for videoUrl */}
-      {videoUrl && <video src={getEmbedUrl(videoUrl)} controls className="mb-6 hidden sm-block"></video>}
+      {videoUrl && <video src={getEmbedUrl(videoUrl)} controls className="mb-6 hidden sm:block"></video>}
       <div className="relative flex flex-col w-full">
         <Label htmlFor="video">Video Url</Label>
         <input

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const uploadImage = async (file, userId, profileId) => { // Added userId parameter
   if (!file || (!file.type.startsWith('image/') && !file.type.startsWith('video/'))) {
-    console.error('Invalid file type. Please upload an image or video.');
+    alert('Invalid file type. Please upload an image or video.');
     return null;
 }
 
