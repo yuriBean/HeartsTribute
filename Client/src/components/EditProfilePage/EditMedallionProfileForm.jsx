@@ -37,29 +37,29 @@ export default function EditProfileForm() {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      Object.keys(modifiedData).length === 0 &&
-      profilePicture.name !== profile.profile_picture &&
-      coverPicture.name !== profile.cover_picture
-    ) {
+    const profilePictureModified = profilePicture && profilePicture.name !== profile.profile_picture;
+    const coverPictureModified = coverPicture && coverPicture.name !== profile.cover_picture;
+  
+    // If nothing has been modified, keep the same pictures and notify
+    if (!profilePictureModified && !coverPictureModified) {
       alert("Nothing to update");
       return;
     }
-
-    if (profilePicture.name !== profile.profile_picture || coverPicture.name !== profile.cover_picture) {
-      const isImage = (file) => file && file.type && file.type.startsWith('image/');
-      
-      if (profilePicture && !isImage(profilePicture)) {
-        notifyError("Profile picture must be an image");
-        return;
-      }
-      
-      if (coverPicture && !isImage(coverPicture)) {
-        notifyError("Cover picture must be an image");
-        return;
-      }
+  
+    // Function to check if file is an image
+    const isImage = (file) => file && file.type && file.type.startsWith('image/');
+    
+    // Validate images only if they are modified
+    if (profilePictureModified && profilePicture && !isImage(profilePicture)) {
+      notifyError("Profile picture must be an image");
+      return;
     }
-      
+  
+    if (coverPictureModified && coverPicture && !isImage(coverPicture)) {
+      notifyError("Cover picture must be an image");
+      return;
+    }
+    
     try {
       setLoading(true);
       if (profilePicture.name !== profile.profile_picture) {

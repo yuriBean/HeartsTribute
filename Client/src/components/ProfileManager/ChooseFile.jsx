@@ -1,6 +1,7 @@
 import { Label } from "./AddPost";
 import { FileUploader } from "react-drag-drop-files";
 import { useState } from "react";
+import { notifyError } from "../../utils/toastNotifications";
 
 export default function ChooseFile({
   value,
