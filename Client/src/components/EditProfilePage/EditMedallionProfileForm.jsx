@@ -39,8 +39,9 @@ export default function EditProfileForm() {
 
     const profilePictureModified = profilePicture && profilePicture.name !== profile.profile_picture;
     const coverPictureModified = coverPicture && coverPicture.name !== profile.cover_picture;
-  
-    if (Object.keys(modifiedData).length === 0 && !profilePictureModified && !coverPictureModified) {
+    const donationProfileIDModified = donationProfileID !== profile.donation_profile_id;
+
+    if (Object.keys(modifiedData).length === 0 && !profilePictureModified && !coverPictureModified && !donationProfileIDModified) {
       alert("Nothing to update");
       return;
     }
@@ -92,6 +93,10 @@ export default function EditProfileForm() {
     if (name === "bio") {
       setBio(value);
     }
+    
+    if (name === "donationProfileID") {
+      setDonationProfileID(value);
+    }
 
     if (profile[name] === value) {
       const updatedData = { ...modifiedData };
@@ -100,6 +105,7 @@ export default function EditProfileForm() {
     } else {
       setModifiedData((prev) => ({ ...prev, [name]: value }));
     }
+  
   };
 
   useEffect(() => {
@@ -158,11 +164,10 @@ export default function EditProfileForm() {
     setDonationProfiles(filtered);
   }, [searchTerm, allProfiles]);
 
-  // Clear profiles and fetch anew
   const fetchNewProfiles = () => {
     setAllProfiles([]);
     setNextProjectId(null);
-    fetchProfilesInBatches(true); // Initial call
+    fetchProfilesInBatches(true);
   };
 
   useEffect(() => {
@@ -194,9 +199,6 @@ export default function EditProfileForm() {
 
       <div className="mb-4 space-x-4 flex "></div>
       <form className="flex flex-col" onSubmit={onSubmit}>
-        {/* <h3 className="mb-2 text-sm tracking-wider md:text-base">
-          Edit Your Personal Information
-        </h3> */}
         <hr />
         <div className="my-3 grid grid-cols-1 gap-y-2 md:w-2/3 md:grid-cols-2 md:gap-x-4 md:gap-y-4 md:space-y-0 mx-auto">
           <InputForEdit
@@ -333,7 +335,6 @@ export default function EditProfileForm() {
         <h3 className="mb-2 text-sm tracking-wider md:text-base">Lifetime</h3>
         <hr />
         <div className="my-3 grid grid-cols-1 gap-y-2 md:w-2/3 md:grid-cols-2 md:gap-x-4 md:gap-y-4 md:space-y-0 mx-auto">
-          {/* for birth_date and death_date  */}
           <InputForEdit
             value={profile?.birth_date}
             handleChange={handleChange}
@@ -366,7 +367,6 @@ export default function EditProfileForm() {
             </h3>
             <hr />
             <div className="my-3 grid grid-cols-1 gap-y-2 md:w-2/3 md:grid-cols-2 md:gap-x-4 md:gap-y-4 md:space-y-0 mx-auto">
-            {/* for City and State */}
               <InputForEdit
                 value={profile?.city}
                 handleChange={handleChange}
@@ -387,16 +387,6 @@ export default function EditProfileForm() {
                 id="state"
                 className="px-4 py-3 tracking-wider"
               />
-              {/* <InputForEdit
-                value={profile?.country}
-                handleChange={handleChange}
-                modifiedData={modifiedData}
-                type="text"
-                name="country"
-                label="Country"
-                id="country"
-                className="px-4 py-3 tracking-wider"
-              /> */}
             </div>
             <div className="my-3 grid grid-cols-1 gap-y-2 md:w-2/3 md:grid-cols-2 md:gap-x-4 md:gap-y-4 md:space-y-0 mx-auto">
             <InputForEdit
