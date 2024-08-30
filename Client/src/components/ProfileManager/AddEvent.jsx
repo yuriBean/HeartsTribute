@@ -42,8 +42,7 @@ export default function AddEvent() {
     return null;
   };
 
-  const onSubmit = async (e, data) => {
-    e.preventDefault();
+  const onSubmit = async ( data) => {
     if (image === null || errors.length > 0) {
       notifyError("All Fields are required. Please fill all the fields.");
       return;
