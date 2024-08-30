@@ -2,7 +2,6 @@ import React from "react";
 import { usePublicProfile } from "../Providers/PublicProfileProvider";
 import Spinner from "../Common/Spinner";
 import { notifyError } from "../../utils/toastNotifications";
-import { useAuth } from "../../utils/AuthContext";
 
 export default function HeaderForPublicProfile() {
   const { profile, loading, favorites, addFavorite, removeFavorite } =
@@ -10,7 +9,6 @@ export default function HeaderForPublicProfile() {
   const userFromLocalStorage = localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user"))
     : null;
-  const { user } = useAuth();
   const favoriteButtonClick = () => {
     if (!userFromLocalStorage) {
       notifyError("Please Login to Add to Favorites");
@@ -25,7 +23,6 @@ export default function HeaderForPublicProfile() {
   return !loading ? (
     <div>
       <div className={`relative`}>
-        {/* Profile and Headline */}
         <div className="bg-[#346164] pb-4 rounded-lg">
           <div className="flex w-full justify-center">
             <img
@@ -65,9 +62,6 @@ export default function HeaderForPublicProfile() {
             <h2 className="my-2 text-3xl font-medium text-white">
               {profile?.first_name + " " + profile?.last_name}
             </h2>
-            {/* <p className="text-sm font-semibold">
-              {profile?.title || profile?.breed}
-            </p> */}
           </div>
           {profile?.donation_profile_id && (
             <div className="md:hidden mt-2 flex items-center justify-center ">

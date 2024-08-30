@@ -10,8 +10,8 @@ export default function EventRow({ id, date, img, name, location, time, onDelete
 
     if (window.confirm("Are you sure you want to delete this event? This action cannot be undone.")) {
     try {
-      await deleteEvent(id); // Call the service to delete the event
-      onDelete(); // Trigger the onDelete callback to refresh the events list
+      await deleteEvent(id);
+      onDelete(); 
     } catch (error) {
       console.error("Error deleting event:", error);
     }}

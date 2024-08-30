@@ -12,9 +12,6 @@ import { deleteFolder } from "../../utils/imgUploader";
 
 export default function BioTab() {
   const { profile } = usePublicProfile();
-  const user  = localStorage.getItem("user")
-  ? JSON.parse(localStorage.getItem("user"))
-  : null;
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();

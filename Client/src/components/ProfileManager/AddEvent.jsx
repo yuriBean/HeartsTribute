@@ -53,7 +53,7 @@ export default function AddEvent() {
     const isImage = (file) => file && file.type.startsWith('image/');
   
     if (image && !isImage(image)) {
-      alert("Uploaded media must be an image");
+      notifyError("Uploaded media must be an image");
       return;
     }
 

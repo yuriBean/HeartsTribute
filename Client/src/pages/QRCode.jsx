@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getQRCode, getPrivateOwner } from "../services/qrcode.services";
 import { requestAccess } from "../services/profileManager.service"; // Import the function to request access
+import { notifySuccess, notifyError } from "../utils/toastNotifications";
 
 export default function QRCode() {
     const navigate = useNavigate();
@@ -44,11 +45,11 @@ export default function QRCode() {
         try {
             console.log("Profile ID for access request:", qrRecord.profile_id);
             await requestAccess(qrRecord.profile_id); // Function to request access
-            alert("Access request sent successfully!");
+            notifySuccess("Access request sent successfully!");
             navigate("/"); // Redirect to home or another page
         } catch (error) {
             console.error("Failed to send access request", error);
-            alert("Failed to send access request. Please try again.");
+            notifyError("Failed to send access request. Please try again.");
         }
     };
 

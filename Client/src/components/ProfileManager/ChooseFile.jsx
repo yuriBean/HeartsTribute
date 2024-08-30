@@ -16,16 +16,11 @@ export default function ChooseFile({
   const handleFileChange = (file) => {
     
     try {
-      // Assuming file size limit is set to 10 MB
-      if (file.size > 10 * 1024 * 1024) {
-        alert('File size exceeds the 10 MB limit.');
-        return;
-      }
       setSelectedFile(file);    
       onSelectValue(file);
     } catch (error) {
       console.error('File upload failed:', error);
-      alert('Failed to upload file.');
+      notifyError('Failed to upload file.');
     }
   };
 

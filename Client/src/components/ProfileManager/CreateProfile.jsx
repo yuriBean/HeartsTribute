@@ -84,19 +84,19 @@ export default function CreateProfile( {setToShowCreateProfile}) {
     data.visibility = profileVisibility;
 
     if (profilePicture === null || coverPicture === null || Object.keys(errors).length > 0) {
-      alert("Fill all the required fields");
+      notifyError("Fill all the required fields");
       return;
     }
 
     const isImage = (file) => file && file.type.startsWith('image/');
   
     if (profilePicture && !isImage(profilePicture)) {
-      alert("Profile picture must be an image");
+      notifyError("Profile picture must be an image");
       return;
     }
   
     if (coverPicture && !isImage(coverPicture)) {
-      alert("Cover picture must be an image");
+      notifyError("Cover picture must be an image");
       return;
     }
   

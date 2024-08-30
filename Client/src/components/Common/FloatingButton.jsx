@@ -1,10 +1,4 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
-import { useAuth } from "../../utils/AuthContext";
-
 export default function FloatingButton() {
-    const { user } = useAuth();
-    const location = useLocation();
 
     return (
         <div className="fixed bottom-4 right-4">

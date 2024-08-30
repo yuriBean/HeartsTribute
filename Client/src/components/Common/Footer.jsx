@@ -8,11 +8,6 @@ export default function Footer() {
       <div className="flex flex-col items-center justify-between gap-4 lg:flex-row">
         <div className=" flex items-center gap-2 text-white lg:w-1/2">
           <img src="/hearts-favicon.png" className="h-12 object-cover" alt="" />
-          {/* <p className="my-1 text-xl">
-            Honor your loved ones by sharing their unique stories, preserving
-            their legacy and keeping their memories alive for generations to
-            come.
-          </p> */} 
           <p>Hearts Tribute</p>
         </div>
         <div className="inline space-x-4">

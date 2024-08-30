@@ -1,13 +1,11 @@
 import { useState } from "react";
 import ChooseFile from "../ProfileManager/ChooseFile";
 import { useForm } from "react-hook-form";
-import Input from "../Common/Input";
 import { AddNewTribute } from "../../services/profileManager.service";
 import { uploadImage } from "../../utils/imgUploader";
 import Spinner from "../Common/Spinner";
 import { notifySuccess, notifyError } from "../../utils/toastNotifications";
 import { usePublicProfile } from "../Providers/PublicProfileProvider";
-import { useNavigate } from "react-router-dom";
 import { Label } from "../ProfileManager/AddPost";
 
 export default function PayTribute({ setShow }) {
@@ -15,7 +13,6 @@ export default function PayTribute({ setShow }) {
   const [loading, setLoading] = useState(false);
   const { profile, getTributes } = usePublicProfile();
   const user = JSON.parse(localStorage.getItem("user"));
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,

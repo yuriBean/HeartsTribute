@@ -55,15 +55,13 @@ export default function AddPost() {
     return true;
   };
 
-  const onSubmit = async (e, data) => {
-    e.preventDefault();
+  const onSubmit = async ( data) => {
     if (!image && !video && !videoUrl) {
       alert("Please select an image or a video or a video url");
       return;
     }
     
     if (!validateMedia()) {
-      alert("Selected video file is not a valid video.");
       return; 
     }
 

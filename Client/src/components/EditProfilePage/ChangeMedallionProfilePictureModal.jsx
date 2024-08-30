@@ -45,7 +45,14 @@ export default function ChangeMedallionProfilePictureModal({
       notifyError("Please select a new image to upload");
       return;
     }
-    console.log("Uploading image");
+
+    const isImage = (file) => file && file.type.startsWith('image/');
+
+    if (file && !isImage(file)) {
+      notifyError("Selected image file is not a valid image.");
+      return;
+    }
+
     setLoading(true);
     const url = await uploadImage(file, user.id, profile.id);
     await updateProfilePicture(url);

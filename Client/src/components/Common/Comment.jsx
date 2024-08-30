@@ -11,7 +11,6 @@ export default function Comment({ comment, post_id, fetchComments }) {
         setDropdownVisible(!dropdownVisible);
     };
     const handleDelete = async () => {
-        // Add your delete logic here
         const prompt = window.confirm(
             "Are you sure you want to delete this comment?",
         );

@@ -36,12 +36,34 @@ export default function AddPostOnProfile() {
     setImage(null)
     setVideo("")
   }
-  const onSubmit = async (e, data) => {
-     e.preventDefault()
+
+  const validateMedia = () => {
+    const isImage = (file) => file && file.type.startsWith('image/');
+    const isVideo = (file) => file && file.type.startsWith('video/');
+
+    if (image && !isImage(image)) {
+      notifyError("Selected image file is not a valid image.");
+      return false;
+    }
+
+    if (video && !isVideo(video)) {
+      notifyError("Selected video file is not a valid video.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const onSubmit = async (data) => {
     if (!image && !video && !videoUrl) {
-      alert('Please select an image or a video or a video url')
+      notifyError('Please select an image or a video or a video url')
       return;
     }
+
+    if (!validateMedia()) {
+      return; 
+    }
+
     try {
       setLoading(true)
       if (image) {

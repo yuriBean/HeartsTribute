@@ -3,7 +3,6 @@ import Post from "../Common/Post";
 import Spinner from "../Common/Spinner";
 import { usePublicProfile } from "../Providers/PublicProfileProvider";
 import CheckProfileOwner from "../CheckProfileOwner";
-import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 export default function MediaTab() {

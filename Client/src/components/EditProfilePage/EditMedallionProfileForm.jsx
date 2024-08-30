@@ -11,6 +11,7 @@ import Spinner from "../Common/Spinner";
 import { useProfile } from "../Providers/EditProfileProvider";
 import { notifySuccess } from "../../utils/toastNotifications";
 import { useNavigate } from "react-router-dom";
+import { notifyError } from "../../utils/toastNotifications";
 
 export default function EditProfileForm() {
   const { profile, loading, setLoading, getProfile } = useProfile();
@@ -48,12 +49,12 @@ export default function EditProfileForm() {
     const isImage = (file) => file && file.type.startsWith('image/');
   
     if (profilePicture && !isImage(profilePicture)) {
-      alert("Profile picture must be an image");
+      notifyError("Profile picture must be an image");
       return;
     }
   
     if (coverPicture && !isImage(coverPicture)) {
-      alert("Cover picture must be an image");
+      notifyError("Cover picture must be an image");
       return;
     }
   

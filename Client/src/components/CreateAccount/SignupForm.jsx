@@ -81,12 +81,9 @@ export default function SignupForm({ qrid }) {
       const user = await signup(email, password, firstName, lastName, qrid);
       setLoading(false);
       if (profiles.length > 0) {
-        // Show pop-up to link tribute tag to an existing profile
         showProfileSelectionPopup(profiles, tributeTagID);
       } else {
-        // Show pop-up to create a new profile
         await createProfile(user.uid, firstName, lastName, tributeTagID);
-        alert(`/profile-created-successfully?qrid=${qrid}`);
       }
       navigate(`/complete-registration?qrid=${qrid}`, { state: { email: email } });
     } catch (error) {

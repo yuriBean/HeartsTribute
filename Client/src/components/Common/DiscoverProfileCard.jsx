@@ -1,14 +1,12 @@
 import dateToNow from "../../utils/dateToNow";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-import { useAuth } from "../../utils/AuthContext"; // Import useAuth
+import { useNavigate } from "react-router-dom"; 
 
 export default function DiscoverProfileCard({ profile }) {
-  const navigate = useNavigate(); // Initialize navigate
-  const { user } = useAuth(); // Get user from Auth context
+  const navigate = useNavigate(); 
 
   const handleViewProfile = () => {
    
-      navigate(`/profile/${profile.id}`); // Navigate to profile if authenticated
+      navigate(`/profile/${profile.id}`); 
     }
 
   return (
@@ -26,7 +24,6 @@ export default function DiscoverProfileCard({ profile }) {
         <p className="text-center text-lg font-semibold tracking-wider lg:text-3xl">
           {profile.first_name} {` `} {profile.last_name}
         </p>
-        {/* <p className="text-center text-base">{profile.title}</p> */}
         <p className="line-clamp-2 text-sm">{profile.bio}</p>
         <a
           onClick={handleViewProfile}
