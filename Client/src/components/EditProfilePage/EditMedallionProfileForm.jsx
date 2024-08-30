@@ -46,19 +46,20 @@ export default function EditProfileForm() {
       return;
     }
 
-    if (profilePicture.name !== profile.profile_picture || coverPicture.name !== profile.cover_picture){
-    const isImage = (file) => file && file.type.startsWith('image/');
-  
-    if (profilePicture && !isImage(profilePicture)) {
-      notifyError("Profile picture must be an image");
-      return;
+    if (profilePicture.name !== profile.profile_picture || coverPicture.name !== profile.cover_picture) {
+      const isImage = (file) => file && file.type && file.type.startsWith('image/');
+      
+      if (profilePicture && !isImage(profilePicture)) {
+        notifyError("Profile picture must be an image");
+        return;
+      }
+      
+      if (coverPicture && !isImage(coverPicture)) {
+        notifyError("Cover picture must be an image");
+        return;
+      }
     }
-  
-    if (coverPicture && !isImage(coverPicture)) {
-      notifyError("Cover picture must be an image");
-      return;
-    }}
-  
+      
     try {
       setLoading(true);
       if (profilePicture.name !== profile.profile_picture) {
