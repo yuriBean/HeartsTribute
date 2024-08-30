@@ -4,21 +4,21 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getQRCode, getPrivateOwner } from "../services/qrcode.services";
 import { requestAccess } from "../services/profileManager.service"; // Import the function to request access
 import { notifySuccess, notifyError } from "../utils/toastNotifications";
+import { useAuth } from "../utils/AuthContext";
 
 export default function QRCode() {
     const navigate = useNavigate();
     const { qr_id } = useParams();
     const [loading, setLoading] = useState(true);
     const [qrRecord, setQrRecord] = useState(null);
-    const user = localStorage.getItem("user")
-    ? JSON.parse(localStorage.getItem("user"))
-    : null;
+    const user = useAuth();
 
 
     const getQR = async () => {
         try {
             const QRrecord = await getQRCode(qr_id);
             setQrRecord(QRrecord);
+            console.log (user);
             const isOwner = await getPrivateOwner(QRrecord.profile_id, user.uid);
             if (!QRrecord) {
                 navigate("/404");
@@ -27,7 +27,7 @@ export default function QRCode() {
                     if (QRrecord.profile_visibility || isOwner) 
                     // if (QRrecord) 
                         {
-                        navigate(`/profile/${QRrecord.profile_id}`); // Redirect to public profile
+                        navigate(`/profile/${QRrecord.profile_id}`); 
                     } else {
                         setLoading(false);
                     }

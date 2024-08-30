@@ -4,11 +4,10 @@ import Modal from "react-modal";
 import {
     getPaginatedQRCodes,
     deleteQrCode,
-    changeQRStatus,
     updateQrCode,
 } from "../services/admin.service";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons'; // Import the icons you need
+import { faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons'; 
 
 const Dashboard = () => {
     const [profileID, setProfileID] = useState("");

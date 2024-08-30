@@ -1,6 +1,6 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getUserProfiles, linkProfileToQR, getLoggedInUser, getQRIdsForProfiles } from "../services/profileManager.service";
+import { getUserProfiles, linkProfileToQR, getLoggedInUser, getQRIdsForProfiles, checkProfileIdForQRId } from "../services/profileManager.service";
 import Layout from "../components/Layout/Layout";
 import Spinner from "../components/Common/Spinner";
 import { notifyError, notifySuccess } from "../utils/toastNotifications";
@@ -14,6 +14,28 @@ export default function NoProfileConnected() {
   const [searchParams] = useSearchParams();
   const qrid = searchParams.get("qrid");
   const user = getLoggedInUser ();
+
+  useEffect(() => {
+    const initialCheck = async () => {
+      if (user) {
+        if (qrid) {
+          const profileId = await checkProfileIdForQRId(qrid);
+          console.log('boo', profileId);
+          if (profileId) {
+            navigate(`/profile/${profileId}`);
+            return;
+          }  
+        } else {
+          notifyError('QR Code not detected. Please scan your QR Code and try again.');
+        }
+      } else {
+        console.log("User is not logged in.");
+      }
+      setLoading(false);
+    };
+
+    initialCheck();
+  }, [qrid, user, navigate]);
 
   const checkUserProfiles = async () => {
     try {
@@ -29,7 +51,7 @@ export default function NoProfileConnected() {
           }
         }
       } else {
-        notifyError("User is not logged in.");
+        console.log("User is not logged in.");
       }
       setLoading(false);
     } catch (error) {
@@ -76,6 +98,7 @@ export default function NoProfileConnected() {
 
   useEffect(() => {
     checkUserProfiles();
+    
   }, []);
 
   return !loading ? (

@@ -25,11 +25,7 @@ export default function CreateQRCode() {
 
     const handleQrCodeGenerator = async () => {
         try {
-            console.log("button clicked for generator ");
             setDisabled(true);
-            console.log("Current QR IDs:", qrids);
-            console.log("Entered QR ID:", qrID);
-    
             if (!qrids.some(qr => qr.id === qrID)) {
                 alert("Invalid QR ID or QR ID already exists");
                 setQrID("");
@@ -49,7 +45,6 @@ export default function CreateQRCode() {
             setTimeout(async () => {
                 const qrCodeImageUrl = await htmlToImage.toBlob(qrCodeRef.current);
                 console.log(qrCodeImageUrl);
-                // Upload the blob to storage and get the URL
                 const imageUrl = await uploadImage(qrCodeImageUrl, true);
                 console.log(imageUrl);
                 let data = {

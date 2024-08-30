@@ -21,17 +21,17 @@ const Dashboard = () => {
     const [page, setPage] = useState(1);
     const [isOpen, setIsOpen] = useState(false);
     const [currentProfile, setCurrentProfile] = useState(null);
-    const [qrCodeMap, setQrCodeMap] = useState({}); // State for QR code mapping
+    const [qrCodeMap, setQrCodeMap] = useState({}); 
 
     const fetchProfiles = async (direction) => {
         try {
             setLoading(true);
             const { data, last, first } = await getPaginatedMedallionProfiles();
-            const { data: qrCodes } = await getPaginatedQRCodes(); // Fetch QR codes
+            const { data: qrCodes } = await getPaginatedQRCodes();
 
             const qrCodeMap = {};
             qrCodes.forEach(qr => {
-                qrCodeMap[qr.profile_id] = qr.qr_id; // Assuming qr.id is the QR code ID
+                qrCodeMap[qr.profile_id] = qr.qr_id; 
             });
 
             setProfiles(data);
