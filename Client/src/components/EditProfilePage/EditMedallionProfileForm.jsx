@@ -46,6 +46,7 @@ export default function EditProfileForm() {
       return;
     }
 
+    if (profilePicture.name !== profile.profile_picture || coverPicture.name !== profile.cover_picture){
     const isImage = (file) => file && file.type.startsWith('image/');
   
     if (profilePicture && !isImage(profilePicture)) {
@@ -56,7 +57,7 @@ export default function EditProfileForm() {
     if (coverPicture && !isImage(coverPicture)) {
       notifyError("Cover picture must be an image");
       return;
-    }
+    }}
   
     try {
       setLoading(true);
