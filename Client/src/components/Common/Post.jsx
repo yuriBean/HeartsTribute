@@ -139,9 +139,6 @@ export default function Post({ post, profile }) {
       <div className="flex h-[11rem] flex-col justify-between">
         <div>
           <div className="my-2 flex justify-between px-4">
-            {/* <h2 className="truncate text-sm font-semibold tracking-widest md:text-base xl:text-lg 2xl:text-xl">
-              {post?.title}
-            </h2> */}
             <span className="flex space-x-3">
               <span className="text-sm font-semibold md:text-base xl:text-lg 2xl:text-xl">
                 {likes}

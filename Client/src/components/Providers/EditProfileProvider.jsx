@@ -20,7 +20,6 @@ export const EditProfileProvider = ({ profile_id, children }) => {
         navigate("/404");
         return;
       }
-      console.log("From Profile Provider : ", res);
       await fetchPostsAndEvents();
       setProfile(res);
     } catch (error) {
@@ -38,7 +37,6 @@ export const EditProfileProvider = ({ profile_id, children }) => {
     try {
       setLoading(true);
       const res = await getEventsByProfileId(profile_id);
-      console.log("From Profile Provider Events : ", res);
       setEvents(res);
     } catch (error) {
       console.error(error);
@@ -51,7 +49,6 @@ export const EditProfileProvider = ({ profile_id, children }) => {
     try {
       setLoading(true);
       const res = await getPostsWithProfileId(profile_id);
-      console.log("From Profile Provider Posts : ", res);
       setPosts(res);
     } catch (error) {
       console.error(error);

@@ -33,7 +33,6 @@ export default function PostModal({ setIsOpen, post, profile, onPostDeleted  }) 
       const res = await AddCommentToPost(data, post.id);
       setLoading(false);
       await fetchComments();
-      console.log(res);
     } catch (error) {}
   };
 
@@ -52,7 +51,6 @@ export default function PostModal({ setIsOpen, post, profile, onPostDeleted  }) 
     }
   };
   const onEmojiClick = (emojiObject) => {
-    console.log(emojiObject);
     setText((prevText) => prevText + emojiObject.emoji);
     setShowEmojiPicker(false);
   };

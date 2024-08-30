@@ -18,7 +18,6 @@ export default function QRCode() {
         try {
             const QRrecord = await getQRCode(qr_id);
             setQrRecord(QRrecord);
-            console.log (user);
             const isOwner = await getPrivateOwner(QRrecord.profile_id, user.uid);
             if (!QRrecord) {
                 navigate("/404");
@@ -37,16 +36,15 @@ export default function QRCode() {
             }
         } catch (error) {
             console.log(error);
-            navigate("/404"); // In case of error, navigate to 404
+            navigate("/404"); 
         }
     };
 
     const handleRequestAccess = async () => {
         try {
-            console.log("Profile ID for access request:", qrRecord.profile_id);
-            await requestAccess(qrRecord.profile_id); // Function to request access
+            await requestAccess(qrRecord.profile_id); 
             notifySuccess("Access request sent successfully!");
-            navigate("/"); // Redirect to home or another page
+            navigate("/"); 
         } catch (error) {
             console.error("Failed to send access request", error);
             notifyError("Failed to send access request. Please try again.");

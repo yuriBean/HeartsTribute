@@ -31,7 +31,6 @@ export const PublicProfileProvider = ({ profile_id, children }) => {
     try {
       setLoading(true);
       const res = await getProfileWithId(profile_id);
-      console.log("From Profile Provider Profile : ", res);
       if (!res) {
         navigate("/404");
         return;
@@ -65,7 +64,6 @@ export const PublicProfileProvider = ({ profile_id, children }) => {
       await updateLocalStorage(userFromLocalStorage.email);
       notifySuccess("Profile added to favorites");
       fetchFavorites();
-      console.log("Updated Favorites : ", favorites);
     } catch (error) {
       console.error(error);
       notifyError("Error adding profile to favorites");
@@ -99,7 +97,6 @@ export const PublicProfileProvider = ({ profile_id, children }) => {
   const getEvents = async () => {
     try {
       const res = await getEventsByProfileId(profile_id);
-      console.log("From Profile Provider Events : ", res);
       setEvents(res);
     } catch (error) {
       console.error(error);
@@ -108,7 +105,6 @@ export const PublicProfileProvider = ({ profile_id, children }) => {
   const getPosts = async () => {
     try {
       const res = await getPostsWithProfileId(profile_id);
-      console.log("From Profile Provider Posts : ", res);
       setPosts(res);
     } catch (error) {
       console.error(error);
@@ -117,7 +113,6 @@ export const PublicProfileProvider = ({ profile_id, children }) => {
   const getTributes = async () => {
     try {
       const res = await GetTributesById(profile_id);
-      console.log("From Profile Provider Tributes : ", res);
       setTributes(res);
     } catch (error) {
       console.error(error);

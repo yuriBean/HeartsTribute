@@ -32,7 +32,6 @@ export default function AddEvent() {
     if (image) {
       try {
         const res = await uploadImage(image, user.id, profile_id);
-        console.log("Event Image available at ", res);
         return res;
       } catch (error) {
         console.log("Failed to get Image URL");

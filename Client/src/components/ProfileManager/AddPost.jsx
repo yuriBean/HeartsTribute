@@ -84,7 +84,6 @@ export default function AddPost() {
       setVideo(null);
       notifySuccess("Post Created Successfully");
       await getPosts();
-      console.log(res);
     } catch (error) {
       notifyError("Failed to create post");
       console.log(error);

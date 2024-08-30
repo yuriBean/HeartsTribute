@@ -28,7 +28,6 @@ export default function PayTribute({ setShow }) {
     if (image) {
       try {
         const res = await uploadImage(image, user.id, profile.id);
-        console.log("Tribute Image available at ", res);
         return res;
       } catch (error) {
         console.log("Failed to get Image URL");
@@ -66,7 +65,6 @@ export default function PayTribute({ setShow }) {
       notifySuccess("Tribute Added");
       getTributes();
       setShow(false);
-      console.log("Tribute Added");
     } catch (error) {
       console.log(error.message);
       notifyError("Failed to Add Tribute");

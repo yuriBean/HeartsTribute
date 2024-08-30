@@ -40,16 +40,13 @@ export default function EditProfileForm() {
     const profilePictureModified = profilePicture && profilePicture.name !== profile.profile_picture;
     const coverPictureModified = coverPicture && coverPicture.name !== profile.cover_picture;
   
-    // If nothing has been modified, keep the same pictures and notify
-    if (!profilePictureModified && !coverPictureModified) {
+    if (Object.keys(modifiedData).length === 0 && !profilePictureModified && !coverPictureModified) {
       alert("Nothing to update");
       return;
     }
   
-    // Function to check if file is an image
     const isImage = (file) => file && file.type && file.type.startsWith('image/');
     
-    // Validate images only if they are modified
     if (profilePictureModified && profilePicture && !isImage(profilePicture)) {
       notifyError("Profile picture must be an image");
       return;
@@ -63,15 +60,12 @@ export default function EditProfileForm() {
     try {
       setLoading(true);
       if (profilePicture.name !== profile.profile_picture) {
-        console.log(profilePicture);
         modifiedData.profile_picture = await uploadImage(profilePicture, user.id, profile.id);
       }
       if (coverPicture.name !== profile.cover_picture) {
-        console.log(coverPicture);
         modifiedData.cover_picture = await uploadImage(coverPicture, user.id, profile.id);
       }
 
-      //   check if donation profile is enabled
       if (donationEnabled && donationProfileID) {
         modifiedData.donation_profile_id = donationProfileID;
         let currentProfile = donationProfiles.find(
@@ -86,7 +80,6 @@ export default function EditProfileForm() {
         modifiedData.donation_profile_title = null;
       }
       const update = await editProfileWithId(profile.id, modifiedData);
-      console.log(update);
 
       notifySuccess("Profile Updated Successfully");
       navigate(-1);

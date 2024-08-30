@@ -20,7 +20,6 @@ export default function NoProfileConnected() {
       if (user) {
         if (qrid) {
           const profileId = await checkProfileIdForQRId(qrid);
-          console.log('boo', profileId);
           if (profileId) {
             navigate(`/profile/${profileId}`);
             return;

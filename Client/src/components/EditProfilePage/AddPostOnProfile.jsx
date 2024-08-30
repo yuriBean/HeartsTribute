@@ -74,7 +74,6 @@ export default function AddPostOnProfile() {
       }
       if (videoUrl != "") {
         data.video = videoUrl
-        console.log("video", videoUrl)
       }
       data.profile_id = profile_id;
       data.user_id = user.id

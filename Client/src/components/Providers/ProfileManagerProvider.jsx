@@ -23,7 +23,6 @@ export const ProfileManagerProvider = ({ children }) => {
         navigate("/404");
         return;
       }
-      console.log("From Profile Provider  manager profile : ", res);
       setManagerProfile(res);
     } catch (error) {
       console.error(error);
@@ -35,7 +34,6 @@ export const ProfileManagerProvider = ({ children }) => {
   const getFavoriteProfiles = async () => {
     try {
       const res = await getFavoriteProfilesWithUserId(user.id);
-      console.log("From Profile Provider Events : ", res);
       setFavoriteProfiles(res);
     } catch (error) {
       console.error(error);
@@ -45,7 +43,6 @@ export const ProfileManagerProvider = ({ children }) => {
   const getPosts = async () => {
     try {
       const res = await getPostsWithUserId(user.id);
-      console.log("From Profile Provider Posts : ", res);
       if (profiles.length == 0) await getAllProfiles();
       setPosts(res);
     } catch (error) {
@@ -56,7 +53,6 @@ export const ProfileManagerProvider = ({ children }) => {
   const getAllProfiles = async () => {
     try {
       const res = await getProfilesWithUserId(user.id);
-      console.log("From Profile Manager Provider Profiles : ", res);
       setProfiles(res);
     } catch (error) {
       console.error(error);
