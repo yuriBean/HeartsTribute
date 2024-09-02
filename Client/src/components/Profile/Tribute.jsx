@@ -8,8 +8,11 @@ export default function Tribute({ tribute, onDelete }) {
   const { profile } = usePublicProfile();
   const user = JSON.parse(localStorage.getItem("user"));
 
+  const profileUserId = profile ? profile.user_id : null;
+  const userId = user ? user.id : null;
+
   const handleDeleteTribute = async () => {
-    if(window.confirm("Are you sure you want to delete this tribute? This action cannot be undone.")){
+    if (window.confirm("Are you sure you want to delete this tribute? This action cannot be undone.")) {
       try {
         await deleteTribute(tribute.id);
         onDelete(); 
@@ -19,7 +22,8 @@ export default function Tribute({ tribute, onDelete }) {
     }
   };
 
-  const canDelete = user.id === tribute.created_by || user.id === profile.user_id;
+  const canDelete = userId === tribute.created_by || userId === profileUserId;
+
 
   return (
     <div
