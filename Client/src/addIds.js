@@ -5,13 +5,13 @@ import { getStorage, ref } from "firebase/storage";
 import { collection, updateDoc, doc, getDoc } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDk08baYEyamSSEvcX4a-f68kBnCcbsX5s",
-  authDomain: "heartstribute-da3ff.firebaseapp.com",
-  projectId: "heartstribute-da3ff",
-  storageBucket: "heartstribute-da3ff.appspot.com",
-  messagingSenderId: "363617177332",
-  appId: "1:363617177332:web:ae52b463ec9247f7b158a1",
-  measurementId: "G-YSRDWP7QY6",
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
+  measurementId: "",
 };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
